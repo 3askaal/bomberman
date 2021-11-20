@@ -1,13 +1,13 @@
-import React, { useContext, useState } from 'react'
-import { Container, Wrapper, Spacer, Box } from '3oilerplate'
-import { RecipeContext } from '../../context'
+import React, { useEffect, useState } from 'react'
+import { Container, Wrapper, Box } from '3oilerplate'
+import randomColor from 'randomcolor'
 import { Controls, Map } from '../../components'
-import { AlignCenter } from 'react-feather'
 
 const initialPlayer = { x: 0, y: 0 }
 
 const PlayView = () => {
   const [players, setPlayers] = useState<any[]>([{...initialPlayer}, {...initialPlayer}, {...initialPlayer}, {...initialPlayer}])
+  const [blocks, updateBlocks] = useState(20)
 
   const move = (playerIndex: number, direction: string, movement: number) => {
     const newPlayer = { ...players[playerIndex] }
@@ -16,6 +16,52 @@ const PlayView = () => {
     newPlayers[playerIndex] = { ...players[playerIndex], ...newPlayer }
     setPlayers(newPlayers)
   }
+
+  useEffect(() => {
+    const newPlayers = players.map((player: any, index: number) => {
+      player.color = randomColor({
+        luminosity: 'dark',
+      })
+
+      if (players.length === 2) {
+        if (index === 1) {
+          return {
+            ...player,
+            x: blocks,
+            y: blocks
+          }
+        }
+      }
+
+      if (index === 1) {
+        return {
+          ...player,
+          x: blocks,
+          y: 0
+        }
+      }
+
+      if (index === 2) {
+        return {
+          ...player,
+          x: 0,
+          y: blocks
+        }
+      }
+
+      if (index === 3) {
+        return {
+          ...player,
+          x: blocks,
+          y: blocks
+        }
+      }
+
+      return player
+    })
+
+    setPlayers(newPlayers)
+  }, [])
 
   return (
     <Wrapper>
@@ -39,12 +85,15 @@ const PlayView = () => {
                 alignItems: playerIndex > 1 ? 'flex-end' : null
               }}
             >
-              <Controls onUpdate={(direction: string, movement: number) => move(playerIndex, direction, movement)}/>
+              <Controls
+                onUpdate={(direction: string, movement: number) => move(playerIndex, direction, movement)}
+                color={players[playerIndex].color}
+              />
             </Box>
           )) }
         </Box>
         <Box style={{ flexGrow: 1, height: '100%', flexDirection: 'row', display: 'flex', alignItems: 'center' }}>
-          <Map players={players} setPlayers={setPlayers} />
+          <Map blocks={blocks} players={players} setPlayers={setPlayers} />
         </Box>
       </Container>
     </Wrapper>

@@ -8,21 +8,21 @@ import {
   ChevronDown,
 } from 'react-feather'
 
-export const Controls = ({onUpdate, style}: any) => {
+export const Controls = ({onUpdate, style, color}: any) => {
   return (
     <SControls style={style}>
-      <SControlsButton dir="left" onClick={() => onUpdate('x', -1)}>
+      <SControlsButton color={color} dir="left" onClick={() => onUpdate('x', -1)}>
         <ChevronLeft />
       </SControlsButton>
       <SControlsMiddle>
-        <SControlsButton dir="up" onClick={() => onUpdate('y', -1)}>
+        <SControlsButton color={color} dir="up" onClick={() => onUpdate('y', -1)}>
           <ChevronUp />
         </SControlsButton>
-        <SControlsButton dir="down" onClick={() => onUpdate('y', 1)}>
+        <SControlsButton color={color} dir="down" onClick={() => onUpdate('y', 1)}>
           <ChevronDown />
         </SControlsButton>
       </SControlsMiddle>
-      <SControlsButton dir="right" onClick={() => onUpdate('x', 1)}>
+      <SControlsButton color={color} dir="right" onClick={() => onUpdate('x', 1)}>
         <ChevronRight />
       </SControlsButton>
     </SControls>

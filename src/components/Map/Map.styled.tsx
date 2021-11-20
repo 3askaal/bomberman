@@ -24,10 +24,10 @@ export const SMapBlock = styled.div(({ theme }: any) => ({
   borderRadius: '0.1rem'
 }))
 
-export const SMapCharacter = styled.div(({ theme }: any) => ({
+export const SMapCharacter = styled.div(({ theme, color }: any) => ({
   position: 'absolute',
   display: 'block',
-  backgroundColor: 'black',
+  backgroundColor: color,
   width: '.8rem',
   height: '.8rem',
   margin: '.1rem',

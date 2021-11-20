@@ -18,14 +18,18 @@ export const SControlsMiddle = styled.div(({ theme }: any) => ({
 }))
 
 
-export const SControlsButton = styled.button(({ theme, dir }: any) => ({
+export const SControlsButton = styled.button(({ theme, dir, color }: any) => ({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
   height: (dir === 'left' || dir === 'right') ? '3rem' : '1.5rem',
-  backgroundColor: 'primary',
+  backgroundColor: color,
   border: '.125rem solid black',
   borderRadius: '.25rem',
   color: 'white',
-  width: '100%'
+  width: '100%',
+
+  'svg': {
+    strokeWidth: 3
+  }
 }))

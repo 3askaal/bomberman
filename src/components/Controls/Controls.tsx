@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Box } from '3oilerplate'
-import { SControls, SControlsButton } from './Controls.styled'
+import { SControls, SControlsMiddle, SControlsButton } from './Controls.styled'
 import {
   ChevronUp,
   ChevronLeft,
@@ -14,14 +14,14 @@ export const Controls = ({onUpdate, style}: any) => {
       <SControlsButton dir="left" onClick={() => onUpdate('x', -1)}>
         <ChevronLeft />
       </SControlsButton>
-      <Box style={{ display: 'flex', flexDirection: 'column' }}>
-        <SControlsButton onClick={() => onUpdate('y', -1)}>
+      <SControlsMiddle>
+        <SControlsButton dir="up" onClick={() => onUpdate('y', -1)}>
           <ChevronUp />
         </SControlsButton>
-        <SControlsButton onClick={() => onUpdate('y', 1)}>
+        <SControlsButton dir="down" onClick={() => onUpdate('y', 1)}>
           <ChevronDown />
         </SControlsButton>
-      </Box>
+      </SControlsMiddle>
       <SControlsButton dir="right" onClick={() => onUpdate('x', 1)}>
         <ChevronRight />
       </SControlsButton>

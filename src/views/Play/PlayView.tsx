@@ -20,15 +20,27 @@ const PlayView = () => {
   return (
     <Wrapper>
       <Container style={{ alignItems: 'center' }}>
-        <Box style={{ width: '100%', height: '100%', position: 'absolute', justifyContent: 'space-between', flexDirection: 'row', display: 'flex', flexWrap: 'wrap' }}>
+        <Box
+          style={{
+            width: '100%',
+            height: '100%',
+            position: 'absolute',
+            justifyContent: 'space-between',
+            flexDirection: 'row',
+            display: 'flex',
+            flexWrap: 'wrap'
+          }}
+        >
           { players.map((player, playerIndex) => (
-            <Controls
+            <Box
               style={{
+                display: 'flex',
                 flexBasis: players.length === 2 ? '100%' : '50%',
                 alignItems: playerIndex > 1 ? 'flex-end' : null
               }}
-              onUpdate={(direction: string, movement: number) => move(playerIndex, direction, movement)}
-            />
+            >
+              <Controls onUpdate={(direction: string, movement: number) => move(playerIndex, direction, movement)}/>
+            </Box>
           )) }
         </Box>
         <Box style={{ flexGrow: 1, height: '100%', flexDirection: 'row', display: 'flex', alignItems: 'center' }}>

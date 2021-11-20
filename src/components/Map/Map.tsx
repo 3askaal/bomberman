@@ -46,12 +46,24 @@ export const Map = ({ players, setPlayers, style } : any) => {
   return (
     <SMap style={{style}} blocks={blocks + 1}>
       { players.map((player: any) => (
-        <SMapCharacter s={{ left: `${player.x}rem`, top: `${player.y}rem` }} />
+        <SMapCharacter
+          s={{
+            left: `${player.x}rem`,
+            top: `${player.y}rem`
+          }}
+        />
       )) }
       { times(blocks * blocks, (i) => {
         const y = (i - (i % blocks)) / blocks
         const x = i % blocks
-        return y % 2 && x % 2 ? <SMapBlock s={{ left: `${i % blocks}rem`, top: `${(i - (i % blocks)) / blocks}rem` }} /> : null
+
+        return y % 2 && x % 2 ?
+          <SMapBlock
+            s={{
+              left: `${i % blocks}rem`,
+              top: `${(i - (i % blocks)) / blocks}rem`
+            }}
+          /> : null
       })}
     </SMap>
   )

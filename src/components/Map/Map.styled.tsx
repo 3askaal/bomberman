@@ -27,9 +27,10 @@ export const SMapBlock = styled.div(({ theme }: any) => ({
 export const SMapCharacter = styled.div(({ theme }: any) => ({
   position: 'absolute',
   display: 'block',
-  backgroundColor: 'primary',
-  width: '.9rem',
-  height: '.9rem',
-  border: '.05rem solid white',
+  backgroundColor: 'black',
+  width: '.8rem',
+  height: '.8rem',
+  margin: '.1rem',
   borderRadius: '100%',
+  transition: 'all .125s ease'
 }))

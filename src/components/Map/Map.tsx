@@ -1,8 +1,29 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { SMap, SMapBlock, SMapCharacter } from './Map.styled'
 import { times } from 'lodash'
+import { MapContext } from '../../context'
 
 export const Map = ({ players, style, blocks } : any) => {
+  const { events, setEvents }: any = useContext(MapContext)
+  const [grid, setGrid] = useState<any[]>([])
+
+  useEffect(() => {
+    const newGrid: any[] = []
+    let newEvents: any = {}
+
+    times(blocks * blocks, (i) => {
+      const y = (i - (i % blocks)) / blocks
+      const x = i % blocks
+
+      if (y % 2 && x % 2) {
+        newEvents[`${x}x${y}`] = false
+        newGrid.push({ x, y })
+        setGrid(newGrid)
+        setEvents(newEvents)
+      }
+    })
+  }, [])
+
   return (
     <SMap style={{style}} blocks={blocks + 1}>
       { players.map((player: any) => (
@@ -14,18 +35,14 @@ export const Map = ({ players, style, blocks } : any) => {
           color={player.color}
         />
       )) }
-      { times(blocks * blocks, (i) => {
-        const y = (i - (i % blocks)) / blocks
-        const x = i % blocks
-
-        return y % 2 && x % 2 ?
-          <SMapBlock
-            s={{
-              left: `${x}rem`,
-              top: `${y}rem`
-            }}
-          /> : null
-      })}
+      { grid.map(({x, y}) => (
+        <SMapBlock
+          s={{
+            left: `${x}rem`,
+            top: `${y}rem`
+          }}
+        />
+      ))}
     </SMap>
   )
 }

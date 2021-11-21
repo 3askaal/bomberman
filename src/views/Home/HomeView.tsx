@@ -1,6 +1,5 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { Container, Wrapper, Spacer } from '3oilerplate'
-import { RecipeContext } from '../../context'
 
 const HomeView = () => {
   return (

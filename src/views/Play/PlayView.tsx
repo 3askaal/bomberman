@@ -1,16 +1,23 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Container, Wrapper, Box } from '3oilerplate'
 import randomColor from 'randomcolor'
 import { Controls, Map } from '../../components'
+import { MapContext } from '../../context'
 
 const initialPlayer = { x: 0, y: 0 }
 
 const PlayView = () => {
+  const { events, setEvents }: any = useContext(MapContext)
   const [players, setPlayers] = useState<any[]>([{...initialPlayer}, {...initialPlayer}, {...initialPlayer}, {...initialPlayer}])
-  const [blocks, updateBlocks] = useState(20)
+  const [blocks] = useState(20)
 
   const move = (playerIndex: number, direction: string, movement: number) => {
     const newPlayer = { ...players[playerIndex] }
+
+    if (newPlayer[direction] + movement > blocks || newPlayer[direction] + movement < 0) {
+      return;
+    }
+
     newPlayer[direction] += movement
     const newPlayers = [...players]
     newPlayers[playerIndex] = { ...players[playerIndex], ...newPlayer }

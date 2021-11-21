@@ -3,7 +3,7 @@ import { Router, Switch, Route } from 'react-router-dom'
 import { createBrowserHistory } from 'history'
 import { ThemeProvider } from 'styled-components'
 import { GlobalStyle, theme } from '3oilerplate'
-import { RecipeProvider } from '../context'
+import { MapProvider } from '../context'
 import { PlayView } from '../views'
 import { LocalGlobalStyle, fonts, colors } from '../style'
 import { SApp } from './App.styled'
@@ -29,7 +29,7 @@ const App = () => {
       <SApp>
         <GlobalStyle />
         <LocalGlobalStyle />
-        <RecipeProvider>
+        <MapProvider>
           <Router history={history}>
             <Switch>
               <Route exact path="/">
@@ -37,7 +37,7 @@ const App = () => {
               </Route>
             </Switch>
           </Router>
-        </RecipeProvider>
+        </MapProvider>
       </SApp>
     </ThemeProvider>
   )

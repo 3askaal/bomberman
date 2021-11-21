@@ -1,5 +1,4 @@
-import React, { useState } from 'react'
-import { Box } from '3oilerplate'
+import React from 'react'
 import { SControls, SControlsMiddle, SControlsButton } from './Controls.styled'
 import {
   ChevronUp,

@@ -19,6 +19,11 @@ const PlayView = () => {
     }
 
     newPlayer[direction] += movement
+
+    if (events[`${newPlayer.x}x${newPlayer.y}`] === false) {
+      return
+    }
+
     const newPlayers = [...players]
     newPlayers[playerIndex] = { ...players[playerIndex], ...newPlayer }
     setPlayers(newPlayers)

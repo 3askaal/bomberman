@@ -1,28 +1,100 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { SMap, SMapBlock, SMapCharacter } from './Map.styled'
-import { times } from 'lodash'
+import { times, sampleSize } from 'lodash'
 import { MapContext } from '../../context'
 
 export const Map = ({ players, style, blocks } : any) => {
-  const { events, setEvents }: any = useContext(MapContext)
-  const [grid, setGrid] = useState<any[]>([])
+  const { grid, setGrid }: any = useContext(MapContext)
+  // const [grid, setGrid] = useState<any[]>([])
+  const [metal, setMetal] = useState<any[]>([])
+  const [bricks, setBricks] = useState<any[]>([])
+  // const [brickGenerated, setBrickGenerated] = useState<boolean>(false)
 
   useEffect(() => {
-    const newGrid: any[] = []
-    let newEvents: any = {}
+    generate()
+  }, [])
 
-    times(blocks * blocks, (i) => {
-      const y = (i - (i % blocks)) / blocks
-      const x = i % blocks
+  useEffect(() => {
+    if (grid && !metal.length) {
+      generateMetal()
+    }
+  }, [grid])
+
+  useEffect(() => {
+    if (grid && metal.length && !bricks.length) {
+      generateBricks()
+    }
+  }, [grid])
+
+  function generate() {
+    const newGrid: any = {}
+    const amountBricksForUnevenCube = (blocks * blocks) + blocks + blocks + 1
+
+    times(amountBricksForUnevenCube, (i) => {
+      const y = (i - (i % (blocks + 1))) / (blocks + 1)
+      const x = i % (blocks + 1)
+
+      newGrid[`${x}/${y}`] = { x, y }
+    })
+
+    setGrid(newGrid)
+  }
+
+  function generateMetal() {
+    const newMetal = Object.values(grid).filter((block: any) => {
+      const { x, y } = block
 
       if (y % 2 && x % 2) {
-        newEvents[`${x}x${y}`] = false
-        newGrid.push({ x, y })
+        const newGrid = { ...grid }
+        newGrid[`${x}/${y}`].metal = true
+
         setGrid(newGrid)
-        setEvents(newEvents)
+
+        return true
       }
+
+
+      return false
     })
-  }, [])
+
+    setMetal(newMetal)
+  }
+
+  function generateBricks() {
+    const freeSpaces = Object.values(grid).filter((block: any) => {
+      const { x, y } = block
+
+      const evenUneven = x % 2 === 1 && y % 2 === 0
+      const unevenEven = x % 2 === 0 && y % 2 === 1
+      const bothUneven = x % 1 === 0 && y % 2 === 0
+
+      if (evenUneven || unevenEven || bothUneven) {
+        const isRightRow = y === 0
+        const isBottomRow = y === 20
+        const isLeftRow = x === 0
+        const isTopRow = x === 20
+        const firstRow = isRightRow || isBottomRow || isLeftRow || isTopRow
+
+        if (!firstRow) {
+          return true
+        }
+      }
+
+      return false
+    })
+
+    const newBricks = sampleSize(freeSpaces, (60 / 100) * freeSpaces.length)
+
+    freeSpaces.forEach((brick: any) => {
+      const { x, y } = brick
+      const newGrid = { ...grid }
+      newGrid[`${x}/${y}`].metal = brick
+    })
+
+
+
+    setBricks(newBricks)
+  }
 
   return (
     <SMap style={{style}} blocks={blocks + 1}>
@@ -35,14 +107,27 @@ export const Map = ({ players, style, blocks } : any) => {
           color={player.color}
         />
       )) }
-      { grid.map(({x, y}) => (
+      { metal.length ? metal.map(({x, y}: any) => (
         <SMapBlock
           s={{
             left: `${x}rem`,
             top: `${y}rem`
           }}
         />
-      ))}
+      )) : null }
+      { bricks.length ? bricks.map(({x, y}: any) => (
+        <SMapBlock
+          s={{
+            left: `${x}rem`,
+            top: `${y}rem`,
+            backgroundColor: '#B42B51',
+            borderTopColor: '#E63E6D',
+            borderRightColor: '#E63E6D',
+            borderLeftColor: '#7D1935',
+            borderBottomColor: '#7D1935',
+          }}
+        />
+      )) : null }
     </SMap>
   )
 }

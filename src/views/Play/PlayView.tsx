@@ -7,7 +7,7 @@ import { MapContext } from '../../context'
 const initialPlayer = { x: 0, y: 0 }
 
 const PlayView = () => {
-  const { events, setEvents }: any = useContext(MapContext)
+  const { grid }: any = useContext(MapContext)
   const [players, setPlayers] = useState<any[]>([{...initialPlayer}, {...initialPlayer}, {...initialPlayer}, {...initialPlayer}])
   const [blocks] = useState(20)
 
@@ -20,7 +20,9 @@ const PlayView = () => {
 
     newPlayer[direction] += movement
 
-    if (events[`${newPlayer.x}x${newPlayer.y}`] === false) {
+    const block = grid.find(({x, y, metal, brick}: any) => (x === newPlayer.x && y === newPlayer.y) && (metal || brick))
+
+    if (block) {
       return
     }
 

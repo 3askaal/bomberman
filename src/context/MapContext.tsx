@@ -3,13 +3,13 @@ import React, { createContext, useState } from 'react'
 export const MapContext = createContext({})
 
 export const MapProvider = ({ children }: any) => {
-  const [events, setEvents] = useState<any>({})
+  const [grid, setGrid] = useState<any>(null)
 
   return (
     <MapContext.Provider
       value={{
-        events,
-        setEvents,
+        grid,
+        setGrid,
       }}
     >
       {children}

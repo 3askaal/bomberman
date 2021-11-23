@@ -25,13 +25,14 @@ export const SControlsButton = styled.button(({ theme, type, color }: any) => ({
   justifyContent: 'center',
   height:
     ((type === 'left' || type === 'right') && '3rem') ||
-    ((type === 'up' || type === 'down') && '1.5rem') ||
+    ((type === 'up' || type === 'down') && '2rem') ||
     ((type === 'attack') && '3rem'),
   backgroundColor: color,
   border: '.125rem solid ' + theme.colors.background,
   borderRadius: '.25rem',
   color: 'white',
   width: '100%',
+  minWidth: '5rem',
 
   'svg': {
     strokeWidth: 3

@@ -9,13 +9,15 @@ import {
   Crosshair
 } from 'react-feather'
 
-export const Controls = ({ onMove, onAttack, color }: any) => {
+export const Controls = ({ onMove, onAttack, color, index }: any) => {
   return (
-    <Box s={{ display: 'inline-flex', flexDirection: 'column', width: '50%' }}>
-      <SControlsButton color={color} type="attack" onClick={() => onAttack()}>
+    <Box s={{ display: 'inline-flex', flexDirection: 'row', alignItems: ['flex-start', 'flex-end'][index] }}>
+      { index === 0 ? (
+        <SControlsButton color={color} type="attack" onClick={() => onAttack()}>
           <Crosshair />
         </SControlsButton>
-      <SControls>
+      ) : null }
+      <SControls s={{ alignItems: ['flex-start', 'flex-end'][index] }}>
         <SControlsButton color={color} type="left" onClick={() => onMove('x', -1)}>
           <ChevronLeft />
         </SControlsButton>
@@ -31,6 +33,11 @@ export const Controls = ({ onMove, onAttack, color }: any) => {
           <ChevronRight />
         </SControlsButton>
       </SControls>
+      { index === 1 ? (
+        <SControlsButton color={color} type="attack" onClick={() => onAttack()}>
+          <Crosshair />
+        </SControlsButton>
+      ) : null }
     </Box>
   )
 }

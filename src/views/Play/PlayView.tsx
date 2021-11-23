@@ -10,7 +10,7 @@ const initialPlayer = { x: 0, y: 0 }
 
 const PlayView = () => {
   const { grid, setGrid, bombs, setBombs }: any = useContext(MapContext)
-  const [players, setPlayers] = useState<any[]>([{...initialPlayer}, {...initialPlayer}, {...initialPlayer}, {...initialPlayer}])
+  const [players, setPlayers] = useState<any[]>([{...initialPlayer}, {...initialPlayer}])
   const [blocks] = useState(20)
 
   useMousetrap('up', () => move(0, 'y', -1))
@@ -18,6 +18,12 @@ const PlayView = () => {
   useMousetrap('left', () => move(0, 'x', -1))
   useMousetrap('right', () => move(0, 'x', 1))
   useMousetrap('space', () => attack(0))
+
+  useMousetrap('w', () => move(1, 'y', -1))
+  useMousetrap('s', () => move(1, 'y', 1))
+  useMousetrap('a', () => move(1, 'x', -1))
+  useMousetrap('d', () => move(1, 'x', 1))
+  useMousetrap('shift', () => attack(1))
 
   function move (playerIndex: number, direction: string, movement: number) {
     const newPlayer = { ...players[playerIndex] }
@@ -126,7 +132,7 @@ const PlayView = () => {
             <Box
               style={{
                 display: 'inline-flex',
-                width: '50%',
+                width: '100%',
                 // flexBasis: players.length === 2 ? '100%' : '45%',
                 justifyContent: 'center',
               }}
@@ -135,6 +141,7 @@ const PlayView = () => {
                 onMove={(direction: string, movement: number) => move(playerIndex, direction, movement)}
                 onAttack={() => attack(playerIndex)}
                 color={players[playerIndex].color}
+                index={playerIndex}
               />
             </Box>
           )) }

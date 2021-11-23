@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { SMap, SMapBlock, SMapCharacter } from './Map.styled'
+import { SMap, SMapMetal, SMapCharacter, SMapBrick, SMapBomb } from './Map.styled'
 import { times, sampleSize } from 'lodash'
+// import * as mt from 'mousetrap'
 import { MapContext } from '../../context'
 
 export const Map = ({ players, style, blocks } : any) => {
@@ -96,33 +97,40 @@ export const Map = ({ players, style, blocks } : any) => {
 
   return (
     <SMap style={{style}} blocks={blocks + 1}>
-      { players.map((player: any) => (
+      { players.map(({x, y, color}: any, index: number) => (
         <SMapCharacter
+          key={index}
           s={{
-            left: `${player.x}rem`,
-            top: `${player.y}rem`
+            left: `${x}rem`,
+            top: `${y}rem`
           }}
-          color={player.color}
+          color={color}
         />
       )) }
-      { metal.length ? metal.map(({x, y}: any) => (
-        <SMapBlock
+      { metal.length ? metal.map(({x, y}: any, index: number) => (
+        <SMapMetal
+          key={index}
           s={{
             left: `${x}rem`,
             top: `${y}rem`
           }}
         />
       )) : null }
-      { bricks.length ? bricks.map(({x, y}: any) => (
-        <SMapBlock
+      { bricks.length ? bricks.map(({x, y}: any, index: number) => (
+        <SMapBrick
+          key={index}
           s={{
             left: `${x}rem`,
             top: `${y}rem`,
-            backgroundColor: '#B42B51',
-            borderTopColor: '#E63E6D',
-            borderRightColor: '#E63E6D',
-            borderLeftColor: '#7D1935',
-            borderBottomColor: '#7D1935',
+          }}
+        />
+      )) : null }
+      { grid ? Object.values(grid).filter(({ bomb }: any) => bomb).map(({x, y}: any, index: number) => (
+        <SMapBomb
+          key={index}
+          s={{
+            left: `${x}rem`,
+            top: `${y}rem`,
           }}
         />
       )) : null }

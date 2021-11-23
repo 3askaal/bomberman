@@ -3,13 +3,21 @@ import { Container, Wrapper, Box } from '3oilerplate'
 import randomColor from 'randomcolor'
 import { Controls, Map } from '../../components'
 import { MapContext } from '../../context'
+import useMousetrap from "react-hook-mousetrap"
+
 
 const initialPlayer = { x: 0, y: 0 }
 
 const PlayView = () => {
-  const { grid }: any = useContext(MapContext)
+  const { grid, setGrid }: any = useContext(MapContext)
   const [players, setPlayers] = useState<any[]>([{...initialPlayer}, {...initialPlayer}, {...initialPlayer}, {...initialPlayer}])
   const [blocks] = useState(20)
+
+  useMousetrap('up', () => move(0, 'y', -1))
+  useMousetrap('down', () => move(0, 'y', 1))
+  useMousetrap('left', () => move(0, 'x', -1))
+  useMousetrap('right', () => move(0, 'x', 1))
+  useMousetrap('space', () => attack(0))
 
   const move = (playerIndex: number, direction: string, movement: number) => {
     const newPlayer = { ...players[playerIndex] }
@@ -19,8 +27,9 @@ const PlayView = () => {
     }
 
     newPlayer[direction] += movement
+    console.log(newPlayer)
 
-    const block = Object.values(grid).find(({x, y, metal, brick}: any) => (x === newPlayer.x && y === newPlayer.y) && (metal || brick))
+    const block = Object.values(grid).find(({ x, y, metal, brick }: any) => (x === newPlayer.x && y === newPlayer.y) && (metal || brick))
 
     if (block) {
       return
@@ -29,6 +38,26 @@ const PlayView = () => {
     const newPlayers = [...players]
     newPlayers[playerIndex] = { ...players[playerIndex], ...newPlayer }
     setPlayers(newPlayers)
+  }
+
+  const attack = (playerIndex: number) => {
+    const player = { ...players[playerIndex] }
+    updateBlock(player, { bomb: true })
+
+    setTimeout(() => {
+      updateBlock(player, { bomb: false })
+    }, 3000)
+  }
+
+  // const getBlock = (player: any) => {
+  //   Object.values(grid).find(({x, y}: any) => (x === player.x && y === player.y))
+  // }
+
+  function updateBlock(player: any, update: any)  {
+    const posKey = `${player.x}/${player.y}`
+    let newGrid = { ...grid }
+    newGrid = { ...newGrid, [posKey]: { ...newGrid[posKey], ...update }}
+    setGrid({ ...newGrid })
   }
 
   useEffect(() => {
@@ -86,6 +115,7 @@ const PlayView = () => {
             height: '100%',
             position: 'absolute',
             justifyContent: 'space-between',
+            alignContent: 'space-between',
             flexDirection: 'row',
             display: 'flex',
             flexWrap: 'wrap'
@@ -94,13 +124,15 @@ const PlayView = () => {
           { players.map((player, playerIndex) => (
             <Box
               style={{
-                display: 'flex',
-                flexBasis: players.length === 2 ? '100%' : '45%',
-                alignItems: playerIndex > 1 ? 'flex-end' : null
+                display: 'inline-flex',
+                width: '50%',
+                // flexBasis: players.length === 2 ? '100%' : '45%',
+                justifyContent: 'center',
               }}
             >
               <Controls
-                onUpdate={(direction: string, movement: number) => move(playerIndex, direction, movement)}
+                onMove={(direction: string, movement: number) => move(playerIndex, direction, movement)}
+                onAttack={() => attack(playerIndex)}
                 color={players[playerIndex].color}
               />
             </Box>

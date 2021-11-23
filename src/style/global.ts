@@ -3,7 +3,7 @@ import { createGlobalStyle } from 'styled-components'
 export const LocalGlobalStyle: any = createGlobalStyle<any>({
   html: {
     height: '100%',
-    fontSize: '20px'
+    fontSize: '16px'
   },
 
   svg: {

@@ -20,7 +20,7 @@ const PlayView = () => {
 
     newPlayer[direction] += movement
 
-    const block = grid.find(({x, y, metal, brick}: any) => (x === newPlayer.x && y === newPlayer.y) && (metal || brick))
+    const block = Object.values(grid).find(({x, y, metal, brick}: any) => (x === newPlayer.x && y === newPlayer.y) && (metal || brick))
 
     if (block) {
       return
@@ -95,7 +95,7 @@ const PlayView = () => {
             <Box
               style={{
                 display: 'flex',
-                flexBasis: players.length === 2 ? '100%' : '50%',
+                flexBasis: players.length === 2 ? '100%' : '45%',
                 alignItems: playerIndex > 1 ? 'flex-end' : null
               }}
             >

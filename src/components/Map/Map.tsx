@@ -37,19 +37,17 @@ export const Map = ({ players, style, blocks } : any) => {
       newGrid[`${x}/${y}`] = { x, y }
     })
 
-    setGrid(newGrid)
+    setGrid({...newGrid})
   }
 
   function generateMetal() {
+    let newGrid = { ...grid }
+
     const newMetal = Object.values(grid).filter((block: any) => {
       const { x, y } = block
 
       if (y % 2 && x % 2) {
-        const newGrid = { ...grid }
-        newGrid[`${x}/${y}`].metal = true
-
-        setGrid(newGrid)
-
+        newGrid = { ...newGrid, [`${x}/${y}`]: { ...newGrid[`${x}/${y}`], metal: true }}
         return true
       }
 
@@ -57,10 +55,13 @@ export const Map = ({ players, style, blocks } : any) => {
       return false
     })
 
+    setGrid({...newGrid})
     setMetal(newMetal)
   }
 
   function generateBricks() {
+    let newGrid = { ...grid }
+
     const freeSpaces = Object.values(grid).filter((block: any) => {
       const { x, y } = block
 
@@ -85,14 +86,11 @@ export const Map = ({ players, style, blocks } : any) => {
 
     const newBricks = sampleSize(freeSpaces, (60 / 100) * freeSpaces.length)
 
-    freeSpaces.forEach((brick: any) => {
-      const { x, y } = brick
-      const newGrid = { ...grid }
-      newGrid[`${x}/${y}`].metal = brick
+    newBricks.forEach(({x, y}: any) => {
+      newGrid = { ...newGrid, [`${x}/${y}`]: { ...newGrid[`${x}/${y}`], brick: true }}
     })
 
-
-
+    setGrid({ ...newGrid })
     setBricks(newBricks)
   }
 

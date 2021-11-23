@@ -1,13 +1,13 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { SMap, SMapMetal, SMapCharacter, SMapBrick, SMapBomb } from './Map.styled'
+import { SMap, SMapStone, SMapCharacter, SMapBrick, SMapBomb } from './Map.styled'
 import { times, sampleSize } from 'lodash'
 // import * as mt from 'mousetrap'
 import { MapContext } from '../../context'
 
 export const Map = ({ players, style, blocks } : any) => {
-  const { grid, setGrid }: any = useContext(MapContext)
+  const { grid, setGrid, bombs }: any = useContext(MapContext)
   // const [grid, setGrid] = useState<any[]>([])
-  const [metal, setMetal] = useState<any[]>([])
+  const [stones, setStones] = useState<any[]>([])
   const [bricks, setBricks] = useState<any[]>([])
   // const [brickGenerated, setBrickGenerated] = useState<boolean>(false)
 
@@ -15,15 +15,30 @@ export const Map = ({ players, style, blocks } : any) => {
     generate()
   }, [])
 
-  useEffect(() => {
-    if (grid && !metal.length) {
-      generateMetal()
-    }
-  }, [grid])
+  const getBombs = () => {
+    return Object.values(bombs).filter(({ bomb }: any) => bomb)
+  }
 
   useEffect(() => {
-    if (grid && metal.length && !bricks.length) {
-      generateBricks()
+    console.log(bombs)
+  }, [bombs])
+
+  useEffect(() => {
+    if (grid) {
+      if (!stones.length) {
+        generateStones()
+      }
+
+      if (stones.length && !bricks.length) {
+        generateBricks()
+      }
+
+      // const activeBombs = Object.values(grid).filter(({ bomb }: any) => bomb)
+
+      // if (activeBombs.length) {
+      //   setBombs([])
+      //   setBombs(activeBombs)
+      // }
     }
   }, [grid])
 
@@ -41,14 +56,14 @@ export const Map = ({ players, style, blocks } : any) => {
     setGrid({...newGrid})
   }
 
-  function generateMetal() {
+  function generateStones() {
     let newGrid = { ...grid }
 
-    const newMetal = Object.values(grid).filter((block: any) => {
+    const newStones = Object.values(grid).filter((block: any) => {
       const { x, y } = block
 
       if (y % 2 && x % 2) {
-        newGrid = { ...newGrid, [`${x}/${y}`]: { ...newGrid[`${x}/${y}`], metal: true }}
+        newGrid = { ...newGrid, [`${x}/${y}`]: { ...newGrid[`${x}/${y}`], stone: true }}
         return true
       }
 
@@ -57,7 +72,7 @@ export const Map = ({ players, style, blocks } : any) => {
     })
 
     setGrid({...newGrid})
-    setMetal(newMetal)
+    setStones(newStones)
   }
 
   function generateBricks() {
@@ -107,8 +122,8 @@ export const Map = ({ players, style, blocks } : any) => {
           color={color}
         />
       )) }
-      { metal.length ? metal.map(({x, y}: any, index: number) => (
-        <SMapMetal
+      { stones.length ? stones.map(({x, y}: any, index: number) => (
+        <SMapStone
           key={index}
           s={{
             left: `${x}rem`,
@@ -125,7 +140,7 @@ export const Map = ({ players, style, blocks } : any) => {
           }}
         />
       )) : null }
-      { grid ? Object.values(grid).filter(({ bomb }: any) => bomb).map(({x, y}: any, index: number) => (
+      { getBombs().length ? getBombs().map(({x, y}: any, index: number) => (
         <SMapBomb
           key={index}
           s={{

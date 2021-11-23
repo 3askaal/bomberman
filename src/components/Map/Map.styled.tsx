@@ -10,7 +10,7 @@ export const SMap = styled.div(({ theme, blocks }: any) => ({
   // border: `solid ${rgba(theme.colors.primary, 0.6)}`,
 }))
 
-export const SMapMetal = styled.div(({ theme }: any) => ({
+export const SMapStone = styled.div(({ theme }: any) => ({
   position: 'absolute',
   width: '1rem',
   height: '1rem',
@@ -37,10 +37,13 @@ export const SMapBrick = styled.div(() => ({
   position: 'absolute',
   width: '1rem',
   height: '1rem',
-  backgroundColor: '#B42B51',
   border: '0.15rem solid',
+  // light
   borderTopColor: '#E63E6D',
   borderRightColor: '#E63E6D',
+  // middle
+  backgroundColor: '#B42B51',
+  // dark
   borderLeftColor: '#7D1935',
   borderBottomColor: '#7D1935',
 }))

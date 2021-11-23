@@ -9,7 +9,7 @@ import useMousetrap from "react-hook-mousetrap"
 const initialPlayer = { x: 0, y: 0 }
 
 const PlayView = () => {
-  const { grid, setGrid }: any = useContext(MapContext)
+  const { grid, setGrid, bombs, setBombs }: any = useContext(MapContext)
   const [players, setPlayers] = useState<any[]>([{...initialPlayer}, {...initialPlayer}, {...initialPlayer}, {...initialPlayer}])
   const [blocks] = useState(20)
 
@@ -19,7 +19,7 @@ const PlayView = () => {
   useMousetrap('right', () => move(0, 'x', 1))
   useMousetrap('space', () => attack(0))
 
-  const move = (playerIndex: number, direction: string, movement: number) => {
+  function move (playerIndex: number, direction: string, movement: number) {
     const newPlayer = { ...players[playerIndex] }
 
     if (newPlayer[direction] + movement > blocks || newPlayer[direction] + movement < 0) {
@@ -29,7 +29,7 @@ const PlayView = () => {
     newPlayer[direction] += movement
     console.log(newPlayer)
 
-    const block = Object.values(grid).find(({ x, y, metal, brick }: any) => (x === newPlayer.x && y === newPlayer.y) && (metal || brick))
+    const block = Object.values(grid).find(({ x, y, stone, brick }: any) => (x === newPlayer.x && y === newPlayer.y) && (stone || brick))
 
     if (block) {
       return
@@ -40,12 +40,13 @@ const PlayView = () => {
     setPlayers(newPlayers)
   }
 
-  const attack = (playerIndex: number) => {
-    const player = { ...players[playerIndex] }
-    updateBlock(player, { bomb: true })
+  function attack(playerIndex: number) {
+    const { x, y }: any = { ...players[playerIndex] }
+    const posKey = `${x}/${y}`
+    setBombs({ ...bombs, [posKey]: { x, y, bomb: true }})
 
     setTimeout(() => {
-      updateBlock(player, { bomb: false })
+      setBombs({ ...bombs, [posKey]: { x, y, bomb: false }})
     }, 3000)
   }
 
@@ -53,12 +54,12 @@ const PlayView = () => {
   //   Object.values(grid).find(({x, y}: any) => (x === player.x && y === player.y))
   // }
 
-  function updateBlock(player: any, update: any)  {
-    const posKey = `${player.x}/${player.y}`
-    let newGrid = { ...grid }
-    newGrid = { ...newGrid, [posKey]: { ...newGrid[posKey], ...update }}
-    setGrid({ ...newGrid })
-  }
+  // function updateBlock(player: any, update: any)  {
+  //   const posKey = `${player.x}/${player.y}`
+  //   let newGrid = { ...grid }
+  //   newGrid = { ...newGrid, [posKey]: { ...newGrid[posKey], ...update }}
+  //   setGrid({ ...newGrid })
+  // }
 
   useEffect(() => {
     const newPlayers = players.map((player: any, index: number) => {

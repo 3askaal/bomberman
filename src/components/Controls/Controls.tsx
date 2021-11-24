@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Box } from '3oilerplate'
 import { SControls, SControlsMiddle, SControlsButton } from './Controls.styled'
 import {
@@ -8,33 +8,104 @@ import {
   ChevronDown,
   Crosshair
 } from 'react-feather'
+import isMobile from 'is-mobile'
 
 export const Controls = ({ onMove, onAttack, color, index }: any) => {
+  useEffect(() => {
+    isMobile()
+  }, [])
+
   return (
     <Box s={{ display: 'inline-flex', flexDirection: 'row', alignItems: ['flex-start', 'flex-end'][index] }}>
       { index === 0 ? (
-        <SControlsButton color={color} type="attack" onTouchStart={() => onAttack()} onMouseDown={() => onAttack()}>
+        <SControlsButton
+          color={color}
+          type="attack"
+          {...isMobile() ? {
+            onTouchStart: () => onAttack()
+          } : {
+            onMouseDown: () => onAttack()
+          }}
+          s={{
+            touchAction: isMobile() ? 'auto' : 'none',
+          }}
+        >
           <Crosshair />
         </SControlsButton>
       ) : null }
       <SControls s={{ alignItems: ['flex-start', 'flex-end'][index] }}>
-        <SControlsButton color={color} type="left" onTouchStart={() => onMove('x', -1)} onMouseDown={() => onMove('x', -1)}>
+        <SControlsButton
+          color={color}
+          type="left"
+          {...isMobile() ? {
+            onTouchStart: () => onMove('x',  -1)
+          } : {
+            onMouseDown: () => onMove('x',  -1)
+          }}
+          s={{
+            touchAction: isMobile() ? 'auto' : 'none',
+          }}
+        >
           <ChevronLeft />
         </SControlsButton>
         <SControlsMiddle>
-          <SControlsButton color={color} type="up" onTouchStart={() => onMove('y', -1)} onMouseDown={() => onMove('y', -1)}>
+          <SControlsButton
+            color={color}
+            type="up"
+            {...isMobile() ? {
+              onTouchStart: () => onMove('y',  -1)
+            } : {
+              onMouseDown: () => onMove('y',  -1)
+            }}
+            s={{
+              touchAction: isMobile() ? 'auto' : 'none',
+            }}
+          >
             <ChevronUp />
           </SControlsButton>
-          <SControlsButton color={color} type="down" onTouchStart={() => onMove('y', 1)} onMouseDown={() => onMove('y', 1)}>
+          <SControlsButton
+            color={color}
+            type="down"
+            {...isMobile() ? {
+              onTouchStart: () => onMove('y ', 1)
+            } : {
+              onMouseDown: () => onMove('y ', 1)
+            }}
+            s={{
+              touchAction: isMobile() ? 'auto' : 'none',
+            }}
+          >
             <ChevronDown />
           </SControlsButton>
         </SControlsMiddle>
-        <SControlsButton color={color} type="right" onTouchStart={() => onMove('x', 1)} onMouseDown={() => onMove('x', 1)}>
+        <SControlsButton
+          color={color}
+          type="right"
+          {...isMobile() ? {
+            onTouchStart: () => onMove('x ', 1)
+          } : {
+            onMouseDown: () => onMove('x ', 1)
+          }}
+          s={{
+            touchAction: isMobile() ? 'auto' : 'none',
+          }}
+        >
           <ChevronRight />
         </SControlsButton>
       </SControls>
       { index === 1 ? (
-        <SControlsButton color={color} type="attack" onTouchStart={() => onAttack()} onMouseDown={() => onAttack()}>
+        <SControlsButton
+          color={color}
+          type="attack"
+          {...isMobile() ? {
+            onTouchStart: () => onAttack()
+          } : {
+            onMouseDown: () => onAttack()
+          }}
+          s={{
+            touchAction: isMobile() ? 'auto' : 'none',
+          }}
+        >
           <Crosshair />
         </SControlsButton>
       ) : null }

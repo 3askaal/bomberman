@@ -116,8 +116,7 @@ export const Map = ({ players, style, blocks } : any) => {
         <SMapCharacter
           key={index}
           s={{
-            left: `${x}rem`,
-            top: `${y}rem`
+            transform: `translate3d(${x}rem, ${y}rem, 0)`
           }}
           color={color}
         />

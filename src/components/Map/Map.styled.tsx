@@ -5,7 +5,9 @@ export const SMap = styled.div(({ theme, blocks }: any) => ({
   position: 'relative',
   height: `${blocks}rem`,
   width: `${blocks}rem`,
-  backgroundColor: 'white',
+  backgroundColor: '#F0F8FF',
+  borderRadius: '0.2rem',
+  boxShadow: '0 0 0 2px #F0F8FF',
   // backgroundImage: `url(${griptape})`,
   // border: `solid ${rgba(theme.colors.primary, 0.6)}`,
 }))
@@ -30,7 +32,7 @@ export const SMapCharacter = styled.div(({ theme, color }: any) => ({
   height: '.8rem',
   margin: '.1rem',
   borderRadius: '100%',
-  transition: 'all .125s ease'
+  transition: 'transform .1s ease'
 }))
 
 export const SMapBrick = styled.div(() => ({

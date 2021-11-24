@@ -51,6 +51,8 @@ const PlayView = () => {
     const posKey = `${x}/${y}`
     setBombs({ ...bombs, [posKey]: { x, y, bomb: true }})
 
+
+
     setTimeout(() => {
       setBombs((currentBombs: any) => ({ ...currentBombs, [posKey]: { x, y, bomb: false }}))
     }, 3000)

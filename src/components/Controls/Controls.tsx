@@ -67,9 +67,9 @@ export const Controls = ({ onMove, onAttack, color, index }: any) => {
             color={color}
             type="down"
             {...isMobile() ? {
-              onTouchStart: () => onMove('y ', 1)
+              onTouchStart: () => onMove('y', 1)
             } : {
-              onMouseDown: () => onMove('y ', 1)
+              onMouseDown: () => onMove('y', 1)
             }}
             s={{
               touchAction: isMobile() ? 'auto' : 'none',
@@ -82,9 +82,9 @@ export const Controls = ({ onMove, onAttack, color, index }: any) => {
           color={color}
           type="right"
           {...isMobile() ? {
-            onTouchStart: () => onMove('x ', 1)
+            onTouchStart: () => onMove('x', 1)
           } : {
-            onMouseDown: () => onMove('x ', 1)
+            onMouseDown: () => onMove('x', 1)
           }}
           s={{
             touchAction: isMobile() ? 'auto' : 'none',

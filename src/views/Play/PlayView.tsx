@@ -9,7 +9,14 @@ import useMousetrap from "react-hook-mousetrap"
 const initialPlayer = { x: 0, y: 0 }
 
 const PlayView = () => {
-  const { grid, setGrid, bombs, setBombs }: any = useContext(MapContext)
+  const {
+    grid,
+    setGrid,
+    bombs,
+    setBombs,
+    explosions,
+    setExplosions
+  }: any = useContext(MapContext)
   const [players, setPlayers] = useState<any[]>([{...initialPlayer}, {...initialPlayer}])
   const [blocks] = useState(20)
 
@@ -49,8 +56,13 @@ const PlayView = () => {
     const { x, y }: any = { ...players[playerIndex] }
     const posKey = `${x}/${y}`
 
-    let newBombs = { ...bombs, [posKey]: { x, y, bomb: true } }
-    let resetBombs = { ...bombs, [posKey]: { x, y, bomb: false } }
+    let newGrid = { ...grid }
+
+    const newBombs = { ...bombs, [posKey]: { x, y, bomb: true } }
+    const resetBombs = { ...bombs, [posKey]: { x, y, bomb: false } }
+
+    let newExplosions = { ...explosions, [posKey]: { x, y, explosion: true } }
+    let resetExplosions = { ...explosions, [posKey]: { x, y, explosion: false } }
 
     const directions = ['left', 'right', 'up', 'down']
 
@@ -75,11 +87,11 @@ const PlayView = () => {
         const newPosKey = `${newPos.x}/${newPos.y}`
 
         if (newPos.brick) {
-          setGrid((currentGrid: any) => ({ ...currentGrid, [newPosKey]: { ...newPos, brick: false }}))
+          newGrid = { ...newGrid, [newPosKey]: { ...newPos, brick: false }}
         }
 
-        newBombs = { ...newBombs, [newPosKey]: { x: newPos.x, y: newPos.y, bomb: true }}
-        resetBombs = { ...resetBombs, [newPosKey]: { x: newPos.x, y: newPos.y, bomb: false }}
+        newExplosions = { ...newExplosions, [newPosKey]: { x: newPos.x, y: newPos.y, explosion: true }}
+        resetExplosions = { ...resetExplosions, [newPosKey]: { x: newPos.x, y: newPos.y, explosion: false }}
 
         i++
 
@@ -92,8 +104,14 @@ const PlayView = () => {
     setBombs((currentBombs: any) => ({ ...currentBombs, ...newBombs }))
 
     setTimeout(() => {
+      setGrid((currentGrid: any) => ({ ...currentGrid, ...newGrid }))
       setBombs((currentBombs: any) => ({ ...currentBombs, ...resetBombs }))
+      setExplosions((currentExplosions: any) => ({ ...currentExplosions, ...newExplosions }))
     }, 3000)
+
+    setTimeout(() => {
+      setExplosions((currentExplosions: any) => ({ ...currentExplosions, ...resetExplosions }))
+    }, 3500)
   }
 
   // const getBlock = (player: any) => {

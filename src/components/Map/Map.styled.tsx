@@ -53,10 +53,18 @@ export const SMapBrick = styled.div(() => ({
 export const SMapBomb = styled.div(() => ({
   position: 'absolute',
   borderRadius: '100%',
-  width: '.9rem',
-  height: '.9rem',
-  margin: '.05rem',
-  // background: '#111',
+  width: '.8rem',
+  height: '.8rem',
+  margin: '.1rem',
+  backgroundColor: '#111',
+}))
+
+export const SMapExplosion = styled.div(() => ({
+  position: 'absolute',
+  borderRadius: '100%',
+  width: '.8rem',
+  height: '.8rem',
+  margin: '.1rem',
   background: `repeating-radial-gradient(
     #FFC300,
     #FFC300 0.1rem,

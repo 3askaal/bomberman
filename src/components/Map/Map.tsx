@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { SMap, SMapStone, SMapCharacter, SMapBrick, SMapBomb } from './Map.styled'
+import { SMap, SMapStone, SMapCharacter, SMapBrick, SMapBomb, SMapExplosion } from './Map.styled'
 import { times, sampleSize } from 'lodash'
 // import * as mt from 'mousetrap'
 import { MapContext } from '../../context'
 
 export const Map = ({ players, style, blocks } : any) => {
-  const { grid, setGrid, bombs }: any = useContext(MapContext)
+  const { grid, setGrid, bombs, explosions }: any = useContext(MapContext)
   // const [grid, setGrid] = useState<any[]>([])
   const [stones, setStones] = useState<any[]>([])
   const [bricks, setBricks] = useState<any[]>([])
@@ -17,6 +17,10 @@ export const Map = ({ players, style, blocks } : any) => {
 
   const getBombs = () => {
     return bombs ? Object.values(bombs).filter(({ bomb }: any) => bomb) : []
+  }
+
+  const getExplosions = () => {
+    return explosions ? Object.values(explosions).filter(({ explosion }: any) => explosion) : []
   }
 
   const getBricks = () => {
@@ -147,6 +151,15 @@ export const Map = ({ players, style, blocks } : any) => {
       )) }
       { getBombs().map(({x, y}: any, index: number) => (
         <SMapBomb
+          key={index}
+          s={{
+            left: `${x}rem`,
+            top: `${y}rem`,
+          }}
+        />
+      )) }
+      { getExplosions().map(({x, y}: any, index: number) => (
+        <SMapExplosion
           key={index}
           s={{
             left: `${x}rem`,

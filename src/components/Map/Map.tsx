@@ -37,11 +37,6 @@ export const Map = ({ players, style, blocks } : any) => {
         generateBricks()
       }
 
-      if (bricks.length) {
-        console.log(grid)
-        console.log(bricks)
-      }
-
       // const activeBombs = Object.values(grid).filter(({ bomb }: any) => bomb)
 
       // if (activeBombs.length) {
@@ -75,7 +70,6 @@ export const Map = ({ players, style, blocks } : any) => {
         newGrid = { ...newGrid, [`${x}/${y}`]: { ...newGrid[`${x}/${y}`], stone: true }}
         return true
       }
-
 
       return false
     })

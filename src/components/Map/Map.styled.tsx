@@ -56,7 +56,8 @@ export const SMapBomb = styled.div(() => ({
   width: '.8rem',
   height: '.8rem',
   margin: '.1rem',
-  backgroundColor: '#111',
+  backgroundColor: '#666',
+  border: '0.15rem solid #A9A9A9',
 }))
 
 export const SMapExplosion = styled.div(() => ({

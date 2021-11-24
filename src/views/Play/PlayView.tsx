@@ -58,8 +58,8 @@ const PlayView = () => {
 
     let newGrid = { ...grid }
 
-    const newBombs = { ...bombs, [posKey]: { x, y, bomb: true } }
-    const resetBombs = { ...bombs, [posKey]: { x, y, bomb: false } }
+    const newBomb = { ...bombs, [posKey]: { x, y, bomb: true } }
+    const resetBomb = { ...bombs, [posKey]: { x, y, bomb: false } }
 
     let newExplosions = { ...explosions, [posKey]: { x, y, explosion: true } }
     let resetExplosions = { ...explosions, [posKey]: { x, y, explosion: false } }
@@ -101,11 +101,11 @@ const PlayView = () => {
       }
     })
 
-    setBombs((currentBombs: any) => ({ ...currentBombs, ...newBombs }))
+    setBombs((currentBombs: any) => ({ ...currentBombs, ...newBomb }))
 
     setTimeout(() => {
       setGrid((currentGrid: any) => ({ ...currentGrid, ...newGrid }))
-      setBombs((currentBombs: any) => ({ ...currentBombs, ...resetBombs }))
+      setBombs((currentBombs: any) => ({ ...currentBombs, ...resetBomb }))
       setExplosions((currentExplosions: any) => ({ ...currentExplosions, ...newExplosions }))
     }, 3000)
 
@@ -186,8 +186,9 @@ const PlayView = () => {
             flexWrap: 'wrap'
           }}
         >
-          { players.map((player, playerIndex) => (
+          { players.map((player, index: number) => (
             <Box
+              key={`player${index}`}
               style={{
                 display: 'inline-flex',
                 width: '100%',
@@ -196,10 +197,10 @@ const PlayView = () => {
               }}
             >
               <Controls
-                onMove={(direction: string, movement: number) => move(playerIndex, direction, movement)}
-                onAttack={() => attack(playerIndex)}
-                color={players[playerIndex].color}
-                index={playerIndex}
+                onMove={(direction: string, movement: number) => move(index, direction, movement)}
+                onAttack={() => attack(index)}
+                color={player.color}
+                index={index}
               />
             </Box>
           )) }

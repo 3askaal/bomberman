@@ -29,6 +29,11 @@ export const Map = ({ players, style, blocks } : any) => {
         generateBricks()
       }
 
+      if (bricks.length) {
+        console.log(grid)
+        console.log(bricks)
+      }
+
       // const activeBombs = Object.values(grid).filter(({ bomb }: any) => bomb)
 
       // if (activeBombs.length) {
@@ -77,19 +82,19 @@ export const Map = ({ players, style, blocks } : any) => {
     const freeSpaces = Object.values(grid).filter((block: any) => {
       const { x, y } = block
 
-      const evenUneven = x % 2 === 1 && y % 2 === 0
-      const unevenEven = x % 2 === 0 && y % 2 === 1
-      const bothUneven = x % 1 === 0 && y % 2 === 0
+      const isEvenUneven = x % 2 === 1 && y % 2 === 0
+      const isUnevenEven = x % 2 === 0 && y % 2 === 1
+      const isBothUneven = x % 1 === 0 && y % 2 === 0
 
-      if (evenUneven || unevenEven || bothUneven) {
+      if (isEvenUneven || isUnevenEven || isBothUneven) {
         const isTopLeftCorner = y < 3 && x < 3
         const isTopRightCorner = y < 3 && x > 17
         const isBottomLeftCorner = y > 17 && x < 3
         const isBottomRightCorner = y > 17 && x > 17
 
-        const firstRow = isTopLeftCorner || isTopRightCorner || isBottomLeftCorner || isBottomRightCorner
+        const isCorner = isTopLeftCorner || isTopRightCorner || isBottomLeftCorner || isBottomRightCorner
 
-        if (!firstRow) {
+        if (!isCorner) {
           return true
         }
       }

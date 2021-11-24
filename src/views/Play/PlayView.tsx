@@ -67,12 +67,14 @@ const PlayView = () => {
 
         const newPos = grid[go[direction]]
 
-        if (newPos && !newPos.metal) {
-          const newPosKey = `${newPos.x}/${newPos.y}`
-          console.log(newPosKey)
-          newBombs = { ...newBombs, [newPosKey]: { x: newPos.x, y: newPos.y, bomb: true }}
-          resetBombs = { ...resetBombs, [newPosKey]: { x: newPos.x, y: newPos.y, bomb: false }}
+        if (!newPos || newPos.stone || newPos.brick) {
+          return
         }
+
+        const newPosKey = `${newPos.x}/${newPos.y}`
+        console.log(newPosKey)
+        newBombs = { ...newBombs, [newPosKey]: { x: newPos.x, y: newPos.y, bomb: true }}
+        resetBombs = { ...resetBombs, [newPosKey]: { x: newPos.x, y: newPos.y, bomb: false }}
 
         i++
       }

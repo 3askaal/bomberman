@@ -20,10 +20,6 @@ export const Map = ({ players, style, blocks } : any) => {
   }
 
   useEffect(() => {
-    console.log(bombs)
-  }, [bombs])
-
-  useEffect(() => {
     if (grid) {
       if (!stones.length) {
         generateStones()
@@ -86,11 +82,12 @@ export const Map = ({ players, style, blocks } : any) => {
       const bothUneven = x % 1 === 0 && y % 2 === 0
 
       if (evenUneven || unevenEven || bothUneven) {
-        const isRightRow = y === 0
-        const isBottomRow = y === 20
-        const isLeftRow = x === 0
-        const isTopRow = x === 20
-        const firstRow = isRightRow || isBottomRow || isLeftRow || isTopRow
+        const isTopLeftCorner = y < 3 && x < 3
+        const isTopRightCorner = y < 3 && x > 17
+        const isBottomLeftCorner = y > 17 && x < 3
+        const isBottomRightCorner = y > 17 && x > 17
+
+        const firstRow = isTopLeftCorner || isTopRightCorner || isBottomLeftCorner || isBottomRightCorner
 
         if (!firstRow) {
           return true

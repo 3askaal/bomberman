@@ -33,7 +33,6 @@ const PlayView = () => {
     }
 
     newPlayer[direction] += movement
-    console.log(newPlayer)
 
     const block = Object.values(grid).find(({ x, y, stone, brick }: any) => (x === newPlayer.x && y === newPlayer.y) && (stone || brick))
 
@@ -49,12 +48,40 @@ const PlayView = () => {
   function attack(playerIndex: number) {
     const { x, y }: any = { ...players[playerIndex] }
     const posKey = `${x}/${y}`
-    setBombs({ ...bombs, [posKey]: { x, y, bomb: true }})
 
+    let newBombs = { ...bombs, [posKey]: { x, y, bomb: true } }
+    let resetBombs = { ...bombs, [posKey]: { x, y, bomb: false } }
 
+    const directions = ['left', 'right', 'up', 'down']
+
+    directions.forEach((direction) => {
+      let i = 1
+
+      while (i < 3) {
+        const go: any = {
+          left: `${x - i}/${y}`,
+          right: `${x + i}/${y}`,
+          up: `${x}/${y + i}`,
+          down: `${x}/${y - i}`,
+        }
+
+        const newPos = grid[go[direction]]
+
+        if (newPos && !newPos.metal) {
+          const newPosKey = `${newPos.x}/${newPos.y}`
+          console.log(newPosKey)
+          newBombs = { ...newBombs, [newPosKey]: { x: newPos.x, y: newPos.y, bomb: true }}
+          resetBombs = { ...resetBombs, [newPosKey]: { x: newPos.x, y: newPos.y, bomb: false }}
+        }
+
+        i++
+      }
+    })
+
+    setBombs((currentBombs: any) => ({ ...currentBombs, ...newBombs }))
 
     setTimeout(() => {
-      setBombs((currentBombs: any) => ({ ...currentBombs, [posKey]: { x, y, bomb: false }}))
+      setBombs((currentBombs: any) => ({ ...currentBombs, ...resetBombs }))
     }, 3000)
   }
 

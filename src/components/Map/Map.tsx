@@ -16,7 +16,11 @@ export const Map = ({ players, style, blocks } : any) => {
   }, [])
 
   const getBombs = () => {
-    return Object.values(bombs).filter(({ bomb }: any) => bomb)
+    return bombs ? Object.values(bombs).filter(({ bomb }: any) => bomb) : []
+  }
+
+  const getBricks = () => {
+    return grid ? Object.values(grid).filter(({ brick }: any) => brick) : []
   }
 
   useEffect(() => {
@@ -132,7 +136,7 @@ export const Map = ({ players, style, blocks } : any) => {
           }}
         />
       )) : null }
-      { bricks.length ? bricks.map(({x, y}: any, index: number) => (
+      { getBricks().map(({x, y}: any, index: number) => (
         <SMapBrick
           key={index}
           s={{
@@ -140,8 +144,8 @@ export const Map = ({ players, style, blocks } : any) => {
             top: `${y}rem`,
           }}
         />
-      )) : null }
-      { getBombs().length ? getBombs().map(({x, y}: any, index: number) => (
+      )) }
+      { getBombs().map(({x, y}: any, index: number) => (
         <SMapBomb
           key={index}
           s={{
@@ -149,7 +153,7 @@ export const Map = ({ players, style, blocks } : any) => {
             top: `${y}rem`,
           }}
         />
-      )) : null }
+      )) }
     </SMap>
   )
 }

@@ -56,8 +56,9 @@ const PlayView = () => {
 
     directions.forEach((direction) => {
       let i = 1
+      let limit = 3
 
-      while (i < 3) {
+      while (i < limit) {
         const go: any = {
           left: `${x - i}/${y}`,
           right: `${x + i}/${y}`,
@@ -67,16 +68,24 @@ const PlayView = () => {
 
         const newPos = grid[go[direction]]
 
-        if (!newPos || newPos.stone || newPos.brick) {
+        if (!newPos || newPos.stone) {
           return
         }
 
         const newPosKey = `${newPos.x}/${newPos.y}`
-        console.log(newPosKey)
+
+        if (newPos.brick) {
+          setGrid((currentGrid: any) => ({ ...currentGrid, [newPosKey]: { ...newPos, brick: false }}))
+        }
+
         newBombs = { ...newBombs, [newPosKey]: { x: newPos.x, y: newPos.y, bomb: true }}
         resetBombs = { ...resetBombs, [newPosKey]: { x: newPos.x, y: newPos.y, bomb: false }}
 
         i++
+
+        if (newPos.brick) {
+          limit = i
+        }
       }
     })
 

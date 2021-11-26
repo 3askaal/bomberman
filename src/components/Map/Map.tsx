@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { SMap, SMapStone, SMapCharacter, SMapBrick, SMapBomb, SMapExplosion } from './Map.styled'
 import { times, sampleSize } from 'lodash'
+import { Box } from '3oilerplate'
 // import * as mt from 'mousetrap'
 import { MapContext } from '../../context'
 
@@ -152,15 +153,43 @@ export const Map = ({ players, style, blocks } : any) => {
           }}
         />
       )) }
-      { getExplosions().map(({x, y}: any, index: number) => (
-        <SMapExplosion
-          key={index}
-          s={{
-            left: `${x}rem`,
-            top: `${y}rem`,
-          }}
-        />
-      )) }
+      { getExplosions().map(({x, y, distance}: any, index: number) => (
+        <Box s={{ position: 'relative', left: `${x}rem`, top: `${y}rem`, width: '1rem', height: '1rem', backgroundColor: '#900C3F' }}>
+          { Object.keys(distance).map((key: string, index: number) => (
+            <SMapExplosion
+              key={index}
+              x={x}
+              y={y}
+              direction={key}
+              {...key === 'left' && distance[key] && { s: {
+                top: 0,
+                right: '1rem',
+                width: `${distance[key]}rem`,
+                height: '1rem',
+              }}}
+              {...key === 'right' && distance[key] && { s: {
+                top: 0,
+                left: `1rem`,
+                width: `${distance[key]}rem`,
+                height: '1rem',
+              }}}
+              {...key === 'up' && distance[key] && { s: {
+                left: 0,
+                bottom: '1rem',
+                width: '1rem',
+                height: `${distance[key]}rem`,
+              }}}
+              {...key === 'down' && distance[key] && { s: {
+                left: 0,
+                top: `1rem`,
+                width: '1rem',
+                height: `${distance[key]}rem`,
+              }}}
+              distance={distance}
+            />
+          )) }
+        </Box>
+      ))}
     </SMap>
   )
 }

@@ -60,22 +60,46 @@ export const SMapBomb = styled.div(() => ({
   border: '0.15rem solid #A9A9A9',
 }))
 
-export const SMapExplosion = styled.div(() => ({
+export const SMapExplosion = styled.div(({ x, y, width, height }: any) => ({
   position: 'absolute',
-  borderRadius: '100%',
-  width: '.8rem',
-  height: '.8rem',
-  margin: '.1rem',
-  background: `repeating-radial-gradient(
-    #FFC300,
-    #FFC300 0.1rem,
-    #FF5733 0.1rem,
-    #FF5733 0.2rem,
-    #C70039 0.2rem,
-    #C70039 0.3rem,
-    #900C3F 0.3rem,
-    #900C3F 0.4rem,
-    #C70039 0.4rem,
-    #C70039 0.6rem
-  )`,
+  // borderRadius: '.25rem',
+  backgroundColor: '#900C3F',
+  // background: `repeating-radial-gradient(
+  //   #FFC300,
+  //   #FFC300 0.1rem,
+  //   #FF5733 0.1rem,
+  //   #FF5733 0.2rem,
+  //   #C70039 0.2rem,
+  //   #C70039 0.3rem,
+  //   #900C3F 0.3rem,
+  //   #900C3F 0.4rem,
+  //   #C70039 0.4rem,
+  //   #C70039 0.6rem
+  // )`,
+
+  // ':after': {
+  //   content: "''",
+  //   position: 'absolute',
+  //   display: 'block',
+  //   height: `${height}rem`,
+  //   width: '.8rem',
+  //   left: `${x}rem`,
+  //   top: `${startY}rem`,
+  //   backgroundColor: '#900C3F',
+  //   border: '.15rem solid #C70039',
+  //   borderRadius: '.2rem'
+  // },
+
+  // ':before': {
+  //   content: "''",
+  //   position: 'absolute',
+  //   display: 'block',
+  //   width: `${width}rem`,
+  //   height: '.8rem',
+  //   top: `${y}rem`,
+  //   left: `${startX}rem`,
+  //   backgroundColor: '#900C3F',
+  //   border: '.15rem solid #C70039',
+  //   borderRadius: '.2rem'
+  // },
 }))

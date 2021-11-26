@@ -12,9 +12,7 @@ const PlayView = () => {
   const {
     grid,
     setGrid,
-    bombs,
     setBombs,
-    explosions,
     setExplosions
   }: any = useContext(MapContext)
   const [players, setPlayers] = useState<any[]>([{...initialPlayer}, {...initialPlayer}])
@@ -56,15 +54,22 @@ const PlayView = () => {
     const { x, y }: any = { ...players[playerIndex] }
     const posKey = `${x}/${y}`
 
-    let newGrid = { ...grid }
+    let newGrid = {}
 
-    const newBomb = { ...bombs, [posKey]: { x, y, bomb: true } }
-    const resetBomb = { ...bombs, [posKey]: { x, y, bomb: false } }
+    const bomb = { [posKey]: { x, y, bomb: true } }
+    const resetBomb = { [posKey]: { x, y, bomb: false } }
 
-    let newExplosions = { ...explosions, [posKey]: { x, y, explosion: true } }
-    let resetExplosions = { ...explosions, [posKey]: { x, y, explosion: false } }
+    let explosions: any = { [posKey]: { x, y, explosion: true } }
+    let resetExplosions = { [posKey]: { x, y, explosion: false } }
 
     const directions = ['left', 'right', 'up', 'down']
+
+    let distance: any = {
+      right: 0,
+      left: 0,
+      up: 0,
+      down: 0
+    }
 
     directions.forEach((direction) => {
       let i = 1
@@ -74,8 +79,8 @@ const PlayView = () => {
         const go: any = {
           left: `${x - i}/${y}`,
           right: `${x + i}/${y}`,
-          up: `${x}/${y + i}`,
-          down: `${x}/${y - i}`,
+          up: `${x}/${y - i}`,
+          down: `${x}/${y + i}`,
         }
 
         const newPos = grid[go[direction]]
@@ -90,8 +95,10 @@ const PlayView = () => {
           newGrid = { ...newGrid, [newPosKey]: { ...newPos, brick: false }}
         }
 
-        newExplosions = { ...newExplosions, [newPosKey]: { x: newPos.x, y: newPos.y, explosion: true }}
+        // explosions = { ...explosions, [newPosKey]: { x: newPos.x, y: newPos.y, explosion: true }}
         resetExplosions = { ...resetExplosions, [newPosKey]: { x: newPos.x, y: newPos.y, explosion: false }}
+
+        distance[direction]++
 
         i++
 
@@ -101,12 +108,21 @@ const PlayView = () => {
       }
     })
 
-    setBombs((currentBombs: any) => ({ ...currentBombs, ...newBomb }))
+    explosions = {
+      ...explosions,
+      // [newPosKey]: { x: newPos.x, y: newPos.y },
+      [posKey]: {
+        ...explosions[posKey],
+        distance,
+      }
+    }
+
+    setBombs((currentBombs: any) => ({ ...currentBombs, ...bomb }))
 
     setTimeout(() => {
       setGrid((currentGrid: any) => ({ ...currentGrid, ...newGrid }))
       setBombs((currentBombs: any) => ({ ...currentBombs, ...resetBomb }))
-      setExplosions((currentExplosions: any) => ({ ...currentExplosions, ...newExplosions }))
+      setExplosions((currentExplosions: any) => ({ ...currentExplosions, ...explosions }))
     }, 3000)
 
     setTimeout(() => {

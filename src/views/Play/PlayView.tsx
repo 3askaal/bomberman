@@ -16,7 +16,7 @@ const PlayView = () => {
     setExplosions
   }: any = useContext(MapContext)
   const [players, setPlayers] = useState<any[]>([{...initialPlayer}, {...initialPlayer}])
-  const [blocks] = useState(20)
+  const [blocks] = useState(16)
 
   useMousetrap('up', () => move(0, 'y', -1))
   useMousetrap('down', () => move(0, 'y', 1))

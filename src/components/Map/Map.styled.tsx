@@ -60,46 +60,98 @@ export const SMapBomb = styled.div(() => ({
   border: '0.15rem solid #A9A9A9',
 }))
 
-export const SMapExplosion = styled.div(({ x, y, width, height }: any) => ({
+const c1 = '#FFC300';
+const c2 = '#FF5733';
+const c3 = '#C70039';
+const c4 = '#900C3F';
+
+export const SMapExplosion = styled.div(({ x, y, width, direction }: any) => ({
   position: 'absolute',
-  // borderRadius: '.25rem',
-  backgroundColor: '#900C3F',
-  // background: `repeating-radial-gradient(
-  //   #FFC300,
-  //   #FFC300 0.1rem,
-  //   #FF5733 0.1rem,
-  //   #FF5733 0.2rem,
-  //   #C70039 0.2rem,
-  //   #C70039 0.3rem,
-  //   #900C3F 0.3rem,
-  //   #900C3F 0.4rem,
-  //   #C70039 0.4rem,
-  //   #C70039 0.6rem
-  // )`,
+  background: `linear-gradient(
+    ${direction === 'up' || direction === 'down' ? '90deg,' : ''}
+    ${c1},
+    ${c1} .2rem,
+    ${c2} .2rem,
+    ${c2} .3rem,
+    ${c3} .3rem,
+    ${c3} .4rem,
+    ${c4} .4rem,
+    ${c4} .5rem,
+    ${c4} .6rem,
+    ${c3} .6rem,
+    ${c3} .7rem,
+    ${c2} .7rem,
+    ${c2} .8rem,
+    ${c1} .8rem,
+    ${c1}
+  )`,
+  ...(direction === 'right' && {
+    borderTopRightRadius: '.5rem',
+    borderBottomRightRadius: '.5rem',
+  }),
+  ...(direction === 'up' && {
+    borderTopLeftRadius: '.5rem',
+    borderTopRightRadius: '.5rem',
+  }),
+  ...(direction === 'down' && {
+    borderBottomLeftRadius: '.5rem',
+    borderBottomRightRadius: '.5rem',
+  }),
+  ...(direction === 'left' && {
+    borderTopLeftRadius: '.5rem',
+    borderBottomLeftRadius: '.5rem',
+  }),
+}))
 
-  // ':after': {
-  //   content: "''",
-  //   position: 'absolute',
-  //   display: 'block',
-  //   height: `${height}rem`,
-  //   width: '.8rem',
-  //   left: `${x}rem`,
-  //   top: `${startY}rem`,
-  //   backgroundColor: '#900C3F',
-  //   border: '.15rem solid #C70039',
-  //   borderRadius: '.2rem'
-  // },
+export const SMapExplosionEdge = styled.div(({ direction }: any) => ({
+  position: 'absolute',
+  width: '.5rem',
+  height: '1rem',
+  overflow: 'hidden',
 
-  // ':before': {
-  //   content: "''",
-  //   position: 'absolute',
-  //   display: 'block',
-  //   width: `${width}rem`,
-  //   height: '.8rem',
-  //   top: `${y}rem`,
-  //   left: `${startX}rem`,
-  //   backgroundColor: '#900C3F',
-  //   border: '.15rem solid #C70039',
-  //   borderRadius: '.2rem'
-  // },
+  ...(direction === 'right' && {
+    width: '.5rem',
+    height: '1rem',
+  }),
+  ...(direction === 'up' && {
+    width: '1rem',
+    height: '.5rem',
+  }),
+  ...(direction === 'down' && {
+    width: '1rem',
+    height: '.5rem',
+  }),
+  ...(direction === 'left' && {
+    width: '.5rem',
+    height: '1rem',
+  }),
+
+  '::after': {
+    content: "''",
+    position: 'absolute',
+    ...(direction === 'right' && {
+      right: 0,
+    }),
+    ...(direction === 'up' && {
+      top: 0,
+    }),
+    ...(direction === 'down' && {
+      bottom: 0,
+    }),
+    ...(direction === 'left' && {
+      left: 0,
+    }),
+    width: '1rem',
+    height: '1rem',
+    borderRadius: '100%',
+    background: `radial-gradient(
+      ${c4},
+      ${c4} .1rem,
+      ${c3} .1rem,
+      ${c3} .2rem,
+      ${c2} .2rem,
+      ${c2} .3rem,
+      ${c1} .3rem
+    )`
+  },
 }))

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { SMap, SMapStone, SMapCharacter, SMapBrick, SMapBomb, SMapExplosion } from './Map.styled'
+import { SMap, SMapStone, SMapCharacter, SMapBrick, SMapBomb, SMapExplosion, SMapExplosionEdge } from './Map.styled'
 import { times, sampleSize } from 'lodash'
 import { Box } from '3oilerplate'
 // import * as mt from 'mousetrap'
@@ -91,9 +91,9 @@ export const Map = ({ players, style, blocks } : any) => {
 
       if (isEvenUneven || isUnevenEven || isBothUneven) {
         const isTopLeftCorner = y < 3 && x < 3
-        const isTopRightCorner = y < 3 && x > 17
-        const isBottomLeftCorner = y > 17 && x < 3
-        const isBottomRightCorner = y > 17 && x > 17
+        const isTopRightCorner = y < 3 && x > (blocks - 3)
+        const isBottomLeftCorner = y > (blocks - 3) && x < 3
+        const isBottomRightCorner = y > (blocks - 3) && x > (blocks - 3)
 
         const isCorner = isTopLeftCorner || isTopRightCorner || isBottomLeftCorner || isBottomRightCorner
 
@@ -154,8 +154,8 @@ export const Map = ({ players, style, blocks } : any) => {
         />
       )) }
       { getExplosions().map(({x, y, distance}: any, index: number) => (
-        <Box s={{ position: 'relative', left: `${x}rem`, top: `${y}rem`, width: '1rem', height: '1rem', backgroundColor: '#900C3F' }}>
-          { Object.keys(distance).map((key: string, index: number) => (
+        <Box s={{ position: 'relative', left: `${x}rem`, top: `${y}rem`, width: '1rem', height: '1rem', backgroundColor: '#FFC300' }}>
+          { Object.keys(distance).map((key: string, index: number) => distance[key] ? (
             <SMapExplosion
               key={index}
               x={x}
@@ -186,8 +186,24 @@ export const Map = ({ players, style, blocks } : any) => {
                 height: `${distance[key]}rem`,
               }}}
               distance={distance}
-            />
-          )) }
+            >
+              <SMapExplosionEdge
+                direction={key}
+                {...key === 'right' && distance[key] && { s: {
+                  right: 0,
+                }}}
+                {...key === 'up' && distance[key] && { s: {
+                  top: 0,
+                }}}
+                {...key === 'down' && distance[key] && { s: {
+                  bottom: 0,
+                }}}
+                {...key === 'left' && distance[key] && { s: {
+                  left: 0,
+                }}}
+              />
+            </SMapExplosion>
+          ) : null) }
         </Box>
       ))}
     </SMap>

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { SMap, SMapStone, SMapCharacter, SMapBrick, SMapBomb, SMapExplosion, SMapExplosionEdge } from './Map.styled'
+import { SMap, SMapStone, SMapCharacter, SMapBrick, SMapBomb, SMapExplosion, SMapExplosionEdge, SMapCenterBar } from './Map.styled'
 import { times, sampleSize } from 'lodash'
 import { Box } from '3oilerplate'
 // import * as mt from 'mousetrap'
@@ -154,37 +154,16 @@ export const Map = ({ players, style, blocks } : any) => {
         />
       )) }
       { getExplosions().map(({x, y, distance}: any, index: number) => (
-        <Box s={{ position: 'relative', left: `${x}rem`, top: `${y}rem`, width: '1rem', height: '1rem', backgroundColor: '#FFC300' }}>
+        <Box s={{ position: 'relative', left: `${x}rem`, top: `${y}rem`, width: '1rem', height: '1rem' }}>
+          { times(5, (index) => (
+            <SMapCenterBar distance={distance} index={index} />
+          )) }
           { Object.keys(distance).map((key: string, index: number) => distance[key] ? (
             <SMapExplosion
               key={index}
               x={x}
               y={y}
               direction={key}
-              {...key === 'left' && distance[key] && { s: {
-                top: 0,
-                right: '1rem',
-                width: `${distance[key]}rem`,
-                height: '1rem',
-              }}}
-              {...key === 'right' && distance[key] && { s: {
-                top: 0,
-                left: `1rem`,
-                width: `${distance[key]}rem`,
-                height: '1rem',
-              }}}
-              {...key === 'up' && distance[key] && { s: {
-                left: 0,
-                bottom: '1rem',
-                width: '1rem',
-                height: `${distance[key]}rem`,
-              }}}
-              {...key === 'down' && distance[key] && { s: {
-                left: 0,
-                top: `1rem`,
-                width: '1rem',
-                height: `${distance[key]}rem`,
-              }}}
               distance={distance}
             >
               <SMapExplosionEdge

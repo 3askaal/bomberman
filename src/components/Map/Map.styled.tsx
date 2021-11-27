@@ -60,47 +60,122 @@ export const SMapBomb = styled.div(() => ({
   border: '0.15rem solid #A9A9A9',
 }))
 
-const c1 = '#FFC300';
-const c2 = '#FF5733';
-const c3 = '#C70039';
-const c4 = '#900C3F';
+// const c1 = '#FFC300';
+// const c2 = '#FF5733';
+// const c3 = '#C70039';
+// const c4 = '#900C3F';
 
-export const SMapExplosion = styled.div(({ x, y, width, direction }: any) => ({
+const c1 = '#900C3F';
+const c2 = '#C70039';
+const c3 = '#FF5733';
+const c4 = '#FFC300';
+const c5 = 'white';
+const colors = [c1, c2, c3, c4, c5]
+
+
+export const SMapExplosion = styled.div(({ key, direction, distance }: any) => ({
   position: 'absolute',
   background: `linear-gradient(
     ${direction === 'up' || direction === 'down' ? '90deg,' : ''}
     ${c1},
-    ${c1} .2rem,
+    ${c1} .1rem,
+    ${c2} .1rem,
     ${c2} .2rem,
-    ${c2} .3rem,
+    ${c3} .2rem,
     ${c3} .3rem,
-    ${c3} .4rem,
+    ${c4} .3rem,
     ${c4} .4rem,
-    ${c4} .5rem,
+    ${c5} .4rem,
+    ${c5} .6rem,
     ${c4} .6rem,
-    ${c3} .6rem,
+    ${c4} .7rem,
     ${c3} .7rem,
-    ${c2} .7rem,
+    ${c3} .8rem,
     ${c2} .8rem,
-    ${c1} .8rem,
-    ${c1}
+    ${c2} .9rem,
+    ${c1} .9rem,
+    ${c1} 1rem
   )`,
-  ...(direction === 'right' && {
-    borderTopRightRadius: '.5rem',
-    borderBottomRightRadius: '.5rem',
-  }),
-  ...(direction === 'up' && {
-    borderTopLeftRadius: '.5rem',
-    borderTopRightRadius: '.5rem',
-  }),
-  ...(direction === 'down' && {
-    borderBottomLeftRadius: '.5rem',
-    borderBottomRightRadius: '.5rem',
-  }),
-  ...(direction === 'left' && {
+
+  ...direction === 'left' && distance[direction] && {
+    top: 0,
+    right: '1rem',
+    width: `${distance[direction]}rem`,
+    height: '1rem',
     borderTopLeftRadius: '.5rem',
     borderBottomLeftRadius: '.5rem',
-  }),
+  },
+
+  ...direction === 'right' && distance[direction] && {
+    top: 0,
+    left: `1rem`,
+    width: `${distance[direction]}rem`,
+    height: '1rem',
+    borderTopRightRadius: '.5rem',
+    borderBottomRightRadius: '.5rem',
+  },
+
+  ...direction === 'up' && distance[direction] && {
+    left: 0,
+    bottom: '1rem',
+    width: '1rem',
+    height: `${distance[direction]}rem`,
+    borderTopLeftRadius: '.5rem',
+    borderTopRightRadius: '.5rem',
+  },
+
+  ...direction === 'down' && distance[direction] && {
+    left: 0,
+    top: `1rem`,
+    width: '1rem',
+    height: `${distance[direction]}rem`,
+    borderBottomLeftRadius: '.5rem',
+    borderBottomRightRadius: '.5rem',
+  },
+
+}))
+
+export const SMapCenter = styled.div(({ x, y, width, direction }: any) => ({
+  position: 'absolute',
+  width: '100%',
+  height: '100%',
+}))
+
+export const SMapCenterBar = styled.div(({ distance, index }: any) => ({
+  position: 'absolute',
+  width: '100%',
+  height: '100%',
+  zIndex: (index + 1) * 100,
+
+  ...(distance.up || distance.down) && {
+    '::after': {
+      content: "''",
+      backgroundColor: colors[index],
+      position: 'absolute',
+      height: distance.up ? '100%' : `.${58 + ((5 - (index + 1)) * 10)}rem`,
+      bottom: !distance.up ? 0 : null,
+      top: !distance.down ? 0 : null,
+      left: `.${index}rem`,
+      right: `.${index}rem`,
+      // top: `.${index}rem`,
+      // bottom: `.${index}rem`,
+    },
+  },
+
+  ...(distance.left || distance.right) && {
+    '::before': {
+      content: "''",
+      backgroundColor: colors[index],
+      position: 'absolute',
+      width: distance.left ? '100%' : `.${58 + ((5 - (index + 1)) * 10)}rem`,
+      left: !distance.right ? 0 : null,
+      right: !distance.left ? 0 : null,
+      // left: `.${index}rem`,
+      // right: `.${index}rem`,
+      top: `.${index}rem`,
+      bottom: `.${index}rem`,
+    },
+  },
 }))
 
 export const SMapExplosionEdge = styled.div(({ direction }: any) => ({
@@ -145,13 +220,15 @@ export const SMapExplosionEdge = styled.div(({ direction }: any) => ({
     height: '1rem',
     borderRadius: '100%',
     background: `radial-gradient(
-      ${c4},
+      ${c5},
+      ${c5} .1rem,
       ${c4} .1rem,
-      ${c3} .1rem,
+      ${c4} .2rem,
       ${c3} .2rem,
-      ${c2} .2rem,
+      ${c3} .3rem,
       ${c2} .3rem,
-      ${c1} .3rem
+      ${c2} .4rem,
+      ${c1} .4rem
     )`
   },
 }))

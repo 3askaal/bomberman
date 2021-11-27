@@ -1,12 +1,17 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { Container, Wrapper, Box } from '3oilerplate'
 import randomColor from 'randomcolor'
+import { sampleSize, times } from 'lodash'
 import { Controls, Map } from '../../components'
 import { MapContext } from '../../context'
 import useMousetrap from "react-hook-mousetrap"
 
+const colors = ['red', 'green', 'blue', 'purple', 'pink']
+const randomColors = sampleSize(colors, 2)
 
-const initialPlayer = { x: 0, y: 0 }
+const initialPlayers = times(2, (index) => ({ x: 0, y: 0, color: randomColor({ luminosity: 'dark', hue: randomColors[index]}) }))
+
+console.log()
 
 const PlayView = () => {
   const {
@@ -15,7 +20,7 @@ const PlayView = () => {
     setBombs,
     setExplosions
   }: any = useContext(MapContext)
-  const [players, setPlayers] = useState<any[]>([{...initialPlayer}, {...initialPlayer}])
+  const [players, setPlayers] = useState<any[]>(initialPlayers)
   const [blocks] = useState(16)
 
   useMousetrap('up', () => move(0, 'y', -1))
@@ -126,7 +131,7 @@ const PlayView = () => {
     }, 3000)
 
     setTimeout(() => {
-      setExplosions((currentExplosions: any) => ({ ...currentExplosions, ...resetExplosions }))
+      // setExplosions((currentExplosions: any) => ({ ...currentExplosions, ...resetExplosions }))
     }, 3500)
   }
 
@@ -143,9 +148,6 @@ const PlayView = () => {
 
   useEffect(() => {
     const newPlayers = players.map((player: any, index: number) => {
-      player.color = randomColor({
-        luminosity: 'dark',
-      })
 
       if (players.length === 2) {
         if (index === 1) {

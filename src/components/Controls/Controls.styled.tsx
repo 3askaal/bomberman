@@ -24,9 +24,9 @@ export const SControlsButton = styled.button(({ theme, type, color }: any) => ({
   alignItems: 'center',
   justifyContent: 'center',
   height:
-    ((type === 'left' || type === 'right') && '3rem') ||
-    ((type === 'up' || type === 'down') && '2rem') ||
-    ((type === 'attack') && '3rem'),
+    ((type === 'left' || type === 'right') && '2.5rem') ||
+    ((type === 'up' || type === 'down') && '2.5rem') ||
+    ((type === 'attack') && '2.5rem'),
   backgroundColor: color,
   border: '.125rem solid ' + theme.colors.background,
   borderRadius: '.25rem',

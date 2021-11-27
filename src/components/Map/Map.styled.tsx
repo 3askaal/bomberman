@@ -65,11 +65,11 @@ export const SMapBomb = styled.div(() => ({
 // const c3 = '#C70039';
 // const c4 = '#900C3F';
 
-const c1 = '#900C3F';
-const c2 = '#C70039';
-const c3 = '#FF5733';
+const c1 = '#6B0848';
+const c2 = '#A40A3C';
+const c3 = '#EC610A';
 const c4 = '#FFC300';
-const c5 = 'white';
+const c5 = '#F2E8C6';
 const colors = [c1, c2, c3, c4, c5]
 
 

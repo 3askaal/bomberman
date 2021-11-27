@@ -131,7 +131,7 @@ const PlayView = () => {
     }, 3000)
 
     setTimeout(() => {
-      // setExplosions((currentExplosions: any) => ({ ...currentExplosions, ...resetExplosions }))
+      setExplosions((currentExplosions: any) => ({ ...currentExplosions, ...resetExplosions }))
     }, 3500)
   }
 

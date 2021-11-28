@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { Container, Wrapper, Box } from '3oilerplate'
 import randomColor from 'randomcolor'
-import ReactGA from 'react-ga'
+import ReactGA from 'react-ga4'
 import { sampleSize, times } from 'lodash'
 import { Controls, Map } from '../../components'
 import { MapContext } from '../../context'

@@ -158,23 +158,23 @@ export const SMapCenter = s.div(({ x, y, width, direction }: any) => ({
   width: '1rem',
   height: '1rem',
 
-  '::after': {
-    content: "''",
-    position: 'absolute',
-    width: '100%',
-    height: '100%',
-    // animation: `${boom.getName()} .5s forwards`,
-    backgroundColor: 'grey',
-    opacity: .4,
-    borderRadius: '100%',
-    zIndex: 500
-  },
-}),
-css`
-  ::after {
-    animation: ${boom} .5s forwards;
-  }
-`)
+  // '::after': {
+  //   content: "''",
+  //   position: 'absolute',
+  //   width: '100%',
+  //   height: '100%',
+  //   // animation: `${boom.getName()} .5s forwards`,
+  //   backgroundColor: 'grey',
+  //   opacity: .4,
+  //   borderRadius: '100%',
+  //   zIndex: 500
+  // },
+}))
+// css`
+//   ::after {
+//     animation: ${boom} .5s forwards;
+//   }
+// `
 
 export const SMapCenterBar = s.div(({ distance, index }: any) => ({
   position: 'absolute',

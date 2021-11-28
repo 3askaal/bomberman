@@ -1,7 +1,6 @@
-import { styled } from '3oilerplate'
-import styledOG, { keyframes } from 'styled-components'
+import { s, keyframes, css } from '3oilerplate'
 
-export const SMap = styled.div(({ theme, blocks }: any) => ({
+export const SMap = s.div(({ theme, blocks }: any) => ({
   display: 'flex',
   position: 'relative',
   height: `${blocks}rem`,
@@ -13,7 +12,7 @@ export const SMap = styled.div(({ theme, blocks }: any) => ({
   // border: `solid ${rgba(theme.colors.primary, 0.6)}`,
 }))
 
-export const SMapStone = styled.div(({ theme }: any) => ({
+export const SMapStone = s.div(({ theme }: any) => ({
   position: 'absolute',
   width: '1rem',
   height: '1rem',
@@ -26,7 +25,7 @@ export const SMapStone = styled.div(({ theme }: any) => ({
   borderRadius: '0.1rem'
 }))
 
-export const SMapCharacter = styled.div(({ theme, color }: any) => ({
+export const SMapCharacter = s.div(({ theme, color }: any) => ({
   position: 'absolute',
   backgroundColor: color,
   width: '.8rem',
@@ -36,7 +35,7 @@ export const SMapCharacter = styled.div(({ theme, color }: any) => ({
   transition: 'transform .1s ease'
 }))
 
-export const SMapBrick = styled.div(() => ({
+export const SMapBrick = s.div(() => ({
   position: 'absolute',
   width: '1rem',
   height: '1rem',
@@ -51,7 +50,7 @@ export const SMapBrick = styled.div(() => ({
   borderBottomColor: '#7D1935',
 }))
 
-export const SMapBomb = styled.div(() => ({
+export const SMapBomb = s.div(() => ({
   position: 'absolute',
   borderRadius: '100%',
   width: '.8rem',
@@ -74,7 +73,7 @@ const c5 = '#F2E8C6';
 const colors = [c1, c2, c3, c4, c5]
 
 
-export const SMapExplosion = styled.div(({ key, direction, distance }: any) => ({
+export const SMapExplosion = s.div(({ key, direction, distance }: any) => ({
   position: 'absolute',
   background: `linear-gradient(
     ${direction === 'up' || direction === 'down' ? '90deg,' : ''}
@@ -152,27 +151,32 @@ const boom = keyframes`
 `;
 
 
-export const SMapCenter = styled.div(({ x, y, width, direction }: any) => ({
+export const SMapCenter = s.div(({ x, y, width, direction }: any) => ({
   position: 'relative',
   left: `${x}rem`,
   top: `${y}rem`,
   width: '1rem',
   height: '1rem',
 
-  // '::after': {
-  //   content: "''",
-  //   position: 'absolute',
-  //   width: '100%',
-  //   height: '100%',
-  //   animation: `${boom.getName()} .5s forwards`,
-  //   backgroundColor: 'grey',
-  //   opacity: .4,
-  //   borderRadius: '100%',
-  //   zIndex: 500
-  // },
-}))
+  '::after': {
+    content: "''",
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    // animation: `${boom.getName()} .5s forwards`,
+    backgroundColor: 'grey',
+    opacity: .4,
+    borderRadius: '100%',
+    zIndex: 500
+  },
+}),
+css`
+  ::after {
+    animation: ${boom} .5s forwards;
+  }
+`)
 
-export const SMapCenterBar = styled.div(({ distance, index }: any) => ({
+export const SMapCenterBar = s.div(({ distance, index }: any) => ({
   position: 'absolute',
   width: '100%',
   height: '100%',
@@ -209,7 +213,7 @@ export const SMapCenterBar = styled.div(({ distance, index }: any) => ({
   },
 }))
 
-export const SMapExplosionEdge = styled.div(({ direction }: any) => ({
+export const SMapExplosionEdge = s.div(({ direction }: any) => ({
   position: 'absolute',
   width: '.5rem',
   height: '1rem',

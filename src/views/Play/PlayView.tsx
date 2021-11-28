@@ -8,6 +8,7 @@ import { MapContext } from '../../context'
 import useMousetrap from "react-hook-mousetrap"
 
 const colors = ['red', 'green', 'blue', 'purple', 'pink']
+
 const randomColors = sampleSize(colors, 2)
 
 const initialPlayers = times(2, (index) => ({ x: 0, y: 0, color: randomColor({ luminosity: 'dark', hue: randomColors[index]}) }))
@@ -134,7 +135,7 @@ const PlayView = () => {
     }, 3000)
 
     setTimeout(() => {
-      setExplosions((currentExplosions: any) => ({ ...currentExplosions, ...resetExplosions }))
+      // setExplosions((currentExplosions: any) => ({ ...currentExplosions, ...resetExplosions }))
     }, 3500)
   }
 
@@ -182,10 +183,10 @@ const PlayView = () => {
   }, [])
 
   return (
-    <Wrapper>
-      <Container style={{ alignItems: 'center' }}>
+    <Wrapper s={{ padding: ['xs', 's'] }}>
+      <Container s={{ alignItems: 'center' }}>
         <Box
-          style={{
+          s={{
             width: '100%',
             height: '100%',
             position: 'absolute',
@@ -199,7 +200,7 @@ const PlayView = () => {
           { players.map((player, index: number) => (
             <Box
               key={`player${index}`}
-              style={{
+              s={{
                 display: 'inline-flex',
                 width: '100%',
                 justifyContent: 'center',
@@ -214,7 +215,7 @@ const PlayView = () => {
             </Box>
           )) }
         </Box>
-        <Box style={{ flexGrow: 1, height: '100%', flexDirection: 'row', display: 'flex', alignItems: 'center' }}>
+        <Box s={{ flexGrow: 1, height: '100%', flexDirection: 'row', display: 'flex', alignItems: 'center' }}>
           <Map blocks={blocks} players={players} setPlayers={setPlayers} />
         </Box>
       </Container>

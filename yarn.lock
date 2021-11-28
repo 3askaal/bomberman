@@ -2,14 +2,13 @@
 # yarn lockfile v1
 
 
-"3oilerplate@^0.1.49":
-  version "0.1.49"
-  resolved "https://registry.yarnpkg.com/3oilerplate/-/3oilerplate-0.1.49.tgz#7ee6b9c73f08d52537ed160e427b75c42edde9b0"
-  integrity sha512-gYW86edETmidkwyxGkVd9IKnqsuKScYcIg/ZFSU71oLwXq+wmFI/wOlTRrbk5Um57uehENh1idumxIgBP40asw==
+"3oilerplate@^0.2.2":
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/3oilerplate/-/3oilerplate-0.2.2.tgz#381734623b1cb2dd732bfc8fbab85d1698d0b522"
+  integrity sha512-CTsWXBCl0eBY6TFwBl/NJqXU1JnWfipBts2hySCfCC6TcemzDxbYJTwxqKr3yunjCufIJYaSzCn503H/h3+lhw==
   dependencies:
     "@mdx-js/react" "^1.6.16"
     "@styled-system/css" "^5.1.5"
-    "@testing-library/jest-dom" "^5.11.4"
     "@testing-library/react" "^10.4.9"
     "@testing-library/react-hooks" "^3.4.1"
     "@testing-library/user-event" "^12.1.3"
@@ -45,7 +44,6 @@
     react-intersection-observer "^8.31.0"
     react-live "^2.2.2"
     react-router-dom "^5.2.0"
-    react-scripts "^4.0.3"
     react-scroll "^1.8.0"
     react-syntax-highlighter "^12.2.1"
     remark-slug "^6.0.0"
@@ -10168,7 +10166,7 @@ react-router@5.2.1:
     tiny-invariant "^1.0.2"
     tiny-warning "^1.0.0"
 
-react-scripts@4.0.3, react-scripts@^4.0.3:
+react-scripts@4.0.3:
   version "4.0.3"
   resolved "https://registry.yarnpkg.com/react-scripts/-/react-scripts-4.0.3.tgz#b1cafed7c3fa603e7628ba0f187787964cb5d345"
   integrity sha512-S5eO4vjUzUisvkIPB7jVsKtuH2HhWcASREYWHAQ1FP5HyCv3xgn+wpILAEWkmy+A+tTNbSZClhxjT3qz6g4L1A==

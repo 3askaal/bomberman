@@ -1,7 +1,7 @@
-import { styled } from '3oilerplate'
+import { s } from '3oilerplate'
 
 
-export const SControls = styled.div(({ theme }: any) => ({
+export const SControls = s.div(({ theme }: any) => ({
   display: 'flex',
   flexDirection: 'row',
   width: '100%',
@@ -12,18 +12,18 @@ export const SControls = styled.div(({ theme }: any) => ({
   // border: `solid ${rgba(theme.colors.primary, 0.6)}`,
 }))
 
-export const SControlsMove = styled.div(({ theme }: any) => ({
+export const SControlsMove = s.div(({ theme }: any) => ({
   display: 'flex',
   position: 'relative',
   justifyContent: 'center',
   flexBasis: '60%',
 
   '> *': {
-    flexBasis: '33.33%'
+    flexBasis: '35%'
   }
 }))
 
-export const SControlsMiddle = styled.div(({ theme }: any) => ({
+export const SControlsMiddle = s.div(({ theme }: any) => ({
   flexDirection: 'column',
   justifyContent: 'center',
   // flexGrow: 1,
@@ -32,16 +32,16 @@ export const SControlsMiddle = styled.div(({ theme }: any) => ({
 }))
 
 
-export const SControlsButton = styled.button(({ theme, type, color }: any) => ({
+export const SControlsButton = s.button(({ theme, type, color }: any) => ({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  height: ['3rem', '2rem'],
+  height: ['2.1rem', '3rem'],
   backgroundColor: color,
   border: '.125rem solid ' + theme.colors.background,
   borderRadius: '.25rem',
   color: 'white',
-  flexBasis: '30%',
+  flexBasis: '33.33%',
   cursor: 'pointer',
   // width: '100%',
   // width: ['7.2rem', '4rem'],

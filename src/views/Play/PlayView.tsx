@@ -35,7 +35,7 @@ const PlayView = () => {
   useMousetrap('shift', () => attack(1))
 
   useEffect(() => {
-    ReactGA.pageview('/')
+    ReactGA.send({ hitType: "pageview", page: "/play" });
   }, [])
 
   function move (playerIndex: number, direction: string, movement: number) {

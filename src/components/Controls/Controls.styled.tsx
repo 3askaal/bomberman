@@ -32,7 +32,7 @@ export const SControlsButton = styled.button(({ theme, type, color }: any) => ({
   borderRadius: '.25rem',
   color: 'white',
   width: '100%',
-  minWidth: '5rem',
+  minWidth: '4rem',
 
   'svg': {
     strokeWidth: 3

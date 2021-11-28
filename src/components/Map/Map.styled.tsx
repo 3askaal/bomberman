@@ -1,4 +1,5 @@
 import { styled } from '3oilerplate'
+import styledOG, { keyframes } from 'styled-components'
 
 export const SMap = styled.div(({ theme, blocks }: any) => ({
   display: 'flex',
@@ -135,10 +136,40 @@ export const SMapExplosion = styled.div(({ key, direction, distance }: any) => (
 
 }))
 
+const boom = keyframes`
+  0% {
+    top: '0',
+    left: '0',
+    right: '0',
+    bottom: '0',
+  }
+  100% {
+    top: '-.5rem',
+    left: '-.5rem',
+    right: '-.5rem',
+    bottom: '-.5rem',
+  }
+`;
+
+
 export const SMapCenter = styled.div(({ x, y, width, direction }: any) => ({
-  position: 'absolute',
-  width: '100%',
-  height: '100%',
+  position: 'relative',
+  left: `${x}rem`,
+  top: `${y}rem`,
+  width: '1rem',
+  height: '1rem',
+
+  // '::after': {
+  //   content: "''",
+  //   position: 'absolute',
+  //   width: '100%',
+  //   height: '100%',
+  //   animation: `${boom.getName()} .5s forwards`,
+  //   backgroundColor: 'grey',
+  //   opacity: .4,
+  //   borderRadius: '100%',
+  //   zIndex: 500
+  // },
 }))
 
 export const SMapCenterBar = styled.div(({ distance, index }: any) => ({

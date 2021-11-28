@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { Container, Wrapper, Box } from '3oilerplate'
 import randomColor from 'randomcolor'
+import ReactGA from 'react-ga'
 import { sampleSize, times } from 'lodash'
 import { Controls, Map } from '../../components'
 import { MapContext } from '../../context'
@@ -10,8 +11,6 @@ const colors = ['red', 'green', 'blue', 'purple', 'pink']
 const randomColors = sampleSize(colors, 2)
 
 const initialPlayers = times(2, (index) => ({ x: 0, y: 0, color: randomColor({ luminosity: 'dark', hue: randomColors[index]}) }))
-
-console.log()
 
 const PlayView = () => {
   const {
@@ -34,6 +33,10 @@ const PlayView = () => {
   useMousetrap('a', () => move(1, 'x', -1))
   useMousetrap('d', () => move(1, 'x', 1))
   useMousetrap('shift', () => attack(1))
+
+  useEffect(() => {
+    ReactGA.pageview('/')
+  }, [])
 
   function move (playerIndex: number, direction: string, movement: number) {
     const newPlayer = { ...players[playerIndex] }
@@ -134,17 +137,6 @@ const PlayView = () => {
       setExplosions((currentExplosions: any) => ({ ...currentExplosions, ...resetExplosions }))
     }, 3500)
   }
-
-  // const getBlock = (player: any) => {
-  //   Object.values(grid).find(({x, y}: any) => (x === player.x && y === player.y))
-  // }
-
-  // function updateBlock(player: any, update: any)  {
-  //   const posKey = `${player.x}/${player.y}`
-  //   let newGrid = { ...grid }
-  //   newGrid = { ...newGrid, [posKey]: { ...newGrid[posKey], ...update }}
-  //   setGrid({ ...newGrid })
-  // }
 
   useEffect(() => {
     const newPlayers = players.map((player: any, index: number) => {

@@ -202,7 +202,6 @@ const PlayView = () => {
               style={{
                 display: 'inline-flex',
                 width: '100%',
-                // flexBasis: players.length === 2 ? '100%' : '45%',
                 justifyContent: 'center',
               }}
             >

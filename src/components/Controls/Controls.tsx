@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { Box } from '3oilerplate'
-import { SControls, SControlsMiddle, SControlsButton } from './Controls.styled'
+import { SControls, SControlsMove, SControlsMiddle, SControlsButton } from './Controls.styled'
 import {
   ChevronUp,
   ChevronLeft,
@@ -16,7 +16,7 @@ export const Controls = ({ onMove, onAttack, color, index }: any) => {
   }, [])
 
   return (
-    <Box s={{ display: 'inline-flex', flexDirection: 'row', alignItems: ['flex-start', 'flex-end'][index] }}>
+    <SControls s={{ alignItems: ['flex-start', 'flex-end'][index] }}>
       { index === 0 ? (
         <SControlsButton
           color={color}
@@ -33,7 +33,7 @@ export const Controls = ({ onMove, onAttack, color, index }: any) => {
           <Crosshair />
         </SControlsButton>
       ) : null }
-      <SControls s={{ alignItems: ['flex-start', 'flex-end'][index] }}>
+      <SControlsMove s={{ alignItems: ['flex-start', 'flex-end'][index] }}>
         <SControlsButton
           color={color}
           type="left"
@@ -92,7 +92,7 @@ export const Controls = ({ onMove, onAttack, color, index }: any) => {
         >
           <ChevronRight />
         </SControlsButton>
-      </SControls>
+      </SControlsMove>
       { index === 1 ? (
         <SControlsButton
           color={color}
@@ -109,6 +109,6 @@ export const Controls = ({ onMove, onAttack, color, index }: any) => {
           <Crosshair />
         </SControlsButton>
       ) : null }
-    </Box>
+    </SControls>
   )
 }

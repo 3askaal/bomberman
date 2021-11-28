@@ -2,7 +2,7 @@ import React from 'react'
 import { Router, Switch, Route } from 'react-router-dom'
 import { createBrowserHistory } from 'history'
 import { ThemeProvider } from 'styled-components'
-import ReactGA from 'react-ga'
+import ReactGA from 'react-ga4'
 import { GlobalStyle, theme } from '3oilerplate'
 import { MapProvider } from '../context'
 import { PlayView } from '../views'
@@ -12,7 +12,7 @@ import './fonts.css'
 
 export const history = createBrowserHistory()
 
-ReactGA.initialize('119845723')
+ReactGA.initialize('G-40XGVJPSNY')
 
 const App = () => {
   return (

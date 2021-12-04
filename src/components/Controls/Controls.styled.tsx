@@ -36,7 +36,7 @@ export const SControlsButton = s.button(({ theme, type, color }: any) => ({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  height: ['2.1rem', '3rem'],
+  height: ['1.8rem', '2.6rem'],
   backgroundColor: color,
   border: '.125rem solid ' + theme.colors.background,
   borderRadius: '.25rem',
@@ -45,6 +45,10 @@ export const SControlsButton = s.button(({ theme, type, color }: any) => ({
   cursor: 'pointer',
   // width: '100%',
   // width: ['7.2rem', '4rem'],
+
+  ...type === 'bomb' && ({
+    flexBasis: '25%'
+  }),
 
   ...type !== 'bomb' && ({
     width: '100%',
@@ -60,19 +64,23 @@ export const SControlsButton = s.button(({ theme, type, color }: any) => ({
   }
 }))
 
-export const SControlsHealth = s.div(({ index, health }: any) => ({
+export const SControlsHealth = s.div(({ index }: any) => ({
   position: 'relative',
-  height: '.4rem',
+  height: '6px',
   width: '100%',
   // backgroundColor: '#B42B51',
-  border: '.1rem solid #B42B51',
+  border: '2px solid',
+  borderColor: 'white',
   [['mb', 'mt'][index]]: 'xs',
+  borderRadius: '.5rem'
 }))
+
 export const SControlsHealthProgress = s.div(({ index, health }: any) => ({
   position: 'absolute',
-  backgroundColor: '#B42B51',
+  backgroundColor: 'white',
   width: `${health}%`,
   top: 0,
   bottom: 0,
-  left: 0,
+  [['right', 'left'][index]]: 0,
+  borderRadius: '.5rem',
 }))

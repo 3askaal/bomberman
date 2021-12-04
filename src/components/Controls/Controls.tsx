@@ -15,7 +15,7 @@ export const Controls = ({ onMove, onBomb, color, index, health }: any) => {
     <SControls>
       { index === 0 && (
         <SControlsHealth index={index}>
-          <SControlsHealthProgress health={health} />
+          <SControlsHealthProgress index={index} health={health} />
         </SControlsHealth>
       )}
       <Box s={{
@@ -120,7 +120,7 @@ export const Controls = ({ onMove, onBomb, color, index, health }: any) => {
       </Box>
       { index === 1 && (
         <SControlsHealth index={index}>
-          <SControlsHealthProgress health={health} />
+          <SControlsHealthProgress index={index} health={health} />
         </SControlsHealth>
       )}
     </SControls>

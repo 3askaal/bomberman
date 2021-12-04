@@ -6,6 +6,8 @@ import { sampleSize, times, keyBy } from 'lodash'
 import { Controls, Map } from '../../components'
 import { MapContext } from '../../context'
 import useMousetrap from "react-hook-mousetrap"
+import { PlayCircle } from 'react-feather'
+import { collapseTextChangeRangesAcrossMultipleVersions } from 'typescript'
 
 const colors = ['red', 'green', 'blue', 'purple', 'pink']
 
@@ -73,6 +75,7 @@ const PlayView = () => {
     const newPlayers: any = {}
     newPlayers[playerIndex] = { ...players[playerIndex], ...newPlayer }
     setPlayers((currentPlayers: any) => ({ ...currentPlayers, ...newPlayers }))
+    console.log(newPlayers[0])
   }
 
   function attack(playerIndex: number) {
@@ -80,13 +83,14 @@ const PlayView = () => {
     const posKey = `${x}/${y}`
 
     let newGrid = {}
-    let newPlayers: any = []
 
     const bomb = { [posKey]: { x, y, bomb: true } }
     const resetBomb = { [posKey]: { x, y, bomb: false } }
 
     let explosions: any = { [posKey]: { x, y, explosion: true } }
     let resetExplosions = { [posKey]: { x, y, explosion: false } }
+
+    let damagePositions = [{ x, y }]
 
     const directions = ['left', 'right', 'up', 'down']
 
@@ -132,20 +136,9 @@ const PlayView = () => {
           limit = i
         }
 
-        newPlayers = {
-          ...newPlayers,
-          ...keyBy(getPlayers().filter((player: any) => {
-            return player.x === newPos.x && player.y === newPos.y
-          }), 'index'),
-        }
-
+        damagePositions.push({ x: newPos.x, y: newPos.y })
       }
     })
-
-    newPlayers = keyBy(Object.values(newPlayers).map((player: any) => ({
-      ...player,
-      health: player.health - 20
-    })), 'index')
 
     explosions = {
       ...explosions,
@@ -161,7 +154,30 @@ const PlayView = () => {
     setTimeout(() => {
       setGrid((currentGrid: any) => ({ ...currentGrid, ...newGrid }))
       setBombs((currentBombs: any) => ({ ...currentBombs, ...resetBomb }))
-      setPlayers((currentPlayers: any) => ({ ...currentPlayers, ...newPlayers }))
+
+      console.log(damagePositions)
+
+      setPlayers((currentPlayers: any) => {
+        const newPlayers = keyBy(
+          Object.values(currentPlayers)
+            .filter((player: any) => {
+              return damagePositions.some(({ x, y }) => player.x === x && player.y === y)
+            })
+            .map((player: any) => ({
+              ...player,
+              health: player.health - 20
+            })),
+          'index'
+        )
+
+        console.log('currentPlayers: ', currentPlayers)
+        console.log('newPlayers: ', newPlayers)
+
+        return {
+          ...currentPlayers,
+          ...newPlayers
+        }
+      })
       setExplosions((currentExplosions: any) => ({ ...currentExplosions, ...explosions }))
     }, 3000)
 
@@ -177,8 +193,8 @@ const PlayView = () => {
         if (index === 1) {
           return {
             ...player,
-            x: 2,
-            y: 0
+            x: blocks,
+            y: blocks
           }
         }
       }

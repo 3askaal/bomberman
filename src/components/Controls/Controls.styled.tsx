@@ -46,15 +46,33 @@ export const SControlsButton = s.button(({ theme, type, color }: any) => ({
   // width: '100%',
   // width: ['7.2rem', '4rem'],
 
-  ...type !== 'attack' && ({
+  ...type !== 'bomb' && ({
     width: '100%',
   }),
 
-  // ...type === 'attack' && ({
+  // ...type === 'bomb' && ({
   //   minWidth: '8rem',
   // }),
 
   'svg': {
-    strokeWidth: 3
+    strokeWidth: 5,
+    stroke: 'white'
   }
+}))
+
+export const SControlsHealth = s.div(({ index, health }: any) => ({
+  position: 'relative',
+  height: '.4rem',
+  width: '100%',
+  // backgroundColor: '#B42B51',
+  border: '.1rem solid #B42B51',
+  [['mb', 'mt'][index]]: 'xs',
+}))
+export const SControlsHealthProgress = s.div(({ index, health }: any) => ({
+  position: 'absolute',
+  backgroundColor: '#B42B51',
+  width: `${health}%`,
+  top: 0,
+  bottom: 0,
+  left: 0,
 }))

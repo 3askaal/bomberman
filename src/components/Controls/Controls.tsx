@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { Box } from '3oilerplate'
-import { SControls, SControlsMove, SControlsMiddle, SControlsButton } from './Controls.styled'
+import { SControls, SControlsMove, SControlsMiddle, SControlsButton, SControlsHealth, SControlsHealthProgress } from './Controls.styled'
 import {
   ChevronUp,
   ChevronLeft,
@@ -10,10 +10,14 @@ import {
 } from 'react-feather'
 import isMobile from 'is-mobile'
 
-export const Controls = ({ onMove, onAttack, color, index, health }: any) => {
+export const Controls = ({ onMove, onBomb, color, index, health }: any) => {
   return (
     <SControls>
-      { index === 0 && <Box s={{ display: 'flex', height: '.2rem', width: `${health}%`, backgroundColor: '#B42B51', mb: 'xs' }} /> }
+      { index === 0 && (
+        <SControlsHealth index={index}>
+          <SControlsHealthProgress health={health} />
+        </SControlsHealth>
+      )}
       <Box s={{
         display: 'flex',
         flexDirection: 'row',
@@ -24,11 +28,11 @@ export const Controls = ({ onMove, onAttack, color, index, health }: any) => {
         { index === 0 ? (
           <SControlsButton
             color={color}
-            type="attack"
+            type="bomb"
             {...isMobile() ? {
-              onTouchStart: () => onAttack()
+              onTouchStart: () => onBomb()
             } : {
-              onMouseDown: () => onAttack()
+              onMouseDown: () => onBomb()
             }}
             s={{
               touchAction: isMobile() ? 'auto' : 'none',
@@ -100,11 +104,11 @@ export const Controls = ({ onMove, onAttack, color, index, health }: any) => {
         { index === 1 ? (
           <SControlsButton
             color={color}
-            type="attack"
+            type="bomb"
             {...isMobile() ? {
-              onTouchStart: () => onAttack()
+              onTouchStart: () => onBomb()
             } : {
-              onMouseDown: () => onAttack()
+              onMouseDown: () => onBomb()
             }}
             s={{
               touchAction: isMobile() ? 'auto' : 'none',
@@ -114,7 +118,11 @@ export const Controls = ({ onMove, onAttack, color, index, health }: any) => {
           </SControlsButton>
         ) : null }
       </Box>
-      { index === 1 && <Box s={{ display: 'flex', height: '.2rem', width: `${health}%`, backgroundColor: '#B42B51', mt: 'xs' }} /> }
+      { index === 1 && (
+        <SControlsHealth index={index}>
+          <SControlsHealthProgress health={health} />
+        </SControlsHealth>
+      )}
     </SControls>
   )
 }

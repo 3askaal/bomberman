@@ -162,9 +162,9 @@ export const Map = ({ style, blocks } : any) => {
         />
       )) }
       { getExplosions().map(({x, y, distance}: any, index: number) => (
-        <SMapExplosion x={x} y ={y}>
+        <SMapExplosion key={index} x={x} y ={y}>
           { times(4, (index) => (
-            <SExplosionCenter distance={distance} index={index} />
+            <SExplosionCenter key={index} distance={distance} index={index} />
           )) }
           { Object.keys(distance).map((key: string, index: number) => distance[key] ? (
             <SMapExplosionDirection

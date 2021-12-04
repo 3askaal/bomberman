@@ -87,7 +87,7 @@ const gradient = `
   ${c1} 100%
 `
 
-export const SMapExplosion = s.div(({ key, direction, distance }: any) => ({
+export const SMapExplosionDirection = s.div(({ key, direction, distance }: any) => ({
   position: 'absolute',
   background: `linear-gradient(
     ${direction === 'up' || direction === 'down' ? '90deg,' : ''}
@@ -147,37 +147,31 @@ const boom = keyframes`
   }
 `;
 
-
-export const SMapCenter = s.div(({ x, y, width, direction }: any) => ({
+export const SMapExplosion = s.div(({ x, y, width, direction }: any) => ({
   position: 'relative',
   left: `${x}rem`,
   top: `${y}rem`,
   width: '1rem',
   height: '1rem',
 }))
-// css`
-//   ::after {
-//     animation: ${boom} .5s forwards;
-//   }
-// `
 
-export const SExplosionCenter = s.polygon(({ distance, index }: any) => ({
+export const SExplosionCenter = s.div(({ distance, index }: any) => ({
   position: 'absolute',
-  width: '100%',
-  height: '100%',
-  zIndex: (index + 1) * 100,
+  width: '1rem',
+  height: '1rem',
+
 
   ...index === 0 && {
     background: `linear-gradient(
-      0deg,
+      ${distance.left ? '0deg' : '90deg'},
       ${gradient}
     )`,
-    clipPath: `polygon(0 0, 50% 50%, 0% 100%)`,
+    clipPath: `polygon(0% 0%, 50% 50%, 0% 100%)`,
   },
 
   ...index === 1 && {
     background: `linear-gradient(
-      90deg,
+      ${distance.up ? '90deg' : '0deg'},
       ${gradient}
     )`,
     clipPath: `polygon(50% 50%, 0% 0%, 100% 0%)`,
@@ -185,7 +179,7 @@ export const SExplosionCenter = s.polygon(({ distance, index }: any) => ({
 
   ...index === 2 && {
     background: `linear-gradient(
-      180deg,
+      ${distance.right ? '180deg' : '90deg'},
       ${gradient}
     )`,
     clipPath: `polygon(100% 100%, 50% 50%, 100% 0%)`,
@@ -193,7 +187,7 @@ export const SExplosionCenter = s.polygon(({ distance, index }: any) => ({
 
   ...index === 3 && {
     background: `linear-gradient(
-      270deg,
+      ${distance.down ? '270deg' : '0deg'},
       ${gradient}
     )`,
     clipPath: `polygon(50% 50%, 100% 100%, 0% 100%)`,

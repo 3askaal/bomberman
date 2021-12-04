@@ -82,7 +82,7 @@ const PlayView = () => {
 
     directions.forEach((direction) => {
       let i = 1
-      let limit = 3
+      let limit = 4
 
       while (i < limit) {
         const go: any = {
@@ -135,7 +135,7 @@ const PlayView = () => {
     }, 3000)
 
     setTimeout(() => {
-      setExplosions((currentExplosions: any) => ({ ...currentExplosions, ...resetExplosions }))
+      // setExplosions((currentExplosions: any) => ({ ...currentExplosions, ...resetExplosions }))
     }, 3500)
   }
 

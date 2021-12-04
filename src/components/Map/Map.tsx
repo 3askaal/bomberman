@@ -1,8 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { SMap, SMapStone, SMapCharacter, SMapBrick, SMapBomb, SMapExplosion, SMapExplosionEdge, SExplosionCenter, SMapCenter } from './Map.styled'
+import { SMap, SMapStone, SMapCharacter, SMapBrick, SMapBomb, SMapExplosion, SExplosionCenter, SMapExplosionDirection, SMapExplosionEdge } from './Map.styled'
 import { times, sampleSize } from 'lodash'
-import { Box } from '3oilerplate'
-// import * as mt from 'mousetrap'
 import { MapContext } from '../../context'
 
 export const Map = ({ players, style, blocks } : any) => {
@@ -154,12 +152,12 @@ export const Map = ({ players, style, blocks } : any) => {
         />
       )) }
       { getExplosions().map(({x, y, distance}: any, index: number) => (
-        <SMapCenter x={x} y ={y}>
+        <SMapExplosion x={x} y ={y}>
           { times(4, (index) => (
             <SExplosionCenter distance={distance} index={index} />
           )) }
           { Object.keys(distance).map((key: string, index: number) => distance[key] ? (
-            <SMapExplosion
+            <SMapExplosionDirection
               key={index}
               x={x}
               y={y}
@@ -181,9 +179,9 @@ export const Map = ({ players, style, blocks } : any) => {
                   left: 0,
                 }}}
               />
-            </SMapExplosion>
+            </SMapExplosionDirection>
           ) : null) }
-        </SMapCenter>
+        </SMapExplosion>
       ))}
     </SMap>
   )

@@ -60,41 +60,38 @@ export const SMapBomb = s.div(() => ({
   border: '0.15rem solid #A9A9A9',
 }))
 
-// const c1 = '#FFC300';
-// const c2 = '#FF5733';
-// const c3 = '#C70039';
-// const c4 = '#900C3F';
-
 const c1 = '#6B0848';
 const c2 = '#A40A3C';
 const c3 = '#EC610A';
 const c4 = '#FFC300';
 const c5 = '#F2E8C6';
-const colors = [c1, c2, c3, c4, c5]
 
+const gradient = `
+  ${c1},
+  ${c1} 10%,
+  ${c2} 10%,
+  ${c2} 20%,
+  ${c3} 20%,
+  ${c3} 30%,
+  ${c4} 30%,
+  ${c4} 40%,
+  ${c5} 40%,
+  ${c5} 60%,
+  ${c4} 60%,
+  ${c4} 70%,
+  ${c3} 70%,
+  ${c3} 80%,
+  ${c2} 80%,
+  ${c2} 90%,
+  ${c1} 90%,
+  ${c1} 100%
+`
 
 export const SMapExplosion = s.div(({ key, direction, distance }: any) => ({
   position: 'absolute',
   background: `linear-gradient(
     ${direction === 'up' || direction === 'down' ? '90deg,' : ''}
-    ${c1},
-    ${c1} .1rem,
-    ${c2} .1rem,
-    ${c2} .2rem,
-    ${c3} .2rem,
-    ${c3} .3rem,
-    ${c4} .3rem,
-    ${c4} .4rem,
-    ${c5} .4rem,
-    ${c5} .6rem,
-    ${c4} .6rem,
-    ${c4} .7rem,
-    ${c3} .7rem,
-    ${c3} .8rem,
-    ${c2} .8rem,
-    ${c2} .9rem,
-    ${c1} .9rem,
-    ${c1} 1rem
+    ${gradient}
   )`,
 
   ...direction === 'left' && distance[direction] && {
@@ -157,18 +154,6 @@ export const SMapCenter = s.div(({ x, y, width, direction }: any) => ({
   top: `${y}rem`,
   width: '1rem',
   height: '1rem',
-
-  // '::after': {
-  //   content: "''",
-  //   position: 'absolute',
-  //   width: '100%',
-  //   height: '100%',
-  //   // animation: `${boom.getName()} .5s forwards`,
-  //   backgroundColor: 'grey',
-  //   opacity: .4,
-  //   borderRadius: '100%',
-  //   zIndex: 500
-  // },
 }))
 // css`
 //   ::after {
@@ -176,41 +161,66 @@ export const SMapCenter = s.div(({ x, y, width, direction }: any) => ({
 //   }
 // `
 
-export const SMapCenterBar = s.div(({ distance, index }: any) => ({
+export const SExplosionCenter = s.polygon(({ distance, index }: any) => ({
   position: 'absolute',
   width: '100%',
   height: '100%',
   zIndex: (index + 1) * 100,
 
-  ...(distance.up || distance.down) && {
-    '::after': {
-      content: "''",
-      backgroundColor: colors[index],
-      position: 'absolute',
-      height: distance.up ? '100%' : `.${58 + ((5 - (index + 1)) * 10)}rem`,
-      bottom: !distance.up ? 0 : null,
-      top: !distance.down ? 0 : null,
-      left: `.${index}rem`,
-      right: `.${index}rem`,
-      // top: `.${index}rem`,
-      // bottom: `.${index}rem`,
-    },
+  ...index === 0 && {
+    background: `linear-gradient(
+      0deg,
+      ${gradient}
+    )`,
+    clipPath: `polygon(0 0, 50% 50%, 0% 100%)`,
   },
 
-  ...(distance.left || distance.right) && {
-    '::before': {
-      content: "''",
-      backgroundColor: colors[index],
-      position: 'absolute',
-      width: distance.left ? '100%' : `.${58 + ((5 - (index + 1)) * 10)}rem`,
-      left: !distance.right ? 0 : null,
-      right: !distance.left ? 0 : null,
-      // left: `.${index}rem`,
-      // right: `.${index}rem`,
-      top: `.${index}rem`,
-      bottom: `.${index}rem`,
-    },
+  ...index === 1 && {
+    background: `linear-gradient(
+      90deg,
+      ${gradient}
+    )`,
+    clipPath: `polygon(50% 50%, 0% 0%, 100% 0%)`,
   },
+
+  ...index === 2 && {
+    background: `linear-gradient(
+      180deg,
+      ${gradient}
+    )`,
+    clipPath: `polygon(100% 100%, 50% 50%, 100% 0%)`,
+  },
+
+  ...index === 3 && {
+    background: `linear-gradient(
+      270deg,
+      ${gradient}
+    )`,
+    clipPath: `polygon(50% 50%, 100% 100%, 0% 100%)`,
+  },
+
+
+  // ...(distance.up || distance.down) && {
+  //   '::after': {
+  //     content: "''",
+  //     backgroundColor: colors[index],
+  //     position: 'absolute',
+  //     height: '100%',
+  //     left: `${(1 - (1 - (index / 10))) * 100}%`,
+  //     right: `${(1 - (1 - (index / 10))) * 100}%`,
+  //   },
+  // },
+
+  // ...(distance.left || distance.right) && {
+  //   '::before': {
+  //     content: "''",
+  //     backgroundColor: colors[index],
+  //     position: 'absolute',
+  //     width: '100%',
+  //     top: `${(1 - (1 - (index / 10))) * 100}%`,
+  //     bottom: `${(1 - (1 - (index / 10))) * 100}%`,
+  //   },
+  // },
 }))
 
 export const SMapExplosionEdge = s.div(({ direction }: any) => ({
@@ -256,14 +266,14 @@ export const SMapExplosionEdge = s.div(({ direction }: any) => ({
     borderRadius: '100%',
     background: `radial-gradient(
       ${c5},
-      ${c5} .1rem,
-      ${c4} .1rem,
-      ${c4} .2rem,
-      ${c3} .2rem,
-      ${c3} .3rem,
-      ${c2} .3rem,
-      ${c2} .4rem,
-      ${c1} .4rem
+      ${c5} 14%,
+      ${c4} 14%,
+      ${c4} 28%,
+      ${c3} 28%,
+      ${c3} 42%,
+      ${c2} 42%,
+      ${c2} 56%,
+      ${c1} 56%
     )`
   },
 }))

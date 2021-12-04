@@ -4,8 +4,9 @@ export const MapContext = createContext({})
 
 export const MapProvider = ({ children }: any) => {
   const [grid, setGrid] = useState<any>(null)
-  const [bombs, setBombs] = useState<any>({})
-  const [explosions, setExplosions] = useState<any>({})
+  const [bombs, setBombs] = useState<any>(null)
+  const [explosions, setExplosions] = useState<any>(null)
+  const [players, setPlayers] = useState<any>(null)
 
   return (
     <MapContext.Provider
@@ -15,7 +16,9 @@ export const MapProvider = ({ children }: any) => {
         bombs,
         setBombs,
         explosions,
-        setExplosions
+        setExplosions,
+        players,
+        setPlayers
       }}
     >
       {children}

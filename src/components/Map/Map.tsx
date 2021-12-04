@@ -3,8 +3,14 @@ import { SMap, SMapStone, SMapCharacter, SMapBrick, SMapBomb, SMapExplosion, SEx
 import { times, sampleSize } from 'lodash'
 import { MapContext } from '../../context'
 
-export const Map = ({ players, style, blocks } : any) => {
-  const { grid, setGrid, bombs, explosions }: any = useContext(MapContext)
+export const Map = ({ style, blocks } : any) => {
+  const {
+    grid,
+    setGrid,
+    bombs,
+    explosions,
+    players
+  }: any = useContext(MapContext)
   // const [grid, setGrid] = useState<any[]>([])
   const [stones, setStones] = useState<any[]>([])
   const [bricks, setBricks] = useState<any[]>([])
@@ -24,6 +30,10 @@ export const Map = ({ players, style, blocks } : any) => {
 
   const getBricks = () => {
     return grid ? Object.values(grid).filter(({ brick }: any) => brick) : []
+  }
+
+  const getPlayers = () => {
+    return players ? Object.values(players) : []
   }
 
   useEffect(() => {
@@ -115,7 +125,7 @@ export const Map = ({ players, style, blocks } : any) => {
 
   return (
     <SMap style={{style}} blocks={blocks + 1}>
-      { players.map(({x, y, color}: any, index: number) => (
+      { getPlayers().map(({x, y, color}: any, index: number) => (
         <SMapCharacter
           key={index}
           s={{

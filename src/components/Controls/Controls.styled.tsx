@@ -1,12 +1,12 @@
 import { s } from '3oilerplate'
 
 
-export const SControls = s.div(({ theme }: any) => ({
+export const SControls = s.div(({ theme, index }: any) => ({
   display: 'flex',
-  flexDirection: 'row',
+  flexDirection: 'column',
   width: '100%',
   maxWidth: ['30rem', '20rem'],
-  justifyContent: 'space-between'
+  // justifyContent: 'space-between'
   // maxWidth: '20rem'
   // backgroundImage: `url(${griptape})`,
   // border: `solid ${rgba(theme.colors.primary, 0.6)}`,

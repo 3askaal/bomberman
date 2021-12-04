@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { Container, Wrapper, Box } from '3oilerplate'
 import randomColor from 'randomcolor'
 import ReactGA from 'react-ga4'
-import { sampleSize, times } from 'lodash'
+import { sampleSize, times, keyBy } from 'lodash'
 import { Controls, Map } from '../../components'
 import { MapContext } from '../../context'
 import useMousetrap from "react-hook-mousetrap"
@@ -11,16 +11,24 @@ const colors = ['red', 'green', 'blue', 'purple', 'pink']
 
 const randomColors = sampleSize(colors, 2)
 
-const initialPlayers = times(2, (index) => ({ x: 0, y: 0, color: randomColor({ luminosity: 'dark', hue: randomColors[index]}) }))
+const initialPlayers = keyBy(times(2, (index) => ({
+  index,
+  x: 0,
+  y: 0,
+  color: randomColor({ luminosity: 'dark', hue: randomColors[index]}),
+  health: 100,
+})), 'index')
 
 const PlayView = () => {
   const {
     grid,
     setGrid,
     setBombs,
-    setExplosions
+    setExplosions,
+    players,
+    setPlayers
   }: any = useContext(MapContext)
-  const [players, setPlayers] = useState<any[]>(initialPlayers)
+
   const [blocks] = useState(16)
 
   useMousetrap('up', () => move(0, 'y', -1))
@@ -39,6 +47,14 @@ const PlayView = () => {
     ReactGA.send({ hitType: "pageview", page: "/play" });
   }, [])
 
+  useEffect(() => {
+    setPlayers(initialPlayers)
+  }, [])
+
+  const getPlayers = () => {
+    return players ? Object.values(players) : []
+  }
+
   function move (playerIndex: number, direction: string, movement: number) {
     const newPlayer = { ...players[playerIndex] }
 
@@ -54,9 +70,9 @@ const PlayView = () => {
       return
     }
 
-    const newPlayers = [...players]
+    const newPlayers: any = {}
     newPlayers[playerIndex] = { ...players[playerIndex], ...newPlayer }
-    setPlayers(newPlayers)
+    setPlayers((currentPlayers: any) => ({ ...currentPlayers, ...newPlayers }))
   }
 
   function attack(playerIndex: number) {
@@ -64,6 +80,7 @@ const PlayView = () => {
     const posKey = `${x}/${y}`
 
     let newGrid = {}
+    let newPlayers: any = []
 
     const bomb = { [posKey]: { x, y, bomb: true } }
     const resetBomb = { [posKey]: { x, y, bomb: false } }
@@ -82,7 +99,7 @@ const PlayView = () => {
 
     directions.forEach((direction) => {
       let i = 1
-      let limit = 4
+      let limit = 3
 
       while (i < limit) {
         const go: any = {
@@ -104,7 +121,7 @@ const PlayView = () => {
           newGrid = { ...newGrid, [newPosKey]: { ...newPos, brick: false }}
         }
 
-        // explosions = { ...explosions, [newPosKey]: { x: newPos.x, y: newPos.y, explosion: true }}
+        // explosions = { [newPosKey]: { x: newPos.x, y: newPos.y, explosion: true }}
         resetExplosions = { ...resetExplosions, [newPosKey]: { x: newPos.x, y: newPos.y, explosion: false }}
 
         distance[direction]++
@@ -114,8 +131,21 @@ const PlayView = () => {
         if (newPos.brick) {
           limit = i
         }
+
+        newPlayers = {
+          ...newPlayers,
+          ...keyBy(getPlayers().filter((player: any) => {
+            return player.x === newPos.x && player.y === newPos.y
+          }), 'index'),
+        }
+
       }
     })
+
+    newPlayers = keyBy(Object.values(newPlayers).map((player: any) => ({
+      ...player,
+      health: player.health - 20
+    })), 'index')
 
     explosions = {
       ...explosions,
@@ -131,6 +161,7 @@ const PlayView = () => {
     setTimeout(() => {
       setGrid((currentGrid: any) => ({ ...currentGrid, ...newGrid }))
       setBombs((currentBombs: any) => ({ ...currentBombs, ...resetBomb }))
+      setPlayers((currentPlayers: any) => ({ ...currentPlayers, ...newPlayers }))
       setExplosions((currentExplosions: any) => ({ ...currentExplosions, ...explosions }))
     }, 3000)
 
@@ -140,14 +171,14 @@ const PlayView = () => {
   }
 
   useEffect(() => {
-    const newPlayers = players.map((player: any, index: number) => {
+    const newPlayers = keyBy(Object.values(initialPlayers).map((player: any, index: number) => {
 
-      if (players.length === 2) {
+      if (Object.values(initialPlayers).length === 2) {
         if (index === 1) {
           return {
             ...player,
-            x: blocks,
-            y: blocks
+            x: 2,
+            y: 0
           }
         }
       }
@@ -177,7 +208,7 @@ const PlayView = () => {
       }
 
       return player
-    })
+    }), 'index')
 
     setPlayers(newPlayers)
   }, [])
@@ -197,7 +228,7 @@ const PlayView = () => {
             flexWrap: 'wrap'
           }}
         >
-          { players.map((player, index: number) => (
+          { getPlayers().map((player: any, index: number) => (
             <Box
               key={`player${index}`}
               s={{
@@ -208,6 +239,7 @@ const PlayView = () => {
             >
               <Controls
                 onMove={(direction: string, movement: number) => move(index, direction, movement)}
+                health={player.health}
                 onAttack={() => attack(index)}
                 color={player.color}
                 index={index}

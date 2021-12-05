@@ -1,58 +1,29 @@
-import { times, sampleSize, keyBy } from 'lodash'
+import { times, sampleSize } from 'lodash'
 import randomColor from 'randomcolor'
 
-export const generatePlayers = (blocks: number) => {
-  const colors = ['red', 'green', 'blue', 'purple', 'pink']
-  const randomColors = sampleSize(colors, 2)
 
-  const initialPlayers = keyBy(times(2, (index) => ({
+
+export const generatePlayers = (players: any, blocks: number) => {
+  const topLeftPosition = { x: 0, y: 0 }
+  const topRightPosition = { x: blocks, y: 0 }
+  const bottomLeftPosition = { x: 0, y: blocks }
+  const bottomRightPosition = { x: blocks, y: blocks }
+  const positions = [topLeftPosition, topRightPosition, bottomLeftPosition, bottomRightPosition]
+
+  const colors = ['red', 'green', 'blue', 'purple', 'pink']
+  const randomColors = sampleSize(colors, players.length)
+
+  return players.map((player: any, index: number) => ({
+    ...player,
     index,
-    x: 0,
-    y: 0,
+    ...positions[index],
+    ...players.length === 2 && {
+      ...index === 0 && topLeftPosition,
+      ...index === 1 && bottomRightPosition,
+    },
     color: randomColor({ luminosity: 'dark', hue: randomColors[index]}),
     health: 100,
-  })), 'index')
-
-  const newPlayers = keyBy(Object.values(initialPlayers).map((player: any, index: number) => {
-
-    if (Object.values(initialPlayers).length === 2) {
-      if (index === 1) {
-        return {
-          ...player,
-          x: blocks,
-          y: blocks
-        }
-      }
-    }
-
-    if (index === 1) {
-      return {
-        ...player,
-        x: blocks,
-        y: 0
-      }
-    }
-
-    if (index === 2) {
-      return {
-        ...player,
-        x: 0,
-        y: blocks
-      }
-    }
-
-    if (index === 3) {
-      return {
-        ...player,
-        x: blocks,
-        y: blocks
-      }
-    }
-
-    return player
-  }), 'index')
-
-  return newPlayers
+  }))
 }
 
 export const generateGrid = (blocks: number) => {
@@ -97,14 +68,14 @@ export const generateBricks = (grid: any, blocks: number) => {
     const isBothUneven = x % 1 === 0 && y % 2 === 0
 
     if (isEvenUneven || isUnevenEven || isBothUneven) {
-      const isTopLeftCorner = y < 3 && x < 3
-      const isTopRightCorner = y < 3 && x > (blocks - 3)
-      const isBottomLeftCorner = y > (blocks - 3) && x < 3
-      const isBottomRightCorner = y > (blocks - 3) && x > (blocks - 3)
+      const isTopLeftPosition = y < 3 && x < 3
+      const isTopRightPosition = y < 3 && x > (blocks - 3)
+      const isBottomLeftPosition = y > (blocks - 3) && x < 3
+      const isBottomRightPosition = y > (blocks - 3) && x > (blocks - 3)
 
-      const isCorner = isTopLeftCorner || isTopRightCorner || isBottomLeftCorner || isBottomRightCorner
+      const isPosition = isTopLeftPosition || isTopRightPosition || isBottomLeftPosition || isBottomRightPosition
 
-      if (!isCorner) {
+      if (!isPosition) {
         return true
       }
     }

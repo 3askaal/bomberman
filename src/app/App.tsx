@@ -5,10 +5,11 @@ import { ThemeProvider } from 'styled-components'
 import ReactGA from 'react-ga4'
 import { GlobalStyle, theme } from '3oilerplate'
 import { MapProvider } from '../context'
-import { PlayView } from '../views'
+import { HomeView, PlayView } from '../views'
 import { LocalGlobalStyle, fonts, colors } from '../style'
 import { SApp } from './App.styled'
 import './fonts.css'
+import SetupView from '../views/Setup/SetupView'
 
 export const history = createBrowserHistory()
 
@@ -37,6 +38,12 @@ const App = () => {
           <Router history={history}>
             <Switch>
               <Route exact path="/">
+                <HomeView />
+              </Route>
+              <Route exact path="/setup">
+                <SetupView />
+              </Route>
+              <Route exact path="/play">
                 <PlayView />
               </Route>
             </Switch>

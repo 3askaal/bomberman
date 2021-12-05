@@ -1,5 +1,4 @@
 import React, { createContext, useEffect, useState } from 'react'
-import { keyBy } from 'lodash'
 
 import { generateBricks, generateGrid, generatePlayers, generateStones } from '../helpers/generate'
 import { generateDamage } from '../helpers/actions'
@@ -11,26 +10,36 @@ export const MapProvider = ({ children }: any) => {
   const [grid, setGrid] = useState<any>({})
   const [bombs, setBombs] = useState<any>(null)
   const [explosions, setExplosions] = useState<any>(null)
-  const [players, setPlayers] = useState<any>(null)
+  const [players, setPlayers] = useState<any>([])
+  const [settings, setSettings] = useState<any>({})
 
   const move = (playerIndex: number, direction: string, movement: number) => {
     const newPlayer = { ...players[playerIndex] }
 
-    if (newPlayer[direction] + movement > blocks || newPlayer[direction] + movement < 0) {
+    newPlayer[direction] += movement
+
+    const positionIsOutOfMap = newPlayer[direction] > blocks || newPlayer[direction] < 0
+
+    if (positionIsOutOfMap) {
       return;
     }
 
-    newPlayer[direction] += movement
+    const positionIsReserved = Object.values(grid)
+      .find(({ x, y, stone, brick }: any) =>
+        (x === newPlayer.x && y === newPlayer.y) &&
+        (stone || brick))
 
-    const block = Object.values(grid).find(({ x, y, stone, brick }: any) => (x === newPlayer.x && y === newPlayer.y) && (stone || brick))
-
-    if (block) {
+    if (positionIsReserved) {
       return
     }
 
-    const newPlayers: any = {}
-    newPlayers[playerIndex] = { ...players[playerIndex], ...newPlayer }
-    setPlayers((currentPlayers: any) => ({ ...currentPlayers, ...newPlayers }))
+    setPlayers((currentPlayers: any) => currentPlayers.map((player: any, index: number) => ({
+      ...player,
+      ...index === playerIndex && {
+        x: newPlayer.x,
+        y: newPlayer.y,
+      }
+    })))
   }
 
   const addBomb = (bomb: any) => {
@@ -52,22 +61,12 @@ export const MapProvider = ({ children }: any) => {
       setBombs((currentBombs: any) => ({ ...currentBombs, ...resetBomb }))
 
       setPlayers((currentPlayers: any) => {
-        const newPlayers = keyBy(
-          Object.values(currentPlayers)
-            .filter((player: any) => {
-              return damagePositions.some(({ x, y }) => player.x === x && player.y === y)
-            })
-            .map((player: any) => ({
-              ...player,
-              health: player.health - 20
-            })),
-          'index'
-        )
-
-        return {
-          ...currentPlayers,
-          ...newPlayers
-        }
+        return currentPlayers.map((player: any) => ({
+          ...player,
+          ...damagePositions.some(({ x, y }) => player.x === x && player.y === y) && ({
+            health: player.health - 20
+          })
+        }))
       })
 
       setExplosions((currentExplosions: any) => ({ ...currentExplosions, ...explosion }))
@@ -79,7 +78,7 @@ export const MapProvider = ({ children }: any) => {
   }
 
   const initializePlayers = () => {
-    const newPlayers = generatePlayers(blocks)
+    const newPlayers = generatePlayers(players, blocks)
 
     setPlayers(newPlayers)
   }
@@ -97,10 +96,6 @@ export const MapProvider = ({ children }: any) => {
     initializePlayers()
   }
 
-  useEffect(() => {
-    initialize()
-  }, [])
-
   return (
     <MapContext.Provider
       value={{
@@ -115,7 +110,9 @@ export const MapProvider = ({ children }: any) => {
         setPlayers,
         move,
         bomb,
-        initialize
+        initialize,
+        settings,
+        setSettings
       }}
     >
       {children}

@@ -29,7 +29,7 @@ export const Map = ({ style, blocks } : any) => {
   }
 
   const getPlayers = () => {
-    return players ? Object.values(players) : []
+    return players
   }
 
   const getActivePlayers = () => {

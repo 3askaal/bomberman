@@ -4,8 +4,10 @@ import ReactGA from 'react-ga4'
 import { Controls, Map } from '../../components'
 import { MapContext } from '../../context'
 import useMousetrap from "react-hook-mousetrap"
+import { useHistory } from 'react-router-dom'
 
 const PlayView = () => {
+  const history = useHistory()
   const {
     blocks,
     players,
@@ -31,12 +33,14 @@ const PlayView = () => {
     ReactGA.send({ hitType: "pageview", page: "/play" });
   }, [])
 
-  const getPlayers = () => {
-    return players ? Object.values(players) : []
-  }
+  useEffect(() => {
+    if (!players.length) {
+      history.push('/')
+    }
+  }, [])
 
   const getActivePlayers = (): any[] => {
-    return getPlayers().filter(({ health }: any) => health)
+    return players.filter(({ health }: any) => health)
   }
 
   const getWinner = (): any => {
@@ -58,7 +62,7 @@ const PlayView = () => {
             flexWrap: 'wrap'
           }}
         >
-          { getPlayers().map((player: any, index: number) => (
+          { getActivePlayers().map((player: any, index: number) => (
             <Box
               key={`player${index}`}
               s={{

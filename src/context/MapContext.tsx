@@ -1,17 +1,7 @@
 import React, { createContext, useEffect, useState } from 'react'
-import { keyBy, sampleSize, times } from 'lodash'
-import randomColor from 'randomcolor'
-import { generateBricks, generateGrid, generateStones } from '../helpers/generate'
+import { keyBy } from 'lodash'
 
-const colors = ['red', 'green', 'blue', 'purple', 'pink']
-const randomColors = sampleSize(colors, 2)
-const initialPlayers = keyBy(times(2, (index) => ({
-  index,
-  x: 0,
-  y: 0,
-  color: randomColor({ luminosity: 'dark', hue: randomColors[index]}),
-  health: 100,
-})), 'index')
+import { generateBricks, generateGrid, generatePlayers, generateStones } from '../helpers/generate'
 
 export const MapContext = createContext({})
 
@@ -147,56 +137,17 @@ export const MapProvider = ({ children }: any) => {
   }
 
   const initializePlayers = () => {
-    const newPlayers = keyBy(Object.values(initialPlayers).map((player: any, index: number) => {
-
-      if (Object.values(initialPlayers).length === 2) {
-        if (index === 1) {
-          return {
-            ...player,
-            x: blocks,
-            y: blocks
-          }
-        }
-      }
-
-      if (index === 1) {
-        return {
-          ...player,
-          x: blocks,
-          y: 0
-        }
-      }
-
-      if (index === 2) {
-        return {
-          ...player,
-          x: 0,
-          y: blocks
-        }
-      }
-
-      if (index === 3) {
-        return {
-          ...player,
-          x: blocks,
-          y: blocks
-        }
-      }
-
-      return player
-    }), 'index')
+    const newPlayers = generatePlayers(blocks)
 
     setPlayers(newPlayers)
   }
-
-
 
   const initializeGrid = () => {
     let newGrid = generateGrid(blocks)
     newGrid = generateStones(newGrid)
     newGrid = generateBricks(newGrid, blocks)
 
-    setGrid({ ...newGrid })
+    setGrid(newGrid)
   }
 
   const initialize = () => {

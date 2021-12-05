@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { useLocation, useHistory } from 'react-router-dom'
-import { Container, Wrapper, Spacer, Button, ElementGroup } from '3oilerplate'
+import { Container, Wrapper, Spacer, Button } from '3oilerplate'
 import { PlayersPanel } from './PlayersPanel'
 import { MapContext } from '../../context'
 import { CONFIG } from '../../config/config'
@@ -11,8 +11,6 @@ const SetupView = () => {
 
   const { initialize, settings, setSettings, players }: any = useContext(MapContext)
   const [activePanel, setActivePanel] = useState('players')
-
-  const playerAmount = CONFIG.AMOUNT_PLAYERS[settings.type]
 
   function onStart() {
     initialize()
@@ -47,12 +45,11 @@ const SetupView = () => {
           </ElementGroup> */}
 
           <Spacer size="s" s={{ flexGrow: 1, justifyContent: 'center' }}>
-            {/* {activePanel === 'settings' ? <SettingsPanel /> : null} */}
-            {activePanel === 'players' ? <PlayersPanel /> : null}
+            { activePanel === 'players' ? <PlayersPanel /> : null }
           </Spacer>
         </Spacer>
 
-        <Button isBlock isDisabled={players.length < playerAmount.min} onClick={onStart}>
+        <Button isBlock isDisabled={players.length < CONFIG.AMOUNT_PLAYERS[settings.type]?.min} onClick={onStart}>
           Start
         </Button>
 

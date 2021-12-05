@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useState } from 'react'
+import React, { createContext, useState } from 'react'
 
 import { generateBricks, generateGrid, generatePlayers, generateStones } from '../helpers/generate'
 import { generateDamage } from '../helpers/actions'
@@ -42,8 +42,7 @@ export const MapProvider = ({ children }: any) => {
     })))
   }
 
-  const addBomb = (bomb: any) => {
-    const resetBomb = { ...bombs }
+  const addBomb = (bomb: any, resetBomb: any) => {
     setBombs((currentBombs: any) => ({ ...currentBombs, ...bomb }))
 
     setTimeout(() => {
@@ -52,13 +51,12 @@ export const MapProvider = ({ children }: any) => {
   }
 
   const bomb = (playerIndex: number) => {
-    const { damagePositions, newGrid, resetBomb, explosion, resetExplosion, bomb } = generateDamage(grid, players, playerIndex)
+    const { damagePositions, newGrid, explosion, resetExplosion, bomb, resetBomb } = generateDamage(grid, players, playerIndex)
 
-    addBomb(bomb)
+    addBomb(bomb, resetBomb)
 
     setTimeout(() => {
       setGrid((currentGrid: any) => ({ ...currentGrid, ...newGrid }))
-      setBombs((currentBombs: any) => ({ ...currentBombs, ...resetBomb }))
 
       setPlayers((currentPlayers: any) => {
         return currentPlayers.map((player: any) => ({

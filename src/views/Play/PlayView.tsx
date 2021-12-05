@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from 'react'
-import { Container, Wrapper, Box } from '3oilerplate'
+import { Container, Wrapper, Box, Popup } from '3oilerplate'
 import randomColor from 'randomcolor'
 import ReactGA from 'react-ga4'
 import { sampleSize, times, keyBy } from 'lodash'
@@ -46,6 +46,10 @@ const PlayView = () => {
 
   const getPlayers = () => {
     return players ? Object.values(players) : []
+  }
+
+  const getActivePlayers = () => {
+    return getPlayers().filter(({ health }: any) => health)
   }
 
   useEffect(() => {
@@ -129,6 +133,11 @@ const PlayView = () => {
           <Map blocks={blocks} players={players} setPlayers={setPlayers} />
         </Box>
       </Container>
+      {/* { getActivePlayers().length < 2 && (
+        <Popup>
+          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse corporis ad corrupti? Explicabo, mollitia, aspernatur rerum tempora commodi debitis ullam consequuntur quia provident labore quasi eveniet, sequi amet repudiandae dolorum.</p>
+        </Popup>
+      )} */}
     </Wrapper>
   )
 }

@@ -1,5 +1,5 @@
 import { s } from '3oilerplate'
-
+import { healthStatusColor } from '../../style'
 
 export const SControls = s.div(({ theme, index }: any) => ({
   display: 'flex',
@@ -68,8 +68,7 @@ export const SControlsHealth = s.div(({ index }: any) => ({
   position: 'relative',
   height: '6px',
   width: '100%',
-  // backgroundColor: '#B42B51',
-  border: '2px solid',
+  border: '1px solid',
   borderColor: 'white',
   [['mb', 'mt'][index]]: 'xs',
   borderRadius: '.5rem'
@@ -77,10 +76,9 @@ export const SControlsHealth = s.div(({ index }: any) => ({
 
 export const SControlsHealthProgress = s.div(({ index, health }: any) => ({
   position: 'absolute',
-  backgroundColor: 'white',
+  backgroundColor: healthStatusColor(health),
   width: `${health}%`,
   top: 0,
   bottom: 0,
   [['right', 'left'][index]]: 0,
-  borderRadius: '.5rem',
 }))

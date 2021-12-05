@@ -160,7 +160,6 @@ export const SExplosionCenter = s.div(({ distance, index }: any) => ({
   width: '1rem',
   height: '1rem',
 
-
   ...index === 0 && {
     background: `linear-gradient(
       ${distance.left ? '0deg' : '90deg'},

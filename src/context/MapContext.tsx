@@ -115,7 +115,7 @@ export const MapProvider = ({ children }: any) => {
             })
             .map((player: any) => ({
               ...player,
-              health: player.health - 20
+              health: player.health - 50
             })),
           'index'
         )

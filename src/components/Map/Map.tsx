@@ -36,6 +36,10 @@ export const Map = ({ style, blocks } : any) => {
     return players ? Object.values(players) : []
   }
 
+  const getActivePlayers = () => {
+    return getPlayers().filter(({ health }: any) => health)
+  }
+
   useEffect(() => {
     if (grid) {
       if (!stones.length) {

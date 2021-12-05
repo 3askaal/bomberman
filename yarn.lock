@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"3oilerplate@^0.2.2":
-  version "0.2.2"
-  resolved "https://registry.yarnpkg.com/3oilerplate/-/3oilerplate-0.2.2.tgz#381734623b1cb2dd732bfc8fbab85d1698d0b522"
-  integrity sha512-CTsWXBCl0eBY6TFwBl/NJqXU1JnWfipBts2hySCfCC6TcemzDxbYJTwxqKr3yunjCufIJYaSzCn503H/h3+lhw==
+"3oilerplate@^0.2.3":
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/3oilerplate/-/3oilerplate-0.2.3.tgz#01f6d74bf88ffa54c8e26d51104078603f1d045a"
+  integrity sha512-Kh0PMRGqW8jCVcwRRj9dREDcMdz+BFmJgYm8kptRk7wKFXkSrmoHPRGoJLtmj932V8dXJETmY+uQVIv6Z5zXcg==
   dependencies:
     "@mdx-js/react" "^1.6.16"
     "@styled-system/css" "^5.1.5"
@@ -34,11 +34,11 @@
     material-ui-colors "^1.0.0"
     normalize.css "^8.0.1"
     prism-react-renderer "^1.1.1"
-    react "^16.13.1"
+    react "^17.0.2"
     react-apollo "^3.1.5"
     react-app-rewire-aliases "^0.2.0"
     react-app-rewired "^2.1.6"
-    react-dom "^16.13.1"
+    react-dom "^17.0.2"
     react-element-to-jsx-string "^14.3.1"
     react-feather "^2.0.8"
     react-intersection-observer "^8.31.0"
@@ -10100,7 +10100,7 @@ react-dev-utils@^11.0.3:
     strip-ansi "6.0.0"
     text-table "0.2.0"
 
-react-dom@^16.13.1, react-dom@^17.0.2:
+react-dom@^17.0.2:
   version "17.0.2"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-17.0.2.tgz#ecffb6845e3ad8dbfcdc498f0d0a939736502c23"
   integrity sha512-s4h96KtLDUQlsENhMn1ar8t2bEa+q/YAtj8pPPdIjPDGBDIVNsrD9aXNWqspUe6AzKCIG0C1HZZLqLV7qpOBGA==
@@ -10303,7 +10303,7 @@ react@^0.14.0:
     envify "^3.0.0"
     fbjs "^0.6.1"
 
-react@^16.13.1, react@^17.0.2:
+react@^17.0.2:
   version "17.0.2"
   resolved "https://registry.yarnpkg.com/react/-/react-17.0.2.tgz#d0b5cc516d29eb3eee383f75b62864cfb6800037"
   integrity sha512-gnhPt75i/dq/z3/6q/0asP78D0u592D5L1pd7M8P+dck6Fu/jJeL6iVVK23fptSUZj8Vjf++7wXA8UNclGQcbA==

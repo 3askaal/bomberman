@@ -1,23 +1,9 @@
 import React, { useContext, useEffect } from 'react'
-import { Container, Wrapper, Box, Popup } from '3oilerplate'
-import randomColor from 'randomcolor'
+import { Container, Wrapper, Box, Popup, Button, Text } from '3oilerplate'
 import ReactGA from 'react-ga4'
-import { sampleSize, times, keyBy } from 'lodash'
 import { Controls, Map } from '../../components'
 import { MapContext } from '../../context'
 import useMousetrap from "react-hook-mousetrap"
-
-const colors = ['red', 'green', 'blue', 'purple', 'pink']
-
-const randomColors = sampleSize(colors, 2)
-
-const initialPlayers = keyBy(times(2, (index) => ({
-  index,
-  x: 0,
-  y: 0,
-  color: randomColor({ luminosity: 'dark', hue: randomColors[index]}),
-  health: 100,
-})), 'index')
 
 const PlayView = () => {
   const {
@@ -25,7 +11,8 @@ const PlayView = () => {
     players,
     setPlayers,
     move,
-    bomb
+    bomb,
+    initialize
   }: any = useContext(MapContext)
 
   useMousetrap('up', () => move(0, 'y', -1))
@@ -48,52 +35,13 @@ const PlayView = () => {
     return players ? Object.values(players) : []
   }
 
-  const getActivePlayers = () => {
+  const getActivePlayers = (): any[] => {
     return getPlayers().filter(({ health }: any) => health)
   }
 
-  useEffect(() => {
-    const newPlayers = keyBy(Object.values(initialPlayers).map((player: any, index: number) => {
-
-      if (Object.values(initialPlayers).length === 2) {
-        if (index === 1) {
-          return {
-            ...player,
-            x: blocks,
-            y: blocks
-          }
-        }
-      }
-
-      if (index === 1) {
-        return {
-          ...player,
-          x: blocks,
-          y: 0
-        }
-      }
-
-      if (index === 2) {
-        return {
-          ...player,
-          x: 0,
-          y: blocks
-        }
-      }
-
-      if (index === 3) {
-        return {
-          ...player,
-          x: blocks,
-          y: blocks
-        }
-      }
-
-      return player
-    }), 'index')
-
-    setPlayers(newPlayers)
-  }, [])
+  const getWinner = (): any => {
+    return getActivePlayers()[0] || {}
+  }
 
   return (
     <Wrapper s={{ padding: ['xs', 's'] }}>
@@ -133,11 +81,15 @@ const PlayView = () => {
           <Map blocks={blocks} players={players} setPlayers={setPlayers} />
         </Box>
       </Container>
-      {/* { getActivePlayers().length < 2 && (
-        <Popup>
-          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse corporis ad corrupti? Explicabo, mollitia, aspernatur rerum tempora commodi debitis ullam consequuntur quia provident labore quasi eveniet, sequi amet repudiandae dolorum.</p>
+      { getActivePlayers().length < 2 && (
+        <Popup
+          actions={[
+            <Button isPositive onClick={() => initialize()}>Restart</Button>
+          ]}
+        >
+          <Text s={{ textAlign: 'center' }}>Player { getWinner().index } won! Click restart to start over!</Text>
         </Popup>
-      )} */}
+      ) }
     </Wrapper>
   )
 }

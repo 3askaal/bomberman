@@ -1,4 +1,4 @@
-import { s, keyframes, css } from '3oilerplate'
+import { s } from '3oilerplate'
 
 export const SMap = s.div(({ theme, blocks }: any) => ({
   display: 'flex',
@@ -132,20 +132,20 @@ export const SMapExplosionDirection = s.div(({ key, direction, distance }: any) 
 
 }))
 
-const boom = keyframes`
-  0% {
-    top: '0',
-    left: '0',
-    right: '0',
-    bottom: '0',
-  }
-  100% {
-    top: '-.5rem',
-    left: '-.5rem',
-    right: '-.5rem',
-    bottom: '-.5rem',
-  }
-`;
+// const boom = keyframes`
+//   0% {
+//     top: '0',
+//     left: '0',
+//     right: '0',
+//     bottom: '0',
+//   }
+//   100% {
+//     top: '-.5rem',
+//     left: '-.5rem',
+//     right: '-.5rem',
+//     bottom: '-.5rem',
+//   }
+// `;
 
 export const SMapExplosion = s.div(({ x, y, width, direction }: any) => ({
   position: 'relative',

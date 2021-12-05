@@ -11,14 +11,6 @@ export const Map = ({ style, blocks } : any) => {
     explosions,
     players
   }: any = useContext(MapContext)
-  // const [grid, setGrid] = useState<any[]>([])
-  const [stones, setStones] = useState<any[]>([])
-  const [bricks, setBricks] = useState<any[]>([])
-  // const [brickGenerated, setBrickGenerated] = useState<boolean>(false)
-
-  useEffect(() => {
-    generate()
-  }, [])
 
   const getBombs = () => {
     return bombs ? Object.values(bombs).filter(({ bomb }: any) => bomb) : []
@@ -26,6 +18,10 @@ export const Map = ({ style, blocks } : any) => {
 
   const getExplosions = () => {
     return explosions ? Object.values(explosions).filter(({ explosion }: any) => explosion) : []
+  }
+
+  const getStones = () => {
+    return grid ? Object.values(grid).filter(({ stone }: any) => stone) : []
   }
 
   const getBricks = () => {
@@ -40,96 +36,9 @@ export const Map = ({ style, blocks } : any) => {
     return getPlayers().filter(({ health }: any) => health)
   }
 
-  useEffect(() => {
-    if (grid) {
-      if (!stones.length) {
-        generateStones()
-      }
-
-      if (stones.length && !bricks.length) {
-        generateBricks()
-      }
-
-      // const activeBombs = Object.values(grid).filter(({ bomb }: any) => bomb)
-
-      // if (activeBombs.length) {
-      //   setBombs([])
-      //   setBombs(activeBombs)
-      // }
-    }
-  }, [grid])
-
-  function generate() {
-    const newGrid: any = {}
-    const amountBricksForUnevenCube = (blocks * blocks) + blocks + blocks + 1
-
-    times(amountBricksForUnevenCube, (i) => {
-      const y = (i - (i % (blocks + 1))) / (blocks + 1)
-      const x = i % (blocks + 1)
-
-      newGrid[`${x}/${y}`] = { x, y }
-    })
-
-    setGrid({...newGrid})
-  }
-
-  function generateStones() {
-    let newGrid = { ...grid }
-
-    const newStones = Object.values(grid).filter((block: any) => {
-      const { x, y } = block
-
-      if (y % 2 && x % 2) {
-        newGrid = { ...newGrid, [`${x}/${y}`]: { ...newGrid[`${x}/${y}`], stone: true }}
-        return true
-      }
-
-      return false
-    })
-
-    setGrid({...newGrid})
-    setStones(newStones)
-  }
-
-  function generateBricks() {
-    let newGrid = { ...grid }
-
-    const freeSpaces = Object.values(grid).filter((block: any) => {
-      const { x, y } = block
-
-      const isEvenUneven = x % 2 === 1 && y % 2 === 0
-      const isUnevenEven = x % 2 === 0 && y % 2 === 1
-      const isBothUneven = x % 1 === 0 && y % 2 === 0
-
-      if (isEvenUneven || isUnevenEven || isBothUneven) {
-        const isTopLeftCorner = y < 3 && x < 3
-        const isTopRightCorner = y < 3 && x > (blocks - 3)
-        const isBottomLeftCorner = y > (blocks - 3) && x < 3
-        const isBottomRightCorner = y > (blocks - 3) && x > (blocks - 3)
-
-        const isCorner = isTopLeftCorner || isTopRightCorner || isBottomLeftCorner || isBottomRightCorner
-
-        if (!isCorner) {
-          return true
-        }
-      }
-
-      return false
-    })
-
-    const newBricks = sampleSize(freeSpaces, (60 / 100) * freeSpaces.length)
-
-    newBricks.forEach(({x, y}: any) => {
-      newGrid = { ...newGrid, [`${x}/${y}`]: { ...newGrid[`${x}/${y}`], brick: true }}
-    })
-
-    setGrid({ ...newGrid })
-    setBricks(newBricks)
-  }
-
   return (
     <SMap style={{style}} blocks={blocks + 1}>
-      { getPlayers().map(({x, y, color}: any, index: number) => (
+      { getActivePlayers().map(({x, y, color}: any, index: number) => (
         <SMapCharacter
           key={index}
           s={{
@@ -138,7 +47,7 @@ export const Map = ({ style, blocks } : any) => {
           color={color}
         />
       )) }
-      { stones.length ? stones.map(({x, y}: any, index: number) => (
+      { getStones().map(({x, y}: any, index: number) => (
         <SMapStone
           key={index}
           s={{
@@ -146,7 +55,7 @@ export const Map = ({ style, blocks } : any) => {
             top: `${y}rem`
           }}
         />
-      )) : null }
+      )) }
       { getBricks().map(({x, y}: any, index: number) => (
         <SMapBrick
           key={index}

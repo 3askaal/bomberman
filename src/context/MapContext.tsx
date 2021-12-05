@@ -1,11 +1,23 @@
-import React, { createContext, useState } from 'react'
-import { keyBy } from 'lodash'
+import React, { createContext, useEffect, useState } from 'react'
+import { keyBy, sampleSize, times } from 'lodash'
+import randomColor from 'randomcolor'
+import { generateBricks, generateGrid, generateStones } from '../helpers/generate'
+
+const colors = ['red', 'green', 'blue', 'purple', 'pink']
+const randomColors = sampleSize(colors, 2)
+const initialPlayers = keyBy(times(2, (index) => ({
+  index,
+  x: 0,
+  y: 0,
+  color: randomColor({ luminosity: 'dark', hue: randomColors[index]}),
+  health: 100,
+})), 'index')
 
 export const MapContext = createContext({})
 
 export const MapProvider = ({ children }: any) => {
   const [blocks] = useState(16)
-  const [grid, setGrid] = useState<any>(null)
+  const [grid, setGrid] = useState<any>({})
   const [bombs, setBombs] = useState<any>(null)
   const [explosions, setExplosions] = useState<any>(null)
   const [players, setPlayers] = useState<any>(null)
@@ -115,7 +127,7 @@ export const MapProvider = ({ children }: any) => {
             })
             .map((player: any) => ({
               ...player,
-              health: player.health - 50
+              health: player.health - 20
             })),
           'index'
         )
@@ -134,6 +146,68 @@ export const MapProvider = ({ children }: any) => {
     }, 3500)
   }
 
+  const initializePlayers = () => {
+    const newPlayers = keyBy(Object.values(initialPlayers).map((player: any, index: number) => {
+
+      if (Object.values(initialPlayers).length === 2) {
+        if (index === 1) {
+          return {
+            ...player,
+            x: blocks,
+            y: blocks
+          }
+        }
+      }
+
+      if (index === 1) {
+        return {
+          ...player,
+          x: blocks,
+          y: 0
+        }
+      }
+
+      if (index === 2) {
+        return {
+          ...player,
+          x: 0,
+          y: blocks
+        }
+      }
+
+      if (index === 3) {
+        return {
+          ...player,
+          x: blocks,
+          y: blocks
+        }
+      }
+
+      return player
+    }), 'index')
+
+    setPlayers(newPlayers)
+  }
+
+
+
+  const initializeGrid = () => {
+    let newGrid = generateGrid(blocks)
+    newGrid = generateStones(newGrid)
+    newGrid = generateBricks(newGrid, blocks)
+
+    setGrid({ ...newGrid })
+  }
+
+  const initialize = () => {
+    initializeGrid()
+    initializePlayers()
+  }
+
+  useEffect(() => {
+    initialize()
+  }, [])
+
   return (
     <MapContext.Provider
       value={{
@@ -147,7 +221,8 @@ export const MapProvider = ({ children }: any) => {
         players,
         setPlayers,
         move,
-        bomb
+        bomb,
+        initialize
       }}
     >
       {children}

@@ -3,13 +3,16 @@ import { useLocation, useHistory } from 'react-router-dom'
 import { Container, Wrapper, Spacer, Button, ElementGroup } from '3oilerplate'
 import { PlayersPanel } from './PlayersPanel'
 import { MapContext } from '../../context'
+import { CONFIG } from '../../config/config'
 
 const SetupView = () => {
   const history = useHistory()
   const query = useLocation().search;
 
-  const { initialize, settings, setSettings }: any = useContext(MapContext)
+  const { initialize, settings, setSettings, players }: any = useContext(MapContext)
   const [activePanel, setActivePanel] = useState('players')
+
+  const playerAmount = CONFIG.AMOUNT_PLAYERS[settings.type]
 
   function onStart() {
     initialize()
@@ -49,7 +52,7 @@ const SetupView = () => {
           </Spacer>
         </Spacer>
 
-        <Button isBlock onClick={onStart}>
+        <Button isBlock isDisabled={players.length < playerAmount.min} onClick={onStart}>
           Start
         </Button>
 

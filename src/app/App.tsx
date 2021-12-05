@@ -29,6 +29,19 @@ const App = () => {
           ...theme.colors,
           ...colors,
         },
+        components: {
+          Input: {
+            default: {
+              padding: 'xs',
+            },
+          },
+          Button: {
+            default: {
+              paddingX: 's',
+              paddingY: 'xs',
+            },
+          },
+        },
       }}
     >
       <SApp>

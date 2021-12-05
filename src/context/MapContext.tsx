@@ -2,6 +2,7 @@ import React, { createContext, useEffect, useState } from 'react'
 import { keyBy } from 'lodash'
 
 import { generateBricks, generateGrid, generatePlayers, generateStones } from '../helpers/generate'
+import { generateDamage } from '../helpers/actions'
 
 export const MapContext = createContext({})
 
@@ -32,78 +33,19 @@ export const MapProvider = ({ children }: any) => {
     setPlayers((currentPlayers: any) => ({ ...currentPlayers, ...newPlayers }))
   }
 
-  const bomb = (playerIndex: number) => {
-    const { x, y }: any = { ...players[playerIndex] }
-    const posKey = `${x}/${y}`
-
-    let newGrid = {}
-
-    const bomb = { [posKey]: { x, y, bomb: true } }
-    const resetBomb = { [posKey]: { x, y, bomb: false } }
-
-    let explosions: any = { [posKey]: { x, y, explosion: true } }
-    let resetExplosions = { [posKey]: { x, y, explosion: false } }
-
-    let damagePositions = [{ x, y }]
-
-    const directions = ['left', 'right', 'up', 'down']
-
-    let distance: any = {
-      right: 0,
-      left: 0,
-      up: 0,
-      down: 0
-    }
-
-    directions.forEach((direction) => {
-      let i = 1
-      let limit = 3
-
-      while (i < limit) {
-        const go: any = {
-          left: `${x - i}/${y}`,
-          right: `${x + i}/${y}`,
-          up: `${x}/${y - i}`,
-          down: `${x}/${y + i}`,
-        }
-
-        const newPos = grid[go[direction]]
-
-        if (!newPos || newPos.stone) {
-          return
-        }
-
-        const newPosKey = `${newPos.x}/${newPos.y}`
-
-        if (newPos.brick) {
-          newGrid = { ...newGrid, [newPosKey]: { ...newPos, brick: false }}
-        }
-
-        // explosions = { [newPosKey]: { x: newPos.x, y: newPos.y, explosion: true }}
-        resetExplosions = { ...resetExplosions, [newPosKey]: { x: newPos.x, y: newPos.y, explosion: false }}
-
-        distance[direction]++
-
-        i++
-
-        if (newPos.brick) {
-          limit = i
-        }
-
-        damagePositions.push({ x: newPos.x, y: newPos.y })
-      }
-    })
-
-    explosions = {
-      ...explosions,
-      // [newPosKey]: { x: newPos.x, y: newPos.y },
-      [posKey]: {
-        ...explosions[posKey],
-        distance,
-      }
-    }
-
+  const addBomb = (bomb: any) => {
+    const resetBomb = { ...bombs }
     setBombs((currentBombs: any) => ({ ...currentBombs, ...bomb }))
+
+    setTimeout(() => {
+      setBombs((currentBombs: any) => ({ ...currentBombs, ...resetBomb }))
+    }, 3000)
+  }
+
+  const bomb = (playerIndex: number) => {
+    const { damagePositions, newGrid, resetBomb, explosion, resetExplosion, bomb } = generateDamage(grid, players, playerIndex)
+
+    addBomb(bomb)
 
     setTimeout(() => {
       setGrid((currentGrid: any) => ({ ...currentGrid, ...newGrid }))
@@ -128,11 +70,11 @@ export const MapProvider = ({ children }: any) => {
         }
       })
 
-      setExplosions((currentExplosions: any) => ({ ...currentExplosions, ...explosions }))
+      setExplosions((currentExplosions: any) => ({ ...currentExplosions, ...explosion }))
     }, 3000)
 
     setTimeout(() => {
-      setExplosions((currentExplosions: any) => ({ ...currentExplosions, ...resetExplosions }))
+      setExplosions((currentExplosions: any) => ({ ...currentExplosions, ...resetExplosion }))
     }, 3500)
   }
 

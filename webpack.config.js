@@ -3,10 +3,10 @@ const path = require('path');
 module.exports = {
   resolve: {
     alias: {
-      'react': path.resolve(__dirname, 'react'),
-      'react-dom': path.resolve(__dirname, 'react-dom'),
-      'styled-components': path.resolve(__dirname, 'styled-components'),
-      'styled-system': path.resolve(__dirname, 'styled-system'),
+      'react': path.resolve(__dirname, 'node_modules/3oilerplate/node_modules/react'),
+      'react-dom': path.resolve(__dirname, 'node_modules/3oilerplate/node_modules/react-dom'),
+      'styled-components': path.resolve(__dirname, 'node_modules/3oilerplate/node_modules/styled-components'),
+      'styled-system': path.resolve(__dirname, 'node_modules/3oilerplate/node_modules/styled-system'),
     },
   },
 };

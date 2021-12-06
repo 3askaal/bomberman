@@ -5,11 +5,19 @@ import chroma from 'chroma-js'
 export const SMap = s.div(({ theme, blocks }: any) => ({
   display: 'flex',
   position: 'relative',
-  height: `${blocks}rem`,
-  width: `${blocks}rem`,
-  backgroundColor: '#F0F8FF',
-  borderRadius: '0.2rem',
-  boxShadow: '0 0 0 2px #F0F8FF',
+  height: `calc(${blocks}rem + 1rem)`,
+  width: `calc(${blocks}rem + 1rem)`,
+  border: '.5rem solid',
+
+  borderRightColor: chroma('#F0F8FF').darken(1).hex(),
+  borderTopColor: chroma('#F0F8FF').darken(1).hex(),
+
+  backgroundColor: chroma('#F0F8FF').darken(1.5).hex(),
+
+  borderLeftColor: chroma('#F0F8FF').darken(2).hex(),
+  borderBottomColor: chroma('#F0F8FF').darken(2).hex(),
+  // borderRadius: '0.2rem',
+  // boxShadow: '0 0 0 2px #F0F8FF',
   // backgroundImage: `url(${griptape})`,
   // border: `solid ${rgba(theme.colors.primary, 0.6)}`,
 }))
@@ -59,8 +67,8 @@ export const SMapBomb = s.div(() => ({
   width: '.8rem',
   height: '.8rem',
   margin: '.1rem',
-  backgroundColor: '#666',
-  border: '0.15rem solid #A9A9A9',
+  backgroundColor: '#222',
+  border: '0.15rem solid #555',
 }))
 
 const c1 = '#6B0848';

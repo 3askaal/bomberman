@@ -64,12 +64,12 @@ export const SControlsButton = s.button(({ theme, type, color }: any) => ({
   }
 }))
 
-export const SControlsHealth = s.div(({ index }: any) => ({
+export const SControlsHealth = s.div(({ index, health }: any) => ({
   position: 'relative',
   height: '6px',
   width: '100%',
   border: '1px solid',
-  borderColor: 'white',
+  borderColor: healthStatusColor(health),
   [['mb', 'mt'][index]]: 'xs',
   borderRadius: '.5rem'
 }))

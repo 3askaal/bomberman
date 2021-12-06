@@ -87,7 +87,7 @@ export const PlayersPanel = () => {
           </ElementGroup>
         </Spacer>
       ))}
-      { players.length < CONFIG.AMOUNT_PLAYERS[settings.type].max && (
+      { players.length < CONFIG.AMOUNT_PLAYERS[settings.type || 'local'].max && (
         <Spacer size="xs">
           <form onSubmit={onSubmit}>
             <Spacer>

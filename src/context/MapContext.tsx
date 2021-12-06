@@ -2,6 +2,7 @@ import React, { createContext, useState } from 'react'
 
 import { generateBricks, generateGrid, generatePlayers, generateStones } from '../helpers/generate'
 import { generateDamage } from '../helpers/actions'
+import moment from 'moment'
 
 export const MapContext = createContext({})
 
@@ -12,6 +13,7 @@ export const MapProvider = ({ children }: any) => {
   const [explosions, setExplosions] = useState<any>(null)
   const [players, setPlayers] = useState<any>([])
   const [settings, setSettings] = useState<any>({})
+  const [time, setTime] = useState<number | null>(null)
 
   const move = (playerIndex: number, direction: string, movement: number) => {
     const newPlayer = { ...players[playerIndex] }
@@ -89,9 +91,15 @@ export const MapProvider = ({ children }: any) => {
     setGrid(newGrid)
   }
 
+  const setTimers = () => {
+    const endTime = moment().add(3, 'minutes')
+    setTime(endTime.valueOf())
+  }
+
   const initialize = () => {
     initializeGrid()
     initializePlayers()
+    setTimers()
   }
 
   return (
@@ -110,7 +118,9 @@ export const MapProvider = ({ children }: any) => {
         bomb,
         initialize,
         settings,
-        setSettings
+        setSettings,
+        time,
+        setTime,
       }}
     >
       {children}

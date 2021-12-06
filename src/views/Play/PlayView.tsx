@@ -1,11 +1,12 @@
 import React, { useContext, useEffect } from 'react'
-import { Container, Wrapper, Box, Popup, Button, Text } from '3oilerplate'
+import { Container, Wrapper, Box, Popup, Button, Text, Spacer } from '3oilerplate'
 import ReactGA from 'react-ga4'
 import { Controls, Map } from '../../components'
 import { MapContext } from '../../context'
 import useMousetrap from "react-hook-mousetrap"
 import { useHistory } from 'react-router-dom'
 import ReactGA4 from 'react-ga4'
+import { Timer } from '../../components/Timer/Timer'
 
 const PlayView = () => {
   const history = useHistory()
@@ -93,7 +94,10 @@ const PlayView = () => {
           )) }
         </Box>
         <Box s={{ flexGrow: 1, height: '100%', flexDirection: 'row', display: 'flex', alignItems: 'center' }}>
-          <Map blocks={blocks} players={players} setPlayers={setPlayers} />
+          <Spacer size="xs">
+            <Timer />
+            <Map blocks={blocks} players={players} setPlayers={setPlayers} />
+          </Spacer>
         </Box>
       </Container>
       { getWinner() && (

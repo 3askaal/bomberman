@@ -14,7 +14,7 @@ export const Controls = ({ onMove, onBomb, color, index, health }: any) => {
   return (
     <SControls>
       { index === 0 && (
-        <SControlsHealth index={index}>
+        <SControlsHealth index={index} health={health}>
           <SControlsHealthProgress index={index} health={health} />
         </SControlsHealth>
       )}

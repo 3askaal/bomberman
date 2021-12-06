@@ -109,7 +109,11 @@ const PlayView = () => {
             <Button isPositive onClick={() => initialize()}>Restart</Button>
           ]}
         >
-          <Text s={{ textAlign: 'center' }}>{ getWinner().name } won! Click restart to start over!</Text>
+          <Text s={{ textAlign: 'center' }}>{
+            remainingTime ?
+              `${getWinner().name} won!` :
+              `Time limit reached!`
+          } Click restart to start over!</Text>
         </Popup>
       ) }
     </Wrapper>

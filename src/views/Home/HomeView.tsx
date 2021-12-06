@@ -1,6 +1,6 @@
 import React from 'react'
 import { useHistory } from 'react-router-dom'
-import { Container, Wrapper, Spacer, Button } from '3oilerplate'
+import { Container, Wrapper, Spacer, Button, Title } from '3oilerplate'
 
 const HomeView = () => {
   const history = useHistory()
@@ -9,8 +9,11 @@ const HomeView = () => {
     <Wrapper>
       <Container style={{ alignItems: 'center', justifyContent: 'center' }}>
         <Spacer size="l" style={{ alignItems: 'center' }}>
-          <Button onClick={() => history.push('/setup?type=local')}>Local play</Button>
-          <Button disable={true} onClick={() => history.push('/multiplayer')}>Multiplayer</Button>
+          <Title level={1}>Bomberman</Title>
+          <Spacer size="m" style={{ alignItems: 'center' }}>
+            <Button onClick={() => history.push('/setup?type=local')}>Local play</Button>
+            <Button disable={true} onClick={() => history.push('/multiplayer')}>Multiplayer</Button>
+          </Spacer>
         </Spacer>
       </Container>
     </Wrapper>

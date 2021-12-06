@@ -24,6 +24,8 @@ const App = () => {
         fonts: {
           ...theme.fonts,
           ...fonts,
+          base: "'Play', sans-serif",
+          title: "'Play', sans-serif"
         },
         colors: {
           ...theme.colors,

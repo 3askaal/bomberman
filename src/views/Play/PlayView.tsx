@@ -55,7 +55,7 @@ const PlayView = () => {
   }
 
   const getWinner = (): any => {
-    return getActivePlayers()[0].length === 1 ? getActivePlayers()[0] : null
+    return getActivePlayers().length === 1 ? getActivePlayers()[0] : null
   }
 
   return (

@@ -5,17 +5,17 @@ import chroma from 'chroma-js'
 export const SMap = s.div(({ theme, blocks }: any) => ({
   display: 'flex',
   position: 'relative',
-  height: `calc(${blocks}rem + 1rem)`,
-  width: `calc(${blocks}rem + 1rem)`,
-  border: '.5rem solid',
+  height: `calc(${blocks}rem + .5rem)`,
+  width: `calc(${blocks}rem + .5rem)`,
+  border: '.25rem solid',
 
-  borderRightColor: chroma('#F0F8FF').darken(1).hex(),
-  borderTopColor: chroma('#F0F8FF').darken(1).hex(),
+  borderRightColor: chroma('#fff').darken(0.5).hex(),
+  borderTopColor: chroma('#fff').darken(0.5).hex(),
 
-  backgroundColor: chroma('#F0F8FF').darken(1.5).hex(),
+  backgroundColor: chroma('#fff').darken(1).hex(),
 
-  borderLeftColor: chroma('#F0F8FF').darken(2).hex(),
-  borderBottomColor: chroma('#F0F8FF').darken(2).hex(),
+  borderLeftColor: chroma('#fff').darken(1.5).hex(),
+  borderBottomColor: chroma('#fff').darken(1.5).hex(),
   // borderRadius: '0.2rem',
   // boxShadow: '0 0 0 2px #F0F8FF',
   // backgroundImage: `url(${griptape})`,
@@ -26,12 +26,14 @@ export const SMapStone = s.div(({ theme }: any) => ({
   position: 'absolute',
   width: '1rem',
   height: '1rem',
-  backgroundColor: '#888888',
   border: '0.15rem solid',
-  borderRightColor: '#C0C0C0',
-  borderTopColor: '#C0C0C0',
-  borderLeftColor: '#444444',
-  borderBottomColor: '#444444',
+  borderRightColor: chroma('#fff').darken(1.5).hex(),
+  borderTopColor: chroma('#fff').darken(1.5).hex(),
+
+  backgroundColor: chroma('#fff').darken(2.5).hex(),
+
+  borderLeftColor: chroma('#fff').darken(3.5).hex(),
+  borderBottomColor: chroma('#fff').darken(3.5).hex(),
   // borderRadius: '0.1rem'
 }))
 

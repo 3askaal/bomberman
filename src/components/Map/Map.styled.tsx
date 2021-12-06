@@ -1,4 +1,6 @@
 import { s } from '3oilerplate'
+import chroma from 'chroma-js'
+
 
 export const SMap = s.div(({ theme, blocks }: any) => ({
   display: 'flex',
@@ -39,15 +41,16 @@ export const SMapBrick = s.div(() => ({
   position: 'absolute',
   width: '1rem',
   height: '1rem',
-  border: '0.15rem solid',
+  border: '0.2rem solid',
   // light
-  borderTopColor: '#E63E6D',
-  borderRightColor: '#E63E6D',
+  borderTopColor: chroma('#C19191').brighten(.2).hex(),
+  borderRightColor: chroma('#C19191').brighten(.2).hex(),
   // middle
-  backgroundColor: '#B42B51',
+  backgroundColor: '#AA7070',
   // dark
-  borderLeftColor: '#7D1935',
-  borderBottomColor: '#7D1935',
+  borderLeftColor: chroma('#8B5D5D').darken(.5).hex(),
+  borderBottomColor: chroma('#8B5D5D').darken(.5).hex(),
+  borderRadius: '0.1rem'
 }))
 
 export const SMapBomb = s.div(() => ({

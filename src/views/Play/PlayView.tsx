@@ -55,7 +55,7 @@ const PlayView = () => {
   }
 
   const getWinner = (): any => {
-    return getActivePlayers()[0] || false
+    return getActivePlayers()[0].length === 1 ? getActivePlayers()[0] : null
   }
 
   return (
@@ -96,7 +96,7 @@ const PlayView = () => {
           <Map blocks={blocks} players={players} setPlayers={setPlayers} />
         </Box>
       </Container>
-      { getActivePlayers().length < 2 && (
+      { getWinner() && (
         <Popup
           actions={[
             <Button isPositive onClick={() => initialize()}>Restart</Button>

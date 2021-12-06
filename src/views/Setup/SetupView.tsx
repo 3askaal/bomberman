@@ -4,6 +4,7 @@ import { Container, Wrapper, Spacer, Button } from '3oilerplate'
 import { PlayersPanel } from './PlayersPanel'
 import { MapContext } from '../../context'
 import { CONFIG } from '../../config/config'
+import ReactGA4 from 'react-ga4'
 
 const SetupView = () => {
   const history = useHistory()
@@ -15,6 +16,12 @@ const SetupView = () => {
   function onStart() {
     initialize()
     history.push('/play')
+
+    ReactGA4.event({
+      category: "actions",
+      action: "play:start",
+      label: players.map(({ name }: any) => name).join(', ')
+    });
   }
 
   useEffect(() => {

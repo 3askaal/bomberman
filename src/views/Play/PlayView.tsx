@@ -5,6 +5,7 @@ import { Controls, Map } from '../../components'
 import { MapContext } from '../../context'
 import useMousetrap from "react-hook-mousetrap"
 import { useHistory } from 'react-router-dom'
+import ReactGA4 from 'react-ga4'
 
 const PlayView = () => {
   const history = useHistory()
@@ -39,12 +40,22 @@ const PlayView = () => {
     }
   }, [])
 
+  useEffect(() => {
+    if (getWinner()) {
+      ReactGA4.event({
+        category: "actions",
+        action: "play:win",
+        label: getWinner().name
+      });
+    }
+  }, [players])
+
   const getActivePlayers = (): any[] => {
     return players.filter(({ health }: any) => health)
   }
 
   const getWinner = (): any => {
-    return getActivePlayers()[0] || {}
+    return getActivePlayers()[0] || false
   }
 
   return (
@@ -91,7 +102,7 @@ const PlayView = () => {
             <Button isPositive onClick={() => initialize()}>Restart</Button>
           ]}
         >
-          <Text s={{ textAlign: 'center' }}>Player { getWinner().index } won! Click restart to start over!</Text>
+          <Text s={{ textAlign: 'center' }}>{ getWinner().name } won! Click restart to start over!</Text>
         </Popup>
       ) }
     </Wrapper>

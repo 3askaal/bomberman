@@ -24,7 +24,7 @@ export const SMapStone = s.div(({ theme }: any) => ({
   borderTopColor: '#C0C0C0',
   borderLeftColor: '#444444',
   borderBottomColor: '#444444',
-  borderRadius: '0.1rem'
+  // borderRadius: '0.1rem'
 }))
 
 export const SMapCharacter = s.div(({ theme, color }: any) => ({
@@ -50,7 +50,7 @@ export const SMapBrick = s.div(() => ({
   // dark
   borderLeftColor: chroma('#8B5D5D').darken(.5).hex(),
   borderBottomColor: chroma('#8B5D5D').darken(.5).hex(),
-  borderRadius: '0.1rem'
+  // borderRadius: '0.1rem'
 }))
 
 export const SMapBomb = s.div(() => ({

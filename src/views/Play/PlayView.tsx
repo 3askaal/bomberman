@@ -6,6 +6,7 @@ import { MapContext } from '../../context'
 import useMousetrap from "react-hook-mousetrap"
 import { useHistory } from 'react-router-dom'
 import ReactGA4 from 'react-ga4'
+import faker from 'faker'
 import { Timer } from '../../components/Timer/Timer'
 
 const PlayView = () => {
@@ -37,7 +38,7 @@ const PlayView = () => {
 
   useEffect(() => {
     if (!players.length) {
-      history.push('/')
+      initialize([{ name: faker.internet.userName() }, { name: faker.internet.userName() }])
     }
   }, [])
 
@@ -49,6 +50,9 @@ const PlayView = () => {
         label: getWinner().name
       });
     }
+    // if (players.length) {
+    //   initialize()
+    // }
   }, [players])
 
   const getActivePlayers = (): any[] => {
@@ -74,7 +78,7 @@ const PlayView = () => {
             flexWrap: 'wrap'
           }}
         >
-          { getActivePlayers().map((player: any, index: number) => (
+          { players.map((player: any, index: number) => (
             <Box
               key={`player${index}`}
               s={{
@@ -88,6 +92,7 @@ const PlayView = () => {
                 health={player.health}
                 onBomb={() => bomb(index)}
                 color={player.color}
+                name={player.name}
                 index={index}
               />
             </Box>

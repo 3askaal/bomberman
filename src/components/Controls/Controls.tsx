@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box } from '3oilerplate'
+import { Box, Text, Spacer } from '3oilerplate'
 import { SControls, SControlsMove, SControlsMiddle, SControlsButton, SControlsHealth, SControlsHealthProgress } from './Controls.styled'
 import {
   ChevronUp,
@@ -10,13 +10,18 @@ import {
 } from 'react-feather'
 import isMobile from 'is-mobile'
 
-export const Controls = ({ onMove, onBomb, color, index, health }: any) => {
+export const Controls = ({ onMove, onBomb, name, color, index, health }: any) => {
   return (
     <SControls>
       { index === 0 && (
-        <SControlsHealth index={index} health={health}>
-          <SControlsHealthProgress index={index} health={health} />
-        </SControlsHealth>
+        <Spacer size="xxs">
+          <Box s={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <Text as="small">{ name }</Text>
+          </Box>
+          <SControlsHealth index={index} health={health}>
+            <SControlsHealthProgress index={index} health={health} />
+          </SControlsHealth>
+        </Spacer>
       )}
       <Box s={{
         display: 'flex',
@@ -119,9 +124,12 @@ export const Controls = ({ onMove, onBomb, color, index, health }: any) => {
         ) : null }
       </Box>
       { index === 1 && (
-        <SControlsHealth index={index}>
-          <SControlsHealthProgress index={index} health={health} />
-        </SControlsHealth>
+        <Spacer size="xxs">
+          <SControlsHealth index={index}>
+            <SControlsHealthProgress index={index} health={health} />
+          </SControlsHealth>
+          <Text as="small">{ name }</Text>
+        </Spacer>
       )}
     </SControls>
   )

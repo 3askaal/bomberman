@@ -6,10 +6,6 @@ export const SControls = s.div(({ theme, index }: any) => ({
   flexDirection: 'column',
   width: '100%',
   maxWidth: ['30rem', '20rem'],
-  // justifyContent: 'space-between'
-  // maxWidth: '20rem'
-  // backgroundImage: `url(${griptape})`,
-  // border: `solid ${rgba(theme.colors.primary, 0.6)}`,
 }))
 
 export const SControlsMove = s.div(({ theme }: any) => ({
@@ -26,9 +22,6 @@ export const SControlsMove = s.div(({ theme }: any) => ({
 export const SControlsMiddle = s.div(({ theme }: any) => ({
   flexDirection: 'column',
   justifyContent: 'center',
-  // flexGrow: 1,
-  // backgroundImage: `url(${griptape})`,
-  // border: `solid ${rgba(theme.colors.primary, 0.6)}`,
 }))
 
 
@@ -43,8 +36,6 @@ export const SControlsButton = s.button(({ theme, type, color }: any) => ({
   color: 'white',
   flexBasis: '33.33%',
   cursor: 'pointer',
-  // width: '100%',
-  // width: ['7.2rem', '4rem'],
 
   ...type === 'bomb' && ({
     flexBasis: '25%'
@@ -53,10 +44,6 @@ export const SControlsButton = s.button(({ theme, type, color }: any) => ({
   ...type !== 'bomb' && ({
     width: '100%',
   }),
-
-  // ...type === 'bomb' && ({
-  //   minWidth: '8rem',
-  // }),
 
   'svg': {
     strokeWidth: 5,

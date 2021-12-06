@@ -77,8 +77,8 @@ export const MapProvider = ({ children }: any) => {
     }, 3500)
   }
 
-  const initializePlayers = () => {
-    const newPlayers = generatePlayers(players, blocks)
+  const initializePlayers = (initialPlayers: any) => {
+    const newPlayers = generatePlayers(initialPlayers || players, blocks)
 
     setPlayers(newPlayers)
   }
@@ -96,9 +96,9 @@ export const MapProvider = ({ children }: any) => {
     setTime(endTime.valueOf())
   }
 
-  const initialize = () => {
+  const initialize = (initialPlayers: any) => {
     initializeGrid()
-    initializePlayers()
+    initializePlayers(initialPlayers)
     setTimers()
   }
 

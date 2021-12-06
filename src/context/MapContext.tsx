@@ -1,8 +1,31 @@
-import React, { createContext, useState } from 'react'
+import React, { createContext, useEffect, useLayoutEffect, useRef, useState } from 'react'
 
 import { generateBricks, generateGrid, generatePlayers, generateStones } from '../helpers/generate'
 import { generateDamage } from '../helpers/actions'
 import moment from 'moment'
+
+
+function useInterval(callback: () => void, delay: number | null) {
+  const savedCallback = useRef(callback)
+
+  // Remember the latest callback if it changes.
+  useLayoutEffect(() => {
+    savedCallback.current = callback
+  }, [callback])
+
+  // Set up the interval.
+  useEffect(() => {
+    // Don't schedule if no delay is specified.
+    // Note: 0 is a valid value for delay.
+    if (!delay && delay !== 0) {
+      return
+    }
+
+    const id = setInterval(() => savedCallback.current(), delay)
+
+    return () => clearInterval(id)
+  }, [delay])
+}
 
 export const MapContext = createContext({})
 
@@ -13,7 +36,8 @@ export const MapProvider = ({ children }: any) => {
   const [explosions, setExplosions] = useState<any>(null)
   const [players, setPlayers] = useState<any>([])
   const [settings, setSettings] = useState<any>({})
-  const [time, setTime] = useState<number | null>(null)
+  const [endTime, setEndTime] = useState<number | null>(null)
+  const [remainingTime, setRemainingTime] = useState<number>(1000)
 
   const move = (playerIndex: number, direction: string, movement: number) => {
     const newPlayer = { ...players[playerIndex] }
@@ -91,16 +115,21 @@ export const MapProvider = ({ children }: any) => {
     setGrid(newGrid)
   }
 
-  const setTimers = () => {
-    const endTime = moment().add(3, 'minutes')
-    setTime(endTime.valueOf())
+  const setTimer = () => {
+    const minutes = 3
+    const remainingTime = minutes * 60 * 1000
+    setRemainingTime(remainingTime)
   }
 
   const initialize = (initialPlayers: any) => {
     initializeGrid()
     initializePlayers(initialPlayers)
-    setTimers()
+    setTimer()
   }
+
+  useInterval(() => {
+    setRemainingTime(remainingTime - 1000)
+  }, remainingTime ? 1000 : null)
 
   return (
     <MapContext.Provider
@@ -119,8 +148,8 @@ export const MapProvider = ({ children }: any) => {
         initialize,
         settings,
         setSettings,
-        time,
-        setTime,
+        remainingTime,
+        setRemainingTime,
       }}
     >
       {children}

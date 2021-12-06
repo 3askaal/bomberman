@@ -17,7 +17,8 @@ const PlayView = () => {
     setPlayers,
     move,
     bomb,
-    initialize
+    initialize,
+    remainingTime
   }: any = useContext(MapContext)
 
   useMousetrap('up', () => move(0, 'y', -1))
@@ -51,11 +52,13 @@ const PlayView = () => {
   }, [players])
 
   const getActivePlayers = (): any[] => {
-    return players.filter(({ health }: any) => health)
+    return [...players].sort((a: any, b: any) => b.health - a.health).filter(({ health }: any) => health > 0)
   }
 
+  const gameOver = () => getActivePlayers().length === 1 || !remainingTime
+
   const getWinner = (): any => {
-    return getActivePlayers().length === 1 ? getActivePlayers()[0] : null
+    return getActivePlayers()[0]
   }
 
   return (
@@ -100,7 +103,7 @@ const PlayView = () => {
           </Spacer>
         </Box>
       </Container>
-      { getWinner() && (
+      { gameOver() && (
         <Popup
           actions={[
             <Button isPositive onClick={() => initialize()}>Restart</Button>

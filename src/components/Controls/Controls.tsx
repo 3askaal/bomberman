@@ -16,7 +16,7 @@ export const Controls = ({ onMove, onBomb, name, color, index, health }: any) =>
       { index === 0 && (
         <Spacer size="xxs">
           <Box s={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <Text as="small">{ name }</Text>
+            <Text>{ name }</Text>
           </Box>
           <SControlsHealth index={index} health={health}>
             <SControlsHealthProgress index={index} health={health} />
@@ -128,7 +128,7 @@ export const Controls = ({ onMove, onBomb, name, color, index, health }: any) =>
           <SControlsHealth index={index}>
             <SControlsHealthProgress index={index} health={health} />
           </SControlsHealth>
-          <Text as="small">{ name }</Text>
+          <Text>{ name }</Text>
         </Spacer>
       )}
     </SControls>

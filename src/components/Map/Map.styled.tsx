@@ -1,4 +1,4 @@
-import { s } from '3oilerplate'
+import { s, keyframes, css } from '3oilerplate'
 import chroma from 'chroma-js'
 
 
@@ -142,31 +142,30 @@ export const SMapExplosionDirection = s.div(({ key, direction, distance }: any) 
     borderBottomLeftRadius: '.5rem',
     borderBottomRightRadius: '.5rem',
   },
-
 }))
 
-// const boom = keyframes`
-//   0% {
-//     top: '0',
-//     left: '0',
-//     right: '0',
-//     bottom: '0',
-//   }
-//   100% {
-//     top: '-.5rem',
-//     left: '-.5rem',
-//     right: '-.5rem',
-//     bottom: '-.5rem',
-//   }
-// `;
+const boom = keyframes`
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+`;
 
-export const SMapExplosion = s.div(({ x, y, width, direction }: any) => ({
-  position: 'relative',
-  left: `${x}rem`,
-  top: `${y}rem`,
-  width: '1rem',
-  height: '1rem',
-}))
+export const SMapExplosion = s.div(
+  ({ x, y, width, direction }: any) => ({
+    position: 'relative',
+    left: `${x}rem`,
+    top: `${y}rem`,
+    width: '1rem',
+    height: '1rem',
+  }),
+  ({ theme }: any) => css`
+    opacity: 0;
+    animation: ${boom} 2s ease-in-out 2s forwards;
+  `
+)
 
 export const SExplosionCenter = s.div(({ distance, index }: any) => ({
   position: 'absolute',

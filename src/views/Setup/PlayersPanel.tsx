@@ -31,7 +31,7 @@ export const PlayersPanel = () => {
     }
 
     setCurrentPlayerName('')
-    setPlayers([...players, { name: currentPlayerName }])
+    setPlayers([ ...players, { name: currentPlayerName } ])
   }
 
   const onSubmit = (event: any) => {
@@ -40,7 +40,7 @@ export const PlayersPanel = () => {
   }
 
   const onRemoveLocalPlayer = (index: number) => {
-    const newLocalPlayers = [...players]
+    const newLocalPlayers = [ ...players ]
     pullAt(newLocalPlayers, [index])
     setPlayers(newLocalPlayers)
   }
@@ -49,7 +49,7 @@ export const PlayersPanel = () => {
     if (value === '') {
       onRemoveLocalPlayer(index)
     } else {
-      const newLocalPlayers = [...players]
+      const newLocalPlayers = [ ...players ]
       newLocalPlayers[index].name = value
       setPlayers(newLocalPlayers)
     }
@@ -87,27 +87,30 @@ export const PlayersPanel = () => {
           </ElementGroup>
         </Spacer>
       ))}
-      <Spacer size="xs">
-        <form onSubmit={onSubmit}>
-          <Spacer>
-            <ElementGroup>
-              <Input
-                placeholder="Username"
-                s={{ flexGrow: 1 }}
-                value={currentPlayerName}
-                isNegative={error}
-                onChange={(value: any) => setCurrentPlayerName(value)}
-              />
-              <Button type="submit">
-                <PlusIcon />
-              </Button>
-            </ElementGroup>
-          </Spacer>
-        </form>
-        <Text size="s" s={{ color: 'negative' }}>
-          {error}
-        </Text>
-      </Spacer>
+      { players.length < CONFIG.AMOUNT_PLAYERS[settings.type].max && (
+        <Spacer size="xs">
+          <form onSubmit={onSubmit}>
+            <Spacer>
+              <ElementGroup>
+                <Input
+                  // placeholder="Username"
+                  placeholder={`Player ${players.length + 1}`}
+                  s={{ flexGrow: 1 }}
+                  value={currentPlayerName}
+                  isNegative={error}
+                  onChange={(value: any) => setCurrentPlayerName(value)}
+                />
+                <Button type="submit">
+                  <PlusIcon />
+                </Button>
+              </ElementGroup>
+            </Spacer>
+          </form>
+          <Text size="s" s={{ color: 'negative' }}>
+            {error}
+          </Text>
+        </Spacer>
+      )}
     </Spacer>
   )
 }

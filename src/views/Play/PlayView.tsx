@@ -34,11 +34,9 @@ const PlayView = () => {
 
   useEffect(() => {
     ReactGA.send({ hitType: "pageview", page: "/play" });
-  }, [])
 
-  useEffect(() => {
     if (!players.length) {
-      initialize([{ name: faker.internet.userName() }, { name: faker.internet.userName() }])
+      initialize([{ name: faker.name.firstName() }, { name: faker.name.firstName() }])
     }
   }, [])
 
@@ -50,9 +48,6 @@ const PlayView = () => {
         label: getWinner().name
       });
     }
-    // if (players.length) {
-    //   initialize()
-    // }
   }, [players])
 
   const getActivePlayers = (): any[] => {

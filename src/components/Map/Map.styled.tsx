@@ -1,6 +1,6 @@
-import { s, keyframes, css } from '3oilerplate'
+import { s } from '3oilerplate'
+import styled, { keyframes, css } from 'styled-components'
 import chroma from 'chroma-js'
-
 
 export const SMap = s.div(({ theme, blocks }: any) => ({
   display: 'flex',
@@ -100,74 +100,21 @@ const gradient = `
   ${c1} 100%
 `
 
-export const SMapExplosionDirection = s.div(({ key, direction, distance }: any) => ({
-  position: 'absolute',
-  background: `linear-gradient(
-    ${direction === 'up' || direction === 'down' ? '90deg,' : ''}
-    ${gradient}
-  )`,
+// EXPLOSION
 
-  ...direction === 'left' && distance[direction] && {
-    top: 0,
-    right: 'calc(1rem - 1px)',
-    width: `${distance[direction]}rem`,
-    height: '1rem',
-    borderTopLeftRadius: '.5rem',
-    borderBottomLeftRadius: '.5rem',
-  },
-
-  ...direction === 'right' && distance[direction] && {
-    top: 0,
-    left: `calc(1rem - 1px)`,
-    width: `${distance[direction]}rem`,
-    height: '1rem',
-    borderTopRightRadius: '.5rem',
-    borderBottomRightRadius: '.5rem',
-  },
-
-  ...direction === 'up' && distance[direction] && {
-    left: 0,
-    bottom: 'calc(1rem - 1px)',
-    width: '1rem',
-    height: `${distance[direction]}rem`,
-    borderTopLeftRadius: '.5rem',
-    borderTopRightRadius: '.5rem',
-  },
-
-  ...direction === 'down' && distance[direction] && {
-    left: 0,
-    top: `calc(1rem - 1px)`,
-    width: '1rem',
-    height: `${distance[direction]}rem`,
-    borderBottomLeftRadius: '.5rem',
-    borderBottomRightRadius: '.5rem',
-  },
-}))
-
-const boom = keyframes`
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-`;
-
-export const SMapExplosion = s.div(
+export const SMapExplosion = styled.div<any>(
   ({ x, y, width, direction }: any) => ({
     position: 'relative',
     left: `${x}rem`,
     top: `${y}rem`,
     width: '1rem',
     height: '1rem',
-  }),
-  ({ theme }: any) => css`
-    opacity: 0;
-    animation: ${boom} 2s ease-in-out 2s forwards;
-  `
+  })
 )
 
-export const SExplosionCenter = s.div(({ distance, index }: any) => ({
+// CENTER
+
+export const SExplosionCenter = styled.div<any>(({ distance, index }: any) => ({
   position: 'absolute',
   width: '1rem',
   height: '1rem',
@@ -203,60 +150,29 @@ export const SExplosionCenter = s.div(({ distance, index }: any) => ({
     )`,
     clipPath: `polygon(50% 50%, 100% 100%, 0% 100%)`,
   },
-
-
-  // ...(distance.up || distance.down) && {
-  //   '::after': {
-  //     content: "''",
-  //     backgroundColor: colors[index],
-  //     position: 'absolute',
-  //     height: '100%',
-  //     left: `${(1 - (1 - (index / 10))) * 100}%`,
-  //     right: `${(1 - (1 - (index / 10))) * 100}%`,
-  //   },
-  // },
-
-  // ...(distance.left || distance.right) && {
-  //   '::before': {
-  //     content: "''",
-  //     backgroundColor: colors[index],
-  //     position: 'absolute',
-  //     width: '100%',
-  //     top: `${(1 - (1 - (index / 10))) * 100}%`,
-  //     bottom: `${(1 - (1 - (index / 10))) * 100}%`,
-  //   },
-  // },
 }))
 
-export const SMapExplosionEdge = s.div(({ direction }: any) => ({
-  position: 'absolute',
-  width: '.5rem',
-  height: '1rem',
-  overflow: 'hidden',
+// BOOM
 
-  ...(direction === 'right' && {
-    width: '.5rem',
-    height: '1rem',
-  }),
-  ...(direction === 'up' && {
-    width: '1rem',
-    height: '.5rem',
-  }),
-  ...(direction === 'down' && {
-    width: '1rem',
-    height: '.5rem',
-  }),
-  ...(direction === 'left' && {
-    width: '.5rem',
-    height: '1rem',
-  }),
+const boom = (size: number) => keyframes`
+  from {
+    width: 0;
+    height: 0;
+    opacity: 0;
+  }
+  to {
+    width: ${size}rem;
+    height: ${size}rem;
+    opacity: 0.2;
+  }
+`;
 
-  '::after': {
-    content: "''",
+export const SMapExplosionBoom = styled.div<any>(
+  ({ direction, size = 2 }: any) => ({
     position: 'absolute',
-    ...(direction === 'right' && {
-      right: 0,
-    }),
+    width: '1rem',
+    height: '1rem',
+
     ...(direction === 'up' && {
       top: 0,
     }),
@@ -266,19 +182,149 @@ export const SMapExplosionEdge = s.div(({ direction }: any) => ({
     ...(direction === 'left' && {
       left: 0,
     }),
-    width: '1rem',
+    ...(direction === 'right' && {
+      right: 0,
+    }),
+
+    '::after': {
+      content: "''",
+      position: 'absolute',
+      display: 'block',
+      borderRadius: '100%',
+      backgroundColor: 'white',
+      top: '50%',
+      left: '50%',
+      transform: `translateX(-50%) translateY(-50%)`,
+      zIndex: '100'
+    }
+  }),
+  ({ size = 1.5, duration = .2, delay = 0 }: any) => {
+    return css`
+      &:after {
+        animation: ${boom(size)} ${duration}s ease-out ${delay}s forwards;
+      }
+    `
+  }
+)
+
+// DIRECTION
+
+const slide = (dimension: string, distance: number) => keyframes`
+  from {
+    ${dimension}: 0rem;
+  }
+  to {
+    ${dimension}: ${distance + .1}rem;
+  }
+`;
+
+export const SMapExplosionDirection = styled.div<any>(
+  ({ key, direction, distance }: any) => ({
+    position: 'absolute',
+    background: `linear-gradient(
+      ${direction === 'up' || direction === 'down' ? '90deg,' : ''}
+      ${gradient}
+    )`,
+
+    ...direction === 'left' && distance[direction] && {
+      top: 0,
+      right: 'calc(1rem - 1px)',
+      // width: `${distance[direction]}rem`,
+      height: '1rem',
+      borderTopLeftRadius: '.5rem',
+      borderBottomLeftRadius: '.5rem',
+    },
+
+    ...direction === 'right' && distance[direction] && {
+      top: 0,
+      left: `calc(1rem - 1px)`,
+      // width: `${distance[direction]}rem`,
+      height: '1rem',
+      borderTopRightRadius: '.5rem',
+      borderBottomRightRadius: '.5rem',
+    },
+
+    ...direction === 'up' && distance[direction] && {
+      left: 0,
+      bottom: 'calc(1rem - 1px)',
+      width: '1rem',
+      // height: `${distance[direction]}rem`,
+      borderTopLeftRadius: '.5rem',
+      borderTopRightRadius: '.5rem',
+    },
+
+    ...direction === 'down' && distance[direction] && {
+      left: 0,
+      top: `calc(1rem - 1px)`,
+      width: '1rem',
+      // height: `${distance[direction]}rem`,
+      borderBottomLeftRadius: '.5rem',
+      borderBottomRightRadius: '.5rem',
+    },
+  }),
+  ({ direction, distance }: any) => {
+    const dimension: string = ((direction === 'up' || direction === 'down') && 'height') || 'width'
+    const directionDistance: number = distance[direction]
+
+    return css`
+      animation: ${slide(dimension, directionDistance)} .1s ease-out forwards;
+    `
+  }
+)
+
+export const SMapExplosionEdge = s.div(
+  ({ direction }: any) => ({
+    position: 'absolute',
+    width: '.5rem',
     height: '1rem',
-    borderRadius: '100%',
-    background: `radial-gradient(
-      ${c5},
-      ${c5} 14%,
-      ${c4} 14%,
-      ${c4} 28%,
-      ${c3} 28%,
-      ${c3} 42%,
-      ${c2} 42%,
-      ${c2} 56%,
-      ${c1} 56%
-    )`
-  },
-}))
+    overflow: 'hidden',
+
+    ...(direction === 'right' && {
+      width: '.5rem',
+      height: '1rem',
+    }),
+    ...(direction === 'up' && {
+      width: '1rem',
+      height: '.5rem',
+    }),
+    ...(direction === 'down' && {
+      width: '1rem',
+      height: '.5rem',
+    }),
+    ...(direction === 'left' && {
+      width: '.5rem',
+      height: '1rem',
+    }),
+
+    '::before': {
+      content: "''",
+      position: 'absolute',
+      ...(direction === 'right' && {
+        right: 0,
+      }),
+      ...(direction === 'up' && {
+        top: 0,
+      }),
+      ...(direction === 'down' && {
+        bottom: 0,
+      }),
+      ...(direction === 'left' && {
+        left: 0,
+      }),
+      width: '1rem',
+      height: '1rem',
+      borderRadius: '100%',
+      background: `radial-gradient(
+        ${c5},
+        ${c5} 14%,
+        ${c4} 14%,
+        ${c4} 28%,
+        ${c3} 28%,
+        ${c3} 42%,
+        ${c2} 42%,
+        ${c2} 56%,
+        ${c1} 56%
+      )`,
+    },
+  }),
+)

@@ -19,8 +19,8 @@ const SetupView = () => {
 
     ReactGA4.event({
       category: "actions",
-      action: "play:start",
-      label: players.map(({ name }: any) => name).join(', ')
+      action: "game:start",
+      label: players.map(({ name }: any) => name).join(' vs. ')
     });
   }
 

@@ -1,12 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { SMap, SMapStone, SMapCharacter, SMapBrick, SMapBomb, SMapExplosion, SExplosionCenter, SMapExplosionDirection, SMapExplosionEdge } from './Map.styled'
+import { SMap, SMapStone, SMapCharacter, SMapBrick, SMapBomb, SMapExplosion, SExplosionCenter, SMapExplosionDirection, SMapExplosionEdge, SMapExplosionBoom } from './Map.styled'
 import { times, sampleSize } from 'lodash'
 import { MapContext } from '../../context'
 
 export const Map = ({ style, blocks } : any) => {
   const {
     grid,
-    setGrid,
     bombs,
     explosions,
     players
@@ -76,6 +75,7 @@ export const Map = ({ style, blocks } : any) => {
       )) }
       { getExplosions().map(({x, y, distance}: any, index: number) => (
         <SMapExplosion key={index} x={x} y ={y}>
+          <SMapExplosionBoom size={1.5} />
           { times(4, (index) => (
             <SExplosionCenter key={index} distance={distance} index={index} />
           )) }
@@ -87,6 +87,7 @@ export const Map = ({ style, blocks } : any) => {
               direction={key}
               distance={distance}
             >
+              <SMapExplosionBoom direction={key} delay={.1} />
               <SMapExplosionEdge
                 direction={key}
                 {...key === 'right' && distance[key] && { s: {

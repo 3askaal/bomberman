@@ -4,21 +4,14 @@ import ReactGA from 'react-ga4'
 import { Controls, Map } from '../../components'
 import { MapContext } from '../../context'
 import useMousetrap from "react-hook-mousetrap"
-import { useHistory } from 'react-router-dom'
 import ReactGA4 from 'react-ga4'
 import faker from 'faker'
 import { Timer } from '../../components/Timer/Timer'
 
-const PlayView = () => {
-  const history = useHistory()
+function useKeyboardBinding() {
   const {
-    blocks,
-    players,
-    setPlayers,
     move,
     bomb,
-    initialize,
-    remainingTime
   }: any = useContext(MapContext)
 
   useMousetrap('up', () => move(0, 'y', -1))
@@ -32,6 +25,19 @@ const PlayView = () => {
   useMousetrap('a', () => move(1, 'x', -1))
   useMousetrap('d', () => move(1, 'x', 1))
   useMousetrap('shift', () => bomb(1))
+}
+
+const PlayView = () => {
+  const {
+    blocks,
+    players,
+    move,
+    bomb,
+    initialize,
+    remainingTime
+  }: any = useContext(MapContext)
+
+  useKeyboardBinding()
 
   useEffect(() => {
     ReactGA.send({ hitType: "pageview", page: "/play" });
@@ -42,11 +48,11 @@ const PlayView = () => {
   }, [])
 
   useEffect(() => {
-    if (getWinner()) {
+    if (gameOver()) {
       ReactGA4.event({
         category: "actions",
-        action: "play:win",
-        label: getWinner().name
+        action: "game:over",
+        label: players.map(({ name }: any) => name).join(' vs. ')
       });
     }
   }, [players])
@@ -62,7 +68,7 @@ const PlayView = () => {
   }
 
   return (
-    <Wrapper s={{ padding: ['xs', 's'] }}>
+    <Wrapper s={{ padding: ['xs', 'xs', 's'] }}>
       <Container s={{ alignItems: 'center' }}>
         <Box
           s={{
@@ -99,7 +105,7 @@ const PlayView = () => {
         <Box s={{ flexGrow: 1, height: '100%', flexDirection: 'row', display: 'flex', alignItems: 'center' }}>
           <Spacer size="xs">
             <Timer />
-            <Map blocks={blocks} players={players} setPlayers={setPlayers} />
+            <Map blocks={blocks} />
           </Spacer>
         </Box>
       </Container>

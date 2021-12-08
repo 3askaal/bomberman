@@ -228,7 +228,7 @@ export const SMapExplosionDirection = styled.div<any>(
 
     ...direction === 'left' && distance[direction] && {
       top: 0,
-      right: 'calc(1rem - 1px)',
+      right: '1rem',
       // width: `${distance[direction]}rem`,
       height: '1rem',
       borderTopLeftRadius: '.5rem',
@@ -237,7 +237,7 @@ export const SMapExplosionDirection = styled.div<any>(
 
     ...direction === 'right' && distance[direction] && {
       top: 0,
-      left: `calc(1rem - 1px)`,
+      left: `1rem`,
       // width: `${distance[direction]}rem`,
       height: '1rem',
       borderTopRightRadius: '.5rem',
@@ -246,7 +246,7 @@ export const SMapExplosionDirection = styled.div<any>(
 
     ...direction === 'up' && distance[direction] && {
       left: 0,
-      bottom: 'calc(1rem - 1px)',
+      bottom: '1rem',
       width: '1rem',
       // height: `${distance[direction]}rem`,
       borderTopLeftRadius: '.5rem',
@@ -255,7 +255,7 @@ export const SMapExplosionDirection = styled.div<any>(
 
     ...direction === 'down' && distance[direction] && {
       left: 0,
-      top: `calc(1rem - 1px)`,
+      top: `1rem`,
       width: '1rem',
       // height: `${distance[direction]}rem`,
       borderBottomLeftRadius: '.5rem',

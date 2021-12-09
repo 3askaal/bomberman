@@ -1,7 +1,7 @@
-import React, { useContext, useEffect, useState } from 'react'
-import { SMap, SMapStone, SMapCharacter, SMapBrick, SMapBomb, SMapExplosion, SExplosionCenter, SMapExplosionDirection, SMapExplosionEdge, SMapExplosionBoom } from './Map.styled'
-import { times, sampleSize } from 'lodash'
+import React, { useContext } from 'react'
+import { SMap, SMapStone, SMapCharacter, SMapBrick, SMapBomb } from './Map.styled'
 import { MapContext } from '../../context'
+import { Explosion } from '../Explosion/Explosion'
 
 export const Map = ({ style, blocks } : any) => {
   const {
@@ -73,39 +73,8 @@ export const Map = ({ style, blocks } : any) => {
           }}
         />
       )) }
-      { getExplosions().map(({x, y, distance}: any, index: number) => (
-        <SMapExplosion key={index} x={x} y ={y}>
-          <SMapExplosionBoom size={1.5} />
-          { times(4, (index) => (
-            <SExplosionCenter key={index} distance={distance} index={index} />
-          )) }
-          { Object.keys(distance).map((key: string, index: number) => distance[key] ? (
-            <SMapExplosionDirection
-              key={index}
-              x={x}
-              y={y}
-              direction={key}
-              distance={distance}
-            >
-              <SMapExplosionBoom direction={key} delay={.1} />
-              <SMapExplosionEdge
-                direction={key}
-                {...key === 'right' && distance[key] && { s: {
-                  right: 0,
-                }}}
-                {...key === 'up' && distance[key] && { s: {
-                  top: 0,
-                }}}
-                {...key === 'down' && distance[key] && { s: {
-                  bottom: 0,
-                }}}
-                {...key === 'left' && distance[key] && { s: {
-                  left: 0,
-                }}}
-              />
-            </SMapExplosionDirection>
-          ) : null) }
-        </SMapExplosion>
+      { getExplosions().map((explosion: any, index: number) => (
+        <Explosion explosion={explosion} index={index} />
       ))}
     </SMap>
   )

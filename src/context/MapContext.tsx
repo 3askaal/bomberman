@@ -36,7 +36,6 @@ export const MapProvider = ({ children }: any) => {
   const [explosions, setExplosions] = useState<any>(null)
   const [players, setPlayers] = useState<any>([])
   const [settings, setSettings] = useState<any>({})
-  const [endTime, setEndTime] = useState<number | null>(null)
   const [remainingTime, setRemainingTime] = useState<number>(1000)
 
   const move = (playerIndex: number, direction: string, movement: number) => {

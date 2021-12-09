@@ -76,16 +76,12 @@ export const SExplosionCenter = styled.div<any>(({ distance, index }: any) => ({
   },
 }))
 
-const smoke = (size: number) => keyframes`
+const smoke = keyframes`
   from {
-    width: 0;
-    height: 0;
-    opacity: 0;
+    background: radial-gradient(#DDDDDD, transparent 0%);
   }
   to {
-    width: ${size}rem;
-    height: ${size}rem;
-    opacity: 0.2;
+    background: radial-gradient(#DDDDDD, transparent 60%);
   }
 `;
 
@@ -113,17 +109,20 @@ export const SExplosionSmoke = styled.div<any>(
       position: 'absolute',
       display: 'block',
       borderRadius: '100%',
-      backgroundColor: 'white',
+      // backgroundColor: 'white',
       top: '50%',
       left: '50%',
       transform: `translateX(-50%) translateY(-50%)`,
+      width: `${size}rem`,
+      height: `${size}rem`,
+      opacity: 0.8,
       zIndex: '100'
     }
   }),
   ({ size = 1.5, duration = .2, delay = 0 }: any) => {
     return css`
       &:after {
-        animation: ${smoke(size)} ${duration}s ease-out ${delay}s forwards;
+        animation: ${smoke} ${duration}s ease-out ${delay}s forwards;
       }
     `
   }
@@ -136,7 +135,7 @@ const slide = (dimension: string, distance: number) => keyframes`
     ${dimension}: 0rem;
   }
   to {
-    ${dimension}: ${distance + .1}rem;
+    ${dimension}: ${distance}rem;
   }
 `;
 
@@ -150,8 +149,8 @@ export const SExplosionDirection = styled.div<any>(
 
     ...direction === 'left' && distance[direction] && {
       top: 0,
-      right: '1rem',
-      // width: `${distance[direction]}rem`,
+      right: `calc(1rem - 1px)`,
+      // width: done with animation
       height: '1rem',
       borderTopLeftRadius: '.5rem',
       borderBottomLeftRadius: '.5rem',
@@ -159,8 +158,8 @@ export const SExplosionDirection = styled.div<any>(
 
     ...direction === 'right' && distance[direction] && {
       top: 0,
-      left: `1rem`,
-      // width: `${distance[direction]}rem`,
+      left: `calc(1rem - 1px)`,
+      // width: done with animation
       height: '1rem',
       borderTopRightRadius: '.5rem',
       borderBottomRightRadius: '.5rem',
@@ -168,18 +167,18 @@ export const SExplosionDirection = styled.div<any>(
 
     ...direction === 'up' && distance[direction] && {
       left: 0,
-      bottom: '1rem',
+      bottom: `calc(1rem - 1px)`,
       width: '1rem',
-      // height: `${distance[direction]}rem`,
+      // height: done with animation
       borderTopLeftRadius: '.5rem',
       borderTopRightRadius: '.5rem',
     },
 
     ...direction === 'down' && distance[direction] && {
       left: 0,
-      top: `1rem`,
+      top: `calc(1rem - 1px)`,
       width: '1rem',
-      // height: `${distance[direction]}rem`,
+      // height: done with animation
       borderBottomLeftRadius: '.5rem',
       borderBottomRightRadius: '.5rem',
     },
@@ -201,21 +200,13 @@ export const SExplosionEdge = s.div(
     height: '1rem',
     overflow: 'hidden',
 
-    ...(direction === 'right' && {
+    ...((direction === 'left' || direction === 'right') && {
       width: '.5rem',
       height: '1rem',
     }),
-    ...(direction === 'up' && {
+    ...((direction === 'up' || direction === 'down') && {
       width: '1rem',
       height: '.5rem',
-    }),
-    ...(direction === 'down' && {
-      width: '1rem',
-      height: '.5rem',
-    }),
-    ...(direction === 'left' && {
-      width: '.5rem',
-      height: '1rem',
     }),
 
     '::before': {

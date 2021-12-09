@@ -5,7 +5,7 @@ import { times } from 'lodash'
 export const Explosion = ({ explosion: { x, y, distance }, index } : any) => {
   return (
     <SExplosion key={`explosion${index}`} x={x} y ={y}>
-      <SExplosionSmoke size={1.5} />
+      <SExplosionSmoke size={5} />
       { times(4, (index) => (
         <SExplosionCenter key={`explosionCenter${index}`} distance={distance} index={index} />
       )) }
@@ -17,7 +17,7 @@ export const Explosion = ({ explosion: { x, y, distance }, index } : any) => {
           direction={key}
           distance={distance}
         >
-          <SExplosionSmoke direction={key} delay={.1} />
+          {/* <SExplosionSmoke direction={key} delay={.1} /> */}
           <SExplosionEdge
             direction={key}
             {...key === 'right' && distance[key] && { s: {

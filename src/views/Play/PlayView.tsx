@@ -9,10 +9,7 @@ import faker from 'faker'
 import { Timer } from '../../components/Timer/Timer'
 
 function useKeyboardBindings() {
-  const {
-    move,
-    bomb,
-  }: any = useContext(MapContext)
+  const { move, bomb }: any = useContext(MapContext)
 
   useMousetrap('up', () => move(1, 'y', -1))
   useMousetrap('down', () => move(1, 'y', 1))

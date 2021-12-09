@@ -52,7 +52,9 @@ const PlayView = () => {
       ReactGA4.event({
         category: "actions",
         action: "game:over",
-        label: players.map(({ name }: any) => name).join(' vs. ')
+      }, {
+        players: players.map(({ name }: any) => name).join(' vs. '),
+        winner: getWinner().name
       });
     }
   }, [players])
@@ -64,7 +66,7 @@ const PlayView = () => {
   const gameOver = () => getActivePlayers().length === 1 || !remainingTime
 
   const getWinner = (): any => {
-    return getActivePlayers()[0]
+    return gameOver() ? getActivePlayers()[0] : false
   }
 
   return (

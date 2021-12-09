@@ -8,23 +8,23 @@ import ReactGA4 from 'react-ga4'
 import faker from 'faker'
 import { Timer } from '../../components/Timer/Timer'
 
-function useKeyboardBinding() {
+function useKeyboardBindings() {
   const {
     move,
     bomb,
   }: any = useContext(MapContext)
 
-  useMousetrap('up', () => move(0, 'y', -1))
-  useMousetrap('down', () => move(0, 'y', 1))
-  useMousetrap('left', () => move(0, 'x', -1))
-  useMousetrap('right', () => move(0, 'x', 1))
-  useMousetrap('space', () => bomb(0))
+  useMousetrap('up', () => move(1, 'y', -1))
+  useMousetrap('down', () => move(1, 'y', 1))
+  useMousetrap('left', () => move(1, 'x', -1))
+  useMousetrap('right', () => move(1, 'x', 1))
+  useMousetrap('space', () => bomb(1))
 
-  useMousetrap('w', () => move(1, 'y', -1))
-  useMousetrap('s', () => move(1, 'y', 1))
-  useMousetrap('a', () => move(1, 'x', -1))
-  useMousetrap('d', () => move(1, 'x', 1))
-  useMousetrap('shift', () => bomb(1))
+  useMousetrap('w', () => move(0, 'y', -1))
+  useMousetrap('s', () => move(0, 'y', 1))
+  useMousetrap('a', () => move(0, 'x', -1))
+  useMousetrap('d', () => move(0, 'x', 1))
+  useMousetrap('shift', () => bomb(0))
 }
 
 const PlayView = () => {
@@ -37,7 +37,7 @@ const PlayView = () => {
     remainingTime
   }: any = useContext(MapContext)
 
-  useKeyboardBinding()
+  useKeyboardBindings()
 
   useEffect(() => {
     ReactGA.send({ hitType: "pageview", page: "/play" });
@@ -54,7 +54,8 @@ const PlayView = () => {
         action: "game:over",
       }, {
         players: players.map(({ name }: any) => name).join(' vs. '),
-        winner: getWinner().name
+        winner: getWinner().name,
+        timeLimitReached: !remainingTime
       });
     }
   }, [players])

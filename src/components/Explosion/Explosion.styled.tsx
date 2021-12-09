@@ -38,50 +38,58 @@ export const SExplosion = styled.div<any>(
   })
 )
 
-export const SExplosionCenter = styled.div<any>(({ distance, index }: any) => ({
+export const SExplosionCenter = styled.div<any>(({ distance, direction, index }: any) => ({
   position: 'absolute',
   width: '1rem',
   height: '1rem',
+  top: 0,
+  left: 0,
+  right: 0,
+  bottom: 0,
 
-  ...index === 0 && {
+  ...direction === 'left' && {
     background: `linear-gradient(
       ${distance.left ? '0deg' : '90deg'},
       ${gradient}
     )`,
-    clipPath: `polygon(0% 0%, 50% 50%, 0% 100%)`,
+    clipPath: `polygon(2% 0%, 50% 50%, 2% 100%)`,
   },
 
-  ...index === 1 && {
+  ...direction === 'top' && {
     background: `linear-gradient(
       ${distance.up ? '90deg' : '0deg'},
       ${gradient}
     )`,
-    clipPath: `polygon(50% 50%, 0% 0%, 100% 0%)`,
+    clipPath: `polygon(50% 50%, 0% 0%, 104% 0%)`,
   },
 
-  ...index === 2 && {
+  ...direction === 'right' && {
     background: `linear-gradient(
       ${distance.right ? '180deg' : '90deg'},
       ${gradient}
     )`,
-    clipPath: `polygon(100% 100%, 50% 50%, 100% 0%)`,
+    clipPath: `polygon(103% 100%, 50% 50%, 103% 0%)`,
   },
 
-  ...index === 3 && {
+  ...direction === 'bottom' && {
     background: `linear-gradient(
       ${distance.down ? '270deg' : '0deg'},
       ${gradient}
     )`,
-    clipPath: `polygon(50% 50%, 100% 100%, 0% 100%)`,
+    clipPath: `polygon(50% 50%, 104% 100%, 0% 100%)`,
   },
 }))
 
-const smoke = keyframes`
+const smoke = (size: number) => keyframes`
   from {
-    background: radial-gradient(#DDDDDD, transparent 0%);
+    width: 0;
+    height: 0;
+    opacity: 0;
   }
   to {
-    background: radial-gradient(#DDDDDD, transparent 60%);
+    width: ${size}rem;
+    height: ${size}rem;
+    opacity: 0.6;
   }
 `;
 
@@ -109,20 +117,20 @@ export const SExplosionSmoke = styled.div<any>(
       position: 'absolute',
       display: 'block',
       borderRadius: '100%',
-      // backgroundColor: 'white',
+      backgroundColor: '#fefefe',
+      // background: `radial-gradient(#DDDDDD, transparent 60%)`,
       top: '50%',
       left: '50%',
       transform: `translateX(-50%) translateY(-50%)`,
       width: `${size}rem`,
       height: `${size}rem`,
-      opacity: 0.8,
       zIndex: '100'
     }
   }),
-  ({ size = 1.5, duration = .2, delay = 0 }: any) => {
+  ({ size = 1.5, duration = .4, delay = 0 }: any) => {
     return css`
       &:after {
-        animation: ${smoke} ${duration}s ease-out ${delay}s forwards;
+        animation: ${smoke(size)} ${duration}s ease-out ${delay}s forwards;
       }
     `
   }
@@ -149,7 +157,7 @@ export const SExplosionDirection = styled.div<any>(
 
     ...direction === 'left' && distance[direction] && {
       top: 0,
-      right: `calc(1rem - 1px)`,
+      right: `1rem`,
       // width: done with animation
       height: '1rem',
       borderTopLeftRadius: '.5rem',
@@ -158,7 +166,7 @@ export const SExplosionDirection = styled.div<any>(
 
     ...direction === 'right' && distance[direction] && {
       top: 0,
-      left: `calc(1rem - 1px)`,
+      left: `1rem`,
       // width: done with animation
       height: '1rem',
       borderTopRightRadius: '.5rem',
@@ -167,7 +175,7 @@ export const SExplosionDirection = styled.div<any>(
 
     ...direction === 'up' && distance[direction] && {
       left: 0,
-      bottom: `calc(1rem - 1px)`,
+      bottom: `1rem`,
       width: '1rem',
       // height: done with animation
       borderTopLeftRadius: '.5rem',
@@ -176,7 +184,7 @@ export const SExplosionDirection = styled.div<any>(
 
     ...direction === 'down' && distance[direction] && {
       left: 0,
-      top: `calc(1rem - 1px)`,
+      top: `1rem`,
       width: '1rem',
       // height: done with animation
       borderBottomLeftRadius: '.5rem',

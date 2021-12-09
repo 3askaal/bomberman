@@ -5,9 +5,9 @@ import { times } from 'lodash'
 export const Explosion = ({ explosion: { x, y, distance }, index } : any) => {
   return (
     <SExplosion key={`explosion${index}`} x={x} y ={y}>
-      <SExplosionSmoke size={5} />
-      { times(4, (index) => (
-        <SExplosionCenter key={`explosionCenter${index}`} distance={distance} index={index} />
+      <SExplosionSmoke size={1.6} />
+      { ['top', 'bottom', 'left', 'right'].map((direction, index) => (
+        <SExplosionCenter direction={direction} distance={distance} index={index} />
       )) }
       { Object.keys(distance).map((key: string, index: number) => distance[key] ? (
         <SExplosionDirection

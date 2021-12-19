@@ -3,26 +3,11 @@ import { Container, Wrapper, Box, Popup, Button, Text, Spacer } from '3oilerplat
 import ReactGA from 'react-ga4'
 import { Controls, Map } from '../../components'
 import { MapContext } from '../../context'
-import useMousetrap from "react-hook-mousetrap"
 import ReactGA4 from 'react-ga4'
 import faker from 'faker'
 import { Timer } from '../../components/Timer/Timer'
-
-function useKeyboardBindings() {
-  const { move, bomb }: any = useContext(MapContext)
-
-  useMousetrap('up', () => move(1, 'y', -1))
-  useMousetrap('down', () => move(1, 'y', 1))
-  useMousetrap('left', () => move(1, 'x', -1))
-  useMousetrap('right', () => move(1, 'x', 1))
-  useMousetrap('space', () => bomb(1))
-
-  useMousetrap('w', () => move(0, 'y', -1))
-  useMousetrap('s', () => move(0, 'y', 1))
-  useMousetrap('a', () => move(0, 'x', -1))
-  useMousetrap('d', () => move(0, 'x', 1))
-  useMousetrap('shift', () => bomb(0))
-}
+import { useKeyboardBindings } from '../../helpers/keyboard'
+import { useSocket } from '../../helpers/socket'
 
 const PlayView = () => {
   const {
@@ -33,6 +18,7 @@ const PlayView = () => {
     initialize,
     remainingTime
   }: any = useContext(MapContext)
+  const socket = useSocket('http://127.0.0.1:9080')
 
   useKeyboardBindings()
 
@@ -49,10 +35,7 @@ const PlayView = () => {
       ReactGA4.event({
         category: "actions",
         action: "game:over",
-      }, {
-        players: players.map(({ name }: any) => name).join(' vs. '),
-        winner: getWinner().name,
-        timeLimitReached: !remainingTime
+        label: `${players.map(({ name }: any) => name).join(' vs. ')}. ${!remainingTime ? 'Time limit reached.' : `Winner: ${getWinner().name}`}`,
       });
     }
   }, [players])

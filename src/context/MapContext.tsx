@@ -3,6 +3,7 @@ import React, { createContext, useEffect, useLayoutEffect, useRef, useState } fr
 import { generateBricks, generateGrid, generatePlayers, generateStones } from '../helpers/generate'
 import { generateDamage } from '../helpers/actions'
 import moment from 'moment'
+import { useSocket } from '../helpers/socket'
 
 
 function useInterval(callback: () => void, delay: number | null) {
@@ -37,8 +38,10 @@ export const MapProvider = ({ children }: any) => {
   const [players, setPlayers] = useState<any>([])
   const [settings, setSettings] = useState<any>({})
   const [remainingTime, setRemainingTime] = useState<number>(1000)
+  const socket = useSocket('http://127.0.0.1:9080')
 
   const move = (playerIndex: number, direction: string, movement: number) => {
+    socket.emit("move", playerIndex, direction, movement)
     const newPlayer = { ...players[playerIndex] }
 
     newPlayer[direction] += movement
@@ -65,6 +68,8 @@ export const MapProvider = ({ children }: any) => {
         y: newPlayer.y,
       }
     })))
+
+    socket.emit("move", players)
   }
 
   const addBomb = (bomb: any, resetBomb: any) => {
@@ -76,6 +81,7 @@ export const MapProvider = ({ children }: any) => {
   }
 
   const bomb = (playerIndex: number) => {
+    socket.emit("bomb", playerIndex)
     const { damagePositions, newGrid, explosion, resetExplosion, bomb, resetBomb } = generateDamage(grid, players, playerIndex)
 
     addBomb(bomb, resetBomb)

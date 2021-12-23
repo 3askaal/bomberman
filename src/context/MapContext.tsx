@@ -1,32 +1,9 @@
-import React, { createContext, useEffect, useLayoutEffect, useRef, useState } from 'react'
-
+import React, { createContext, useContext, useState } from 'react'
+import { useSocket } from "use-socketio";
 import { generateBricks, generateGrid, generatePlayers, generateStones } from '../helpers/generate'
 import { generateDamage } from '../helpers/actions'
-import moment from 'moment'
-import { useSocket } from '../helpers/socket'
-
-
-function useInterval(callback: () => void, delay: number | null) {
-  const savedCallback = useRef(callback)
-
-  // Remember the latest callback if it changes.
-  useLayoutEffect(() => {
-    savedCallback.current = callback
-  }, [callback])
-
-  // Set up the interval.
-  useEffect(() => {
-    // Don't schedule if no delay is specified.
-    // Note: 0 is a valid value for delay.
-    if (!delay && delay !== 0) {
-      return
-    }
-
-    const id = setInterval(() => savedCallback.current(), delay)
-
-    return () => clearInterval(id)
-  }, [delay])
-}
+import { useInterval } from '../helpers/interval'
+import { GameContext } from '.'
 
 export const MapContext = createContext({})
 
@@ -38,9 +15,9 @@ export const MapProvider = ({ children }: any) => {
   const [players, setPlayers] = useState<any>([])
   const [settings, setSettings] = useState<any>({})
   const [remainingTime, setRemainingTime] = useState<number>(1000)
-  const socket = useSocket('http://127.0.0.1:9080')
+  const { socket }: any = useSocket()
 
-  const move = (playerIndex: number, direction: string, movement: number) => {
+  const move = ({ playerIndex, direction, movement }: { playerIndex: number, direction: string, movement: number }) => {
     socket.emit("move", playerIndex, direction, movement)
     const newPlayer = { ...players[playerIndex] }
 
@@ -68,8 +45,6 @@ export const MapProvider = ({ children }: any) => {
         y: newPlayer.y,
       }
     })))
-
-    socket.emit("move", players)
   }
 
   const addBomb = (bomb: any, resetBomb: any) => {

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { Spacer, Button, Input, Text, ElementGroup } from '3oilerplate'
+import { Spacer, Button, Input, Text, ElementGroup, ListItem } from '3oilerplate'
 import { pullAt, some } from 'lodash'
 import { X as XIcon, Plus as PlusIcon } from 'react-feather'
 import { MapContext } from '../../context'
@@ -34,11 +34,6 @@ export const PlayersPanel = () => {
     setPlayers([ ...players, { name: currentPlayerName } ])
   }
 
-  const onSubmit = (event: any) => {
-    event.preventDefault()
-    onAddLocalPlayer()
-  }
-
   const onRemoveLocalPlayer = (index: number) => {
     const newLocalPlayers = [ ...players ]
     pullAt(newLocalPlayers, [index])
@@ -63,13 +58,9 @@ export const PlayersPanel = () => {
     }
   }, [error, currentPlayerName])
 
-  const getPlayers = () => {
-    return players
-  }
-
   return (
     <Spacer size="s">
-      {getPlayers().map((player: any, index: number) => (
+      {players.map((player: any, index: number) => (
         <Spacer
           key={index.toString()}
           gutter="s"
@@ -89,23 +80,21 @@ export const PlayersPanel = () => {
       ))}
       { players.length < CONFIG.AMOUNT_PLAYERS[settings.type || 'local'].max && (
         <Spacer size="xs">
-          <form onSubmit={onSubmit}>
-            <Spacer>
-              <ElementGroup>
-                <Input
-                  // placeholder="Username"
-                  placeholder={`Player ${players.length + 1}`}
-                  s={{ flexGrow: 1 }}
-                  value={currentPlayerName}
-                  isNegative={error}
-                  onChange={(value: any) => setCurrentPlayerName(value)}
-                />
-                <Button type="submit">
-                  <PlusIcon />
-                </Button>
-              </ElementGroup>
-            </Spacer>
-          </form>
+          <Spacer>
+            <ElementGroup>
+              <Input
+                // placeholder="Username"
+                placeholder={`Player ${players.length + 1}`}
+                s={{ flexGrow: 1 }}
+                value={currentPlayerName}
+                isNegative={error}
+                onChange={(value: any) => setCurrentPlayerName(value)}
+              />
+              <Button type="submit" onClick={onAddLocalPlayer}>
+                <PlusIcon />
+              </Button>
+            </ElementGroup>
+          </Spacer>
           <Text size="s" s={{ color: 'negative' }}>
             {error}
           </Text>

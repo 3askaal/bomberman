@@ -7,7 +7,6 @@ import ReactGA4 from 'react-ga4'
 import faker from 'faker'
 import { Timer } from '../../components/Timer/Timer'
 import { useKeyboardBindings } from '../../helpers/keyboard'
-import { useSocket } from '../../helpers/socket'
 
 const PlayView = () => {
   const {
@@ -18,7 +17,6 @@ const PlayView = () => {
     initialize,
     remainingTime
   }: any = useContext(MapContext)
-  const socket = useSocket('http://127.0.0.1:9080')
 
   useKeyboardBindings()
 
@@ -65,9 +63,9 @@ const PlayView = () => {
             flexWrap: 'wrap'
           }}
         >
-          { players.map((player: any, index: number) => (
+          { players.map((player: any, playerIndex: number) => (
             <Box
-              key={`player${index}`}
+              key={`player${playerIndex}`}
               s={{
                 display: 'inline-flex',
                 width: '100%',
@@ -75,12 +73,12 @@ const PlayView = () => {
               }}
             >
               <Controls
-                onMove={(direction: string, movement: number) => move(index, direction, movement)}
+                onMove={(direction: string, movement: number) => move({ playerIndex, direction, movement })}
                 health={player.health}
-                onBomb={() => bomb(index)}
+                onBomb={() => bomb(playerIndex)}
                 color={player.color}
                 name={player.name}
-                index={index}
+                index={playerIndex}
               />
             </Box>
           )) }

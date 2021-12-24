@@ -1,8 +1,6 @@
 import { times, sampleSize } from 'lodash'
 import randomColor from 'randomcolor'
 
-
-
 export const generatePlayers = (players: any, blocks: number) => {
   const topLeftPosition = { x: 0, y: 0 }
   const topRightPosition = { x: blocks, y: 0 }

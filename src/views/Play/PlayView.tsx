@@ -2,31 +2,25 @@ import React, { useContext, useEffect } from 'react'
 import { Container, Wrapper, Box, Popup, Button, Text, Spacer } from '3oilerplate'
 import ReactGA from 'react-ga4'
 import { PlayerDetails, Map } from '../../components'
-import { GameContext, MapContext } from '../../context'
+import { GameContext } from '../../context'
 import ReactGA4 from 'react-ga4'
 import faker from 'faker'
 import { Timer } from '../../components/Timer/Timer'
 import { useKeyboardBindings } from '../../helpers/keyboard'
+import { useHistory } from 'react-router-dom'
 
 const PlayView = () => {
-  const {
-    blocks,
-    players,
-    move,
-    bomb,
-    initialize,
-    remainingTime
-  }: any = useContext(MapContext)
-
-  const { socket }: any = useContext(GameContext)
+  const history = useHistory()
+  const { socket, players, remainingTime, initialize, blocks, move, bomb } = useContext(GameContext)
 
   useKeyboardBindings()
 
   useEffect(() => {
     ReactGA.send({ hitType: "pageview", page: "/play" });
 
-    if (!players.length) {
-      initialize([{ name: faker.name.firstName() }, { name: faker.name.firstName() }])
+    if (!players?.length) {
+      history.push('/')
+      // initialize([{ name: faker.name.firstName() }, { name: faker.name.firstName() }])
     }
   }, [])
 
@@ -35,13 +29,13 @@ const PlayView = () => {
       ReactGA4.event({
         category: "actions",
         action: "game:over",
-        label: `${players.map(({ name }: any) => name).join(' vs. ')}. ${!remainingTime ? 'Time limit reached.' : `Winner: ${getWinner().name}`}`,
+        label: `${players?.map(({ name }: any) => name).join(' vs. ')}. ${!remainingTime ? 'Time limit reached.' : `Winner: ${getWinner().name}`}`,
       });
     }
   }, [players])
 
   const getActivePlayers = (): any[] => {
-    return [...players].sort((a: any, b: any) => b.health - a.health).filter(({ health }: any) => health > 0)
+    return [...(players || [])].sort((a: any, b: any) => b.health - a.health).filter(({ health }: any) => health > 0)
   }
 
   const gameOver = () => getActivePlayers().length === 1 || !remainingTime
@@ -65,7 +59,7 @@ const PlayView = () => {
             flexWrap: 'wrap'
           }}
         >
-          { players.map((player: any, playerIndex: number) => (
+          { players?.map((player: any, playerIndex: number) => (
             <Box
               key={`player${playerIndex}`}
               s={{
@@ -77,11 +71,11 @@ const PlayView = () => {
               <PlayerDetails
                 onMove={(direction: string, movement: number) => move({ playerIndex, direction, movement }, true)}
                 health={player.health}
-                onBomb={() => bomb(playerIndex, true)}
+                onBomb={() => bomb({ playerIndex }, true)}
                 color={player.color}
                 name={player.name}
                 index={playerIndex}
-                hasControls={socket.id === player.socketId}
+                hasControls={socket?.id === player.socketId}
               />
             </Box>
           )) }

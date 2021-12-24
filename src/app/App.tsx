@@ -5,7 +5,7 @@ import { createBrowserHistory } from 'history'
 import { ThemeProvider } from 'styled-components'
 import ReactGA from 'react-ga4'
 import { GlobalStyle, theme } from '3oilerplate'
-import { GameProvider, MapProvider } from '../context'
+import { GameProvider } from '../context'
 import { HomeView, PlayView } from '../views'
 import { LocalGlobalStyle, fonts, colors } from '../style'
 import { SApp } from './App.styled'
@@ -39,6 +39,11 @@ const App = () => {
             default: {
               padding: 'xs',
             },
+            variants: {
+              isBlock: {
+                width: '100% !important'
+              }
+            }
           },
           Button: {
             default: {
@@ -54,27 +59,25 @@ const App = () => {
         <LocalGlobalStyle />
         <Router history={history}>
           <SocketIOProvider url="http://localhost:1338">
-            <MapProvider>
-              <GameProvider>
-                  <Switch>
-                    <Route exact path="/">
-                      <HomeView />
-                    </Route>
-                    <Route exact path="/setup">
-                      <SetupView />
-                    </Route>
-                    <Route exact path="/play">
-                      <PlayView />
-                    </Route>
-                    <Route exact path="/rooms">
-                      <RoomsView />
-                    </Route>
-                    <Route exact path="/lobby/:roomId">
-                      <LobbyView />
-                    </Route>
-                  </Switch>
-              </GameProvider>
-            </MapProvider>
+            <GameProvider>
+              <Switch>
+                <Route exact path="/">
+                  <HomeView />
+                </Route>
+                <Route exact path="/setup">
+                  <SetupView />
+                </Route>
+                <Route exact path="/play">
+                  <PlayView />
+                </Route>
+                <Route exact path="/rooms">
+                  <RoomsView />
+                </Route>
+                <Route exact path="/lobby/:roomId">
+                  <LobbyView />
+                </Route>
+              </Switch>
+            </GameProvider>
           </SocketIOProvider>
         </Router>
       </SApp>

@@ -2,11 +2,11 @@ import React, { useState, useEffect, useContext } from 'react'
 import { Spacer, Button, Input, Text, ElementGroup, ListItem } from '3oilerplate'
 import { pullAt, some } from 'lodash'
 import { X as XIcon, Plus as PlusIcon } from 'react-feather'
-import { MapContext } from '../../context'
 import { CONFIG } from '../../config/config'
+import { GameContext } from '../../context'
 
 export const PlayersPanel = () => {
-  const { players, setPlayers, settings }: any = useContext(MapContext)
+  const { players, setPlayers, settings }: any = useContext(GameContext)
   const [currentPlayerName, setCurrentPlayerName] = useState<string>('')
   const [error, setError] = useState<string | null>('')
 

@@ -2,13 +2,12 @@ import React, { useContext, useEffect, useState } from 'react'
 import { useLocation, useHistory } from 'react-router-dom'
 import { Container, Wrapper, Spacer, Button } from '3oilerplate'
 import { PlayersPanel } from './PlayersPanel'
-import { GameContext, MapContext } from '../../context'
+import { GameContext } from '../../context'
 import { CONFIG } from '../../config/config'
 
 const SetupView = () => {
   const query = useLocation().search;
-  const { settings, players }: any = useContext(MapContext)
-  const { start }: any = useContext(GameContext)
+  const { start, settings, players }: any = useContext(GameContext)
   const [activePanel, setActivePanel] = useState('players')
 
   return (

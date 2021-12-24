@@ -3,12 +3,11 @@ import { useParams } from 'react-router-dom'
 import { some } from 'lodash'
 import { Box, Container, Wrapper, Spacer, Button, List, ListItem, Text, Title, Input, ElementGroup } from '3oilerplate'
 import { ArrowRight as ArrowRightIcon, Check as CheckIcon } from 'react-feather'
-import { MapContext, GameContext } from '../../context'
+import { GameContext } from '../../context'
 import { CONFIG } from '../../config/config'
 
 const LobbyView = () => {
-  const { socket, start, join }: any = useContext(GameContext)
-  const { players, settings, setSettings }: any = useContext(MapContext)
+  const { socket, start, join, players, settings, setSettings, getCurrentPlayer, getOpponents }: any = useContext(GameContext)
   const { roomId }: any = useParams()
   const [hasJoined, setHasJoined] = useState<boolean>(false)
 
@@ -61,11 +60,8 @@ const LobbyView = () => {
     socket.emit('update:player', { roomId, name: currentPlayerName })
   }
 
-  const getOpponents = (): any[] => players.filter(({ socketId }: any) => socketId !== socket.id)
-  const getCurrentPlayer = (): any => players.find(({ socketId }: any) => socketId === socket.id)
-
   const allPlayersHaveUsernames = () => players.every(({ name }: any) => name)
-  const rightAmountOfPlayers = () => players.length < CONFIG.AMOUNT_PLAYERS[settings.type]?.min
+  const rightAmountOfPlayers = () => players?.length > CONFIG.AMOUNT_PLAYERS[settings.type]?.min && players?.length < CONFIG.AMOUNT_PLAYERS[settings.type]?.max
 
   return (
     <Wrapper s={{ padding: 'l' }}>

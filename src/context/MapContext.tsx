@@ -1,9 +1,8 @@
-import React, { createContext, useContext, useState } from 'react'
+import React, { createContext, useState } from 'react'
 import { useSocket } from "use-socketio";
 import { generateBricks, generateGrid, generatePlayers, generateStones } from '../helpers/generate'
 import { generateDamage } from '../helpers/actions'
 import { useInterval } from '../helpers/interval'
-import { GameContext } from '.'
 
 export const MapContext = createContext({})
 
@@ -17,8 +16,14 @@ export const MapProvider = ({ children }: any) => {
   const [remainingTime, setRemainingTime] = useState<number>(1000)
   const { socket }: any = useSocket()
 
-  const move = ({ playerIndex, direction, movement }: { playerIndex: number, direction: string, movement: number }) => {
-    socket.emit("move", playerIndex, direction, movement)
+  const move = (
+    { playerIndex, direction, movement }: { playerIndex: number, direction: string, movement: number },
+    sendEvent?: boolean
+  ) => {
+    if (sendEvent) {
+      socket.emit("move", { playerIndex, direction, movement })
+    }
+
     const newPlayer = { ...players[playerIndex] }
 
     newPlayer[direction] += movement
@@ -55,8 +60,11 @@ export const MapProvider = ({ children }: any) => {
     }, 3000)
   }
 
-  const bomb = (playerIndex: number) => {
-    socket.emit("bomb", playerIndex)
+  const bomb = (playerIndex: number, sendEvent?: boolean) => {
+    if (sendEvent) {
+      socket.emit("bomb", playerIndex)
+    }
+
     const { damagePositions, newGrid, explosion, resetExplosion, bomb, resetBomb } = generateDamage(grid, players, playerIndex)
 
     addBomb(bomb, resetBomb)

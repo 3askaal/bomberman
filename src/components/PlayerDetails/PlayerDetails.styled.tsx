@@ -1,14 +1,14 @@
 import { s } from '3oilerplate'
 import { healthStatusColor } from '../../style'
 
-export const SControls = s.div(({ theme, index }: any) => ({
+export const SPlayerDetails = s.div(({ theme, index }: any) => ({
   display: 'flex',
   flexDirection: 'column',
   width: '100%',
   maxWidth: ['30rem', '20rem'],
 }))
 
-export const SControlsMove = s.div(({ theme }: any) => ({
+export const SPlayerDetailsMove = s.div(({ theme }: any) => ({
   display: 'flex',
   position: 'relative',
   justifyContent: 'center',
@@ -19,13 +19,13 @@ export const SControlsMove = s.div(({ theme }: any) => ({
   }
 }))
 
-export const SControlsMiddle = s.div(({ theme }: any) => ({
+export const SPlayerDetailsMiddle = s.div(({ theme }: any) => ({
   flexDirection: 'column',
   justifyContent: 'center',
 }))
 
 
-export const SControlsButton = s.button(({ theme, type, color }: any) => ({
+export const SPlayerDetailsButton = s.button(({ theme, type, color }: any) => ({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
@@ -51,7 +51,7 @@ export const SControlsButton = s.button(({ theme, type, color }: any) => ({
   }
 }))
 
-export const SControlsHealth = s.div(({ index, health }: any) => ({
+export const SPlayerDetailsHealth = s.div(({ index, health }: any) => ({
   position: 'relative',
   height: '6px',
   width: '100%',
@@ -61,7 +61,7 @@ export const SControlsHealth = s.div(({ index, health }: any) => ({
   borderRadius: '.5rem'
 }))
 
-export const SControlsHealthProgress = s.div(({ index, health }: any) => ({
+export const SPlayerDetailsHealthProgress = s.div(({ index, health }: any) => ({
   position: 'absolute',
   backgroundColor: healthStatusColor(health),
   width: `${health}%`,

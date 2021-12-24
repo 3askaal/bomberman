@@ -1,8 +1,8 @@
 import React, { useContext, useEffect } from 'react'
 import { Container, Wrapper, Box, Popup, Button, Text, Spacer } from '3oilerplate'
 import ReactGA from 'react-ga4'
-import { Controls, Map } from '../../components'
-import { MapContext } from '../../context'
+import { PlayerDetails, Map } from '../../components'
+import { GameContext, MapContext } from '../../context'
 import ReactGA4 from 'react-ga4'
 import faker from 'faker'
 import { Timer } from '../../components/Timer/Timer'
@@ -17,6 +17,8 @@ const PlayView = () => {
     initialize,
     remainingTime
   }: any = useContext(MapContext)
+
+  const { socket }: any = useContext(GameContext)
 
   useKeyboardBindings()
 
@@ -72,13 +74,14 @@ const PlayView = () => {
                 justifyContent: 'center',
               }}
             >
-              <Controls
-                onMove={(direction: string, movement: number) => move({ playerIndex, direction, movement })}
+              <PlayerDetails
+                onMove={(direction: string, movement: number) => move({ playerIndex, direction, movement }, true)}
                 health={player.health}
-                onBomb={() => bomb(playerIndex)}
+                onBomb={() => bomb(playerIndex, true)}
                 color={player.color}
                 name={player.name}
                 index={playerIndex}
+                hasControls={socket.id === player.socketId}
               />
             </Box>
           )) }
@@ -93,7 +96,7 @@ const PlayView = () => {
       { gameOver() && (
         <Popup
           actions={[
-            <Button isPositive onClick={() => initialize()}>Restart</Button>
+            <Button onClick={() => initialize()}>Restart</Button>
           ]}
         >
           <Text s={{ textAlign: 'center' }}>{

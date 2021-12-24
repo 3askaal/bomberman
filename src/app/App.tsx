@@ -52,31 +52,31 @@ const App = () => {
       <SApp>
         <GlobalStyle />
         <LocalGlobalStyle />
-        <SocketIOProvider url="http://localhost:1338">
-          <MapProvider>
-            <GameProvider>
-              <Router history={history}>
-                <Switch>
-                  <Route exact path="/">
-                    <HomeView />
-                  </Route>
-                  <Route exact path="/setup">
-                    <SetupView />
-                  </Route>
-                  <Route exact path="/play">
-                    <PlayView />
-                  </Route>
-                  <Route exact path="/rooms">
-                    <RoomsView />
-                  </Route>
-                  <Route exact path="/lobby/:roomId">
-                    <LobbyView />
-                  </Route>
-                </Switch>
-              </Router>
-            </GameProvider>
-          </MapProvider>
-        </SocketIOProvider>
+        <Router history={history}>
+          <SocketIOProvider url="http://localhost:1338">
+            <MapProvider>
+              <GameProvider>
+                  <Switch>
+                    <Route exact path="/">
+                      <HomeView />
+                    </Route>
+                    <Route exact path="/setup">
+                      <SetupView />
+                    </Route>
+                    <Route exact path="/play">
+                      <PlayView />
+                    </Route>
+                    <Route exact path="/rooms">
+                      <RoomsView />
+                    </Route>
+                    <Route exact path="/lobby/:roomId">
+                      <LobbyView />
+                    </Route>
+                  </Switch>
+              </GameProvider>
+            </MapProvider>
+          </SocketIOProvider>
+        </Router>
       </SApp>
     </ThemeProvider>
   )

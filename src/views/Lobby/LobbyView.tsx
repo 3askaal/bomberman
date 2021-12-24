@@ -8,7 +8,7 @@ import { CONFIG } from '../../config/config'
 
 const LobbyView = () => {
   const { socket, start, join }: any = useContext(GameContext)
-  const { players, setPlayers, settings, setSettings }: any = useContext(MapContext)
+  const { players, settings, setSettings }: any = useContext(MapContext)
   const { roomId }: any = useParams()
   const [hasJoined, setHasJoined] = useState<boolean>(false)
 
@@ -105,7 +105,7 @@ const LobbyView = () => {
           <Button
             isDisabled={!rightAmountOfPlayers() && !allPlayersHaveUsernames()}
             isBlock
-            onClick={start}
+            onClick={() => start()}
           >
             Start Game
           </Button>

@@ -25,7 +25,7 @@ export const generatePlayers = (players: any, blocks: number) => {
 }
 
 export const generateGrid = (blocks: number) => {
-  const newGrid: any = {}
+  let newGrid: any = {}
   const amountBricksForUnevenCube = (blocks * blocks) + blocks + blocks + 1
 
   times(amountBricksForUnevenCube, (i) => {
@@ -34,6 +34,9 @@ export const generateGrid = (blocks: number) => {
 
     newGrid[`${x}/${y}`] = { x, y }
   })
+
+  newGrid = generateStones(newGrid)
+  newGrid = generateBricks(newGrid, blocks)
 
   return newGrid
 }

@@ -12,17 +12,18 @@ export const GameProvider = ({ children }: any) => {
   const { socket } = useSocket()
 
   useSocket('update:players', (newPlayers: any) => setPlayers(newPlayers))
-  useSocket('bomb', (args) => bomb(args))
-  useSocket('move', (args) => move(args))
+
+  useSocket('start', (args) => onStart(args))
+  useSocket('bomb', (args) => onBomb(args))
+  useSocket('move', (args) => onMove(args))
+
 
   function join(roomId: string) {
-    console.log(roomId)
     socket.emit('join', { roomId })
   }
 
   function start() {
-    initialize()
-    history.push('/play')
+    socket.emit('start', {})
 
     ReactGA4.event({
       category: "actions",
@@ -30,6 +31,20 @@ export const GameProvider = ({ children }: any) => {
       label: players.map(({ name }: any) => name).join(' vs. '),
     });
   }
+
+  function onStart(args: any) {
+    history.push('/play')
+    initialize(args)
+  }
+
+  function onBomb(args: any) {
+    bomb(args, false)
+  }
+
+  function onMove(args: any) {
+    move(args, false)
+  }
+
 
   return (
     <GameContext.Provider

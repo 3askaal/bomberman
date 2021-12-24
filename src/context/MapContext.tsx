@@ -6,6 +6,16 @@ import { useInterval } from '../helpers/interval'
 
 export const MapContext = createContext({})
 
+interface MoveActionPayload {
+  playerIndex: number;
+  direction: string;
+  movement: number;
+}
+
+interface BombActionPayload {
+  playerIndex: number;
+}
+
 export const MapProvider = ({ children }: any) => {
   const [blocks] = useState(16)
   const [grid, setGrid] = useState<any>({})
@@ -16,10 +26,7 @@ export const MapProvider = ({ children }: any) => {
   const [remainingTime, setRemainingTime] = useState<number>(1000)
   const { socket }: any = useSocket()
 
-  const move = (
-    { playerIndex, direction, movement }: { playerIndex: number, direction: string, movement: number },
-    sendEvent?: boolean
-  ) => {
+  const move = ({ playerIndex, direction, movement }: MoveActionPayload, sendEvent?: boolean) => {
     if (sendEvent) {
       socket.emit("move", { playerIndex, direction, movement })
     }
@@ -60,7 +67,7 @@ export const MapProvider = ({ children }: any) => {
     }, 3000)
   }
 
-  const bomb = (playerIndex: number, sendEvent?: boolean) => {
+  const bomb = ({ playerIndex }: BombActionPayload, sendEvent?: boolean) => {
     if (sendEvent) {
       socket.emit("bomb", playerIndex)
     }
@@ -89,19 +96,19 @@ export const MapProvider = ({ children }: any) => {
     }, 3500)
   }
 
-  const initializePlayers = (initialPlayers: any) => {
-    const newPlayers = generatePlayers(initialPlayers || players, blocks)
+  // const initializePlayers = (initialPlayers: any) => {
+  //   const newPlayers = generatePlayers(initialPlayers || players, blocks)
 
-    setPlayers(newPlayers)
-  }
+  //   setPlayers(newPlayers)
+  // }
 
-  const initializeGrid = () => {
-    let newGrid = generateGrid(blocks)
-    newGrid = generateStones(newGrid)
-    newGrid = generateBricks(newGrid, blocks)
+  // const initializeGrid = () => {
+  //   let newGrid = generateGrid(blocks)
+  //   newGrid = generateStones(newGrid)
+  //   newGrid = generateBricks(newGrid, blocks)
 
-    setGrid(newGrid)
-  }
+  //   setGrid(newGrid)
+  // }
 
   const setTimer = () => {
     const minutes = 3
@@ -109,9 +116,9 @@ export const MapProvider = ({ children }: any) => {
     setRemainingTime(remainingTime)
   }
 
-  const initialize = (initialPlayers: any) => {
-    initializeGrid()
-    initializePlayers(initialPlayers)
+  const initialize = ({ grid, players }: any) => {
+    setGrid(grid)
+    setPlayers(players)
     setTimer()
   }
 

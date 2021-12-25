@@ -6,5 +6,5 @@ export const API_URL =
 
 export const SOCKET_URL =
   process.env.NODE_ENV === 'production'
-    ? 'https://b0mberman-server.herokuapp.com:4000'
+    ? 'https://b0mberman-server.herokuapp.com'
     : 'http://localhost:4000'

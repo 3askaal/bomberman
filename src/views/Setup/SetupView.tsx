@@ -7,8 +7,14 @@ import { CONFIG } from '../../config/config'
 
 const SetupView = () => {
   const query = useLocation().search;
-  const { start, settings, players }: any = useContext(GameContext)
+  const { startGame, settings, players, setSettings } = useContext(GameContext)
   const [activePanel, setActivePanel] = useState('players')
+
+  useEffect(() => {
+    if (setSettings) {
+      setSettings({ type: 'local' })
+    }
+  }, [setSettings])
 
   return (
     <Wrapper s={{ padding: 'l' }}>
@@ -37,7 +43,7 @@ const SetupView = () => {
           </Spacer>
         </Spacer>
 
-        <Button isBlock isDisabled={players.length < CONFIG.AMOUNT_PLAYERS[settings.type]?.min} onClick={start}>
+        <Button isBlock isDisabled={players && players?.length < CONFIG.AMOUNT_PLAYERS[settings?.type || 'local']?.min} onClick={startGame}>
           Start
         </Button>
 

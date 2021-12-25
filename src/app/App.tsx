@@ -6,13 +6,11 @@ import { ThemeProvider } from 'styled-components'
 import ReactGA from 'react-ga4'
 import { GlobalStyle, theme } from '3oilerplate'
 import { GameProvider } from '../context'
-import { HomeView, PlayView } from '../views'
+import { HomeView, PlayView, SetupView, RoomsView, LobbyView } from '../views'
 import { LocalGlobalStyle, fonts, colors } from '../style'
 import { SApp } from './App.styled'
 import './fonts.css'
-import SetupView from '../views/Setup/SetupView'
-import RoomsView from '../views/Rooms/RoomsView'
-import LobbyView from '../views/Lobby/LobbyView'
+import { SOCKET_URL } from '../constants';
 
 export const history = createBrowserHistory()
 
@@ -58,7 +56,7 @@ const App = () => {
         <GlobalStyle />
         <LocalGlobalStyle />
         <Router history={history}>
-          <SocketIOProvider url="http://localhost:1338">
+          <SocketIOProvider url={SOCKET_URL}>
             <GameProvider>
               <Switch>
                 <Route exact path="/">
@@ -73,7 +71,7 @@ const App = () => {
                 <Route exact path="/rooms">
                   <RoomsView />
                 </Route>
-                <Route exact path="/lobby/:roomId">
+                <Route exact path="/rooms/:roomId">
                   <LobbyView />
                 </Route>
               </Switch>

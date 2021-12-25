@@ -5,24 +5,28 @@ import { Box, Container, Wrapper, Spacer, Button, List, ListItem, Text, Title, I
 import { ArrowRight as ArrowRightIcon, Check as CheckIcon } from 'react-feather'
 import { GameContext } from '../../context'
 import { CONFIG } from '../../config/config'
+import { useSocket } from 'use-socketio'
 
 const LobbyView = () => {
-  const { socket, start, join, players, settings, setSettings, getCurrentPlayer, getOpponents }: any = useContext(GameContext)
-  const { roomId }: any = useParams()
-  const [hasJoined, setHasJoined] = useState<boolean>(false)
+  const params: any = useParams()
+  const { socket } = useSocket()
+  const { joinRoom, leaveRoom, startGame, gameActive, players, settings, setSettings, getCurrentPlayer, getOpponents }: any = useContext(GameContext)
 
   const [currentPlayerName, setCurrentPlayerName] = useState<string>('')
   const [error, setError] = useState<string | null>('')
 
   useEffect(() => {
-    if (socket && roomId && !hasJoined) {
-      join(roomId)
-      setHasJoined(true)
-    }
-  }, [socket, roomId, hasJoined])
+    setSettings({ type: 'online' })
 
-  useEffect(() => {
-    setSettings({ type: 'multi' })
+    if (params.roomId !== socket.id) {
+      joinRoom(params.roomId)
+    }
+
+    return () => {
+      if (!gameActive) {
+        leaveRoom()
+      }
+    }
   }, [])
 
   const onPickUsername = () => {
@@ -57,7 +61,7 @@ const LobbyView = () => {
       return
     }
 
-    socket.emit('update:player', { roomId, name: currentPlayerName })
+    socket.emit('update:player', { name: currentPlayerName })
   }
 
   const allPlayersHaveUsernames = () => players.every(({ name }: any) => name)
@@ -101,7 +105,7 @@ const LobbyView = () => {
           <Button
             isDisabled={!rightAmountOfPlayers() && !allPlayersHaveUsernames()}
             isBlock
-            onClick={() => start()}
+            onClick={() => startGame()}
           >
             Start Game
           </Button>

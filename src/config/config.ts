@@ -4,7 +4,7 @@ export const CONFIG: any = {
       max: 2,
       min: 2
     },
-    multi: {
+    online: {
       min: 2,
       max: 4,
     }

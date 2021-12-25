@@ -1,22 +1,23 @@
-import React, { useContext, useEffect, useState } from 'react'
-import { useLocation, useHistory } from 'react-router-dom'
-import { Container, Wrapper, Spacer, Button, List, ListItem, Popup, Input } from '3oilerplate'
-import { CONFIG } from '../../config/config'
-import ReactGA4 from 'react-ga4'
+import React, { useContext, useState } from 'react'
+import { useHistory } from 'react-router-dom'
+import { Container, Wrapper, Spacer, Button, List, ListItem, Popup, Input, Text, Title } from '3oilerplate'
+import { useSocket } from 'use-socketio'
 import { GameContext } from '../../context'
 
 const RoomsView = () => {
   const history = useHistory()
-  const [rooms, setRooms] = useState<any>([{ id: 1, name: 'Awesome game' }])
+  const { socket } = useSocket()
+  const { createRoom, rooms }: any = useContext(GameContext)
   const [newRoomName, setNewRoomName] = useState('')
   const [showCreateRoomModal, setShowCreateRoomModal] = useState(false)
 
   function onJoin(id: number) {
-    history.push(`/lobby/${id}`)
+    history.push(`/rooms/${id}`)
   }
 
   function onCreate() {
-
+    history.push(`/rooms/${socket.id}`)
+    createRoom(newRoomName)
   }
 
   return (
@@ -28,13 +29,17 @@ const RoomsView = () => {
           >
             Create room
           </Button>
-          <List>
-            { rooms.map((room: any) => (
-              <ListItem onClick={() => onJoin(room.id)}>
-                {room.id} {room.name}
-              </ListItem>
-            )) }
-          </List>
+          { rooms.length ? (
+            <List>
+              { rooms.map((room: any) => (
+                <ListItem onClick={() => onJoin(room.id)}>
+                  {room.name}
+                </ListItem>
+              )) }
+            </List>
+          ) : (
+            <Text s={{ marginTop: 'l', display: 'flex', justifyContent: 'center' }}>No rooms yet, create one if you want to play with somebody</Text>
+          ) }
         </Spacer>
       </Container>
       {showCreateRoomModal && (
@@ -44,7 +49,12 @@ const RoomsView = () => {
             <Button onClick={() => onCreate()}>Start</Button>
           ]}
         >
-          <Input isBlock value={newRoomName} onChange={(value: string) => setNewRoomName(value)} />
+          <Input
+            isBlock
+            value={newRoomName}
+            onChange={(value: string) => setNewRoomName(value)}
+            placeholder="Room name"
+          />
         </Popup>
       )}
     </Wrapper>

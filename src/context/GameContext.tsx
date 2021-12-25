@@ -6,34 +6,45 @@ import { useInterval } from '../helpers/interval';
 import { generateDamage } from '../helpers/actions';
 import { Socket } from 'socket.io-client';
 import { IBomb, IExplosion, IGrid, IPlayer, ISettings } from '../types';
+import { generateGrid, generatePlayers } from '../helpers/generate';
 
 interface GameContextType {
-  blocks?: number,
+  blocks?: number;
 
-  grid?: IGrid,
-  setGrid?: React.Dispatch<React.SetStateAction<IGrid>>,
+  grid?: IGrid;
+  setGrid?: React.Dispatch<React.SetStateAction<IGrid>>;
 
-  bombs?: IBomb,
-  setBombs?: React.Dispatch<React.SetStateAction<IBomb>>,
+  bombs?: IBomb;
+  setBombs?: React.Dispatch<React.SetStateAction<IBomb>>;
 
-  explosions?: IExplosion,
-  setExplosions?: React.Dispatch<React.SetStateAction<IExplosion>>,
+  explosions?: IExplosion;
+  setExplosions?: React.Dispatch<React.SetStateAction<IExplosion>>;
 
-  players?: IPlayer[],
-  setPlayers?: React.Dispatch<React.SetStateAction<IPlayer[]>>,
+  players?: IPlayer[];
+  setPlayers?: React.Dispatch<React.SetStateAction<IPlayer[]>>;
 
-  settings?: ISettings,
-  setSettings?: React.Dispatch<React.SetStateAction<ISettings>>,
+  settings?: ISettings;
+  setSettings?: React.Dispatch<React.SetStateAction<ISettings>>;
 
-  socket?: Socket,
-  join?: any,
-  start?: any,
-  initialize?: any,
-  remainingTime?: any,
-  getOpponents?: any,
-  getCurrentPlayer?: any,
-  move?: any,
-  bomb?: any
+  remainingTime?: any;
+
+  move?: any;
+  bomb?: any;
+
+  rooms?: any;
+  createRoom?: any;
+  joinRoom?: any;
+  leaveRoom?: any;
+
+  launchGame?: any;
+  startGame?: any;
+  gameActive?: boolean;
+  initialize?: any;
+
+  getOpponents?: any;
+  getCurrentPlayer?: any;
+
+  socket?: Socket;
 }
 
 export const GameContext = createContext<GameContextType>({})
@@ -52,6 +63,8 @@ export const GameProvider = ({ children }: any) => {
   const history = useHistory()
   const { socket } = useSocket()
   const [players, setPlayers] = useState<IPlayer[]>([])
+  const [rooms, setRooms] = useState<any>([])
+  const [gameActive, setGameActive] = useState(false)
   const [settings, setSettings] = useState<any>({})
   const [remainingTime, setRemainingTime] = useState<number>(1000)
   const [blocks] = useState(16)
@@ -59,22 +72,34 @@ export const GameProvider = ({ children }: any) => {
   const [bombs, setBombs] = useState<any>(null)
   const [explosions, setExplosions] = useState<any>(null)
 
-  useSocket('update:players', (newPlayers: any) => setPlayers(newPlayers))
-
-  useSocket('start', (args) => {
-    history.push('/play')
-    initialize(args)
+  useSocket('rooms:update', (newRooms: any) => {
+    setRooms(Object.values(newRooms))
   })
 
-  useSocket('bomb', (args) => bomb(args))
-  useSocket('move', (args) => move(args))
+  useSocket('room:update', ({ players: newPlayers }: any) => {
+    setPlayers(newPlayers)
+  })
 
-  function join(roomId: string) {
-    socket.emit('join', { roomId })
+  useSocket('game:start', (args) => startGame(args))
+  useSocket('game:bomb', (args) => bomb(args))
+  useSocket('game:move', (args) => move(args))
+
+  function joinRoom(roomId: string) {
+    socket.emit('room:join', { roomId })
   }
 
-  function start() {
-    socket.emit('start', {})
+  function leaveRoom(roomId: string) {
+    socket.emit('room:leave', { roomId })
+  }
+
+  const createRoom = (name: string) => {
+    socket.emit('room:create', { name })
+  }
+
+  const startGame = (args: any) => {
+    initialize(args)
+    setGameActive(true)
+    history.push('/play')
 
     ReactGA4.event({
       category: "actions",
@@ -83,9 +108,15 @@ export const GameProvider = ({ children }: any) => {
     });
   }
 
+  const launchGame = () => {
+    if (settings.type === 'online') {
+      socket.emit('start', {})
+    }
+  }
+
   const initialize = ({ grid: newGrid, players: newPlayers }: any) => {
-    setGrid(newGrid)
-    setPlayers(newPlayers)
+    setGrid(newGrid || generateGrid(blocks))
+    setPlayers(newPlayers || generatePlayers(players, blocks))
     setTimer()
   }
 
@@ -176,8 +207,13 @@ export const GameProvider = ({ children }: any) => {
     <GameContext.Provider
       value={{
         socket,
-        join,
-        start,
+        rooms,
+        joinRoom,
+        createRoom,
+        leaveRoom,
+        launchGame,
+        startGame,
+        gameActive,
         players,
         setPlayers,
         settings,

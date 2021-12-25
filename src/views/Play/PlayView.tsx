@@ -11,7 +11,7 @@ import { useHistory } from 'react-router-dom'
 
 const PlayView = () => {
   const history = useHistory()
-  const { socket, players, remainingTime, initialize, blocks, move, bomb } = useContext(GameContext)
+  const { socket, players, remainingTime, initialize, blocks, move, bomb, settings } = useContext(GameContext)
 
   useKeyboardBindings()
 
@@ -75,7 +75,7 @@ const PlayView = () => {
                 color={player.color}
                 name={player.name}
                 index={playerIndex}
-                hasControls={socket?.id === player.socketId}
+                hasControls={settings?.type === 'local' || socket?.id === player.socketId}
               />
             </Box>
           )) }

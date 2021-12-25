@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import { Container, Wrapper, Spacer, Button, List, ListItem, Popup, Input, Text, Title } from '3oilerplate'
 import { useSocket } from 'use-socketio'
@@ -19,6 +19,10 @@ const RoomsView = () => {
     history.push(`/rooms/${socket.id}`)
     createRoom(newRoomName)
   }
+
+  useEffect(() => {
+    console.log(socket)
+  }, [socket])
 
   return (
     <Wrapper s={{ padding: 'l' }}>

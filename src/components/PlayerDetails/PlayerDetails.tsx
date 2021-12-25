@@ -10,16 +10,16 @@ import {
 } from 'react-feather'
 import isMobile from 'is-mobile'
 
-export const PlayerDetails = ({ onMove, onBomb, name, color, index, health, hasControls }: any) => {
+export const PlayerDetails = ({ onMove, onBomb, player, hasControls }: any) => {
   return (
     <SPlayerDetails>
-      { index === 0 && (
+      { player.index === 0 && (
         <Spacer size="xxs">
           <Box s={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <Text>{ name }</Text>
+            <Text>{ player.name }</Text>
           </Box>
-          <SPlayerDetailsHealth index={index} health={health}>
-            <SPlayerDetailsHealthProgress index={index} health={health} />
+          <SPlayerDetailsHealth index={player.index} health={player.health}>
+            <SPlayerDetailsHealthProgress index={player.index} health={player.health} />
           </SPlayerDetailsHealth>
         </Spacer>
       )}
@@ -29,11 +29,11 @@ export const PlayerDetails = ({ onMove, onBomb, name, color, index, health, hasC
           flexDirection: 'row',
           width: '100%',
           justifyContent: 'space-between',
-          alignItems: ['flex-start', 'flex-end'][index]
+          alignItems: ['flex-start', 'flex-end'][player.index]
         }}>
-          { index === 0 ? (
+          { player.index === 0 ? (
             <SPlayerDetailsButton
-              color={color}
+              color={player.color}
               type="bomb"
               {...isMobile() ? {
                 onTouchStart: () => onBomb()
@@ -47,9 +47,9 @@ export const PlayerDetails = ({ onMove, onBomb, name, color, index, health, hasC
               <Crosshair />
             </SPlayerDetailsButton>
           ) : null }
-          <SPlayerDetailsMove s={{ alignItems: ['flex-start', 'flex-end'][index] }}>
+          <SPlayerDetailsMove s={{ alignItems: ['flex-start', 'flex-end'][player.index] }}>
             <SPlayerDetailsButton
-              color={color}
+              color={player.color}
               type="left"
               {...isMobile() ? {
                 onTouchStart: () => onMove('x',  -1)
@@ -64,7 +64,7 @@ export const PlayerDetails = ({ onMove, onBomb, name, color, index, health, hasC
             </SPlayerDetailsButton>
             <SPlayerDetailsMiddle>
               <SPlayerDetailsButton
-                color={color}
+                color={player.color}
                 type="up"
                 {...isMobile() ? {
                   onTouchStart: () => onMove('y',  -1)
@@ -78,7 +78,7 @@ export const PlayerDetails = ({ onMove, onBomb, name, color, index, health, hasC
                 <ChevronUp />
               </SPlayerDetailsButton>
               <SPlayerDetailsButton
-                color={color}
+                color={player.color}
                 type="down"
                 {...isMobile() ? {
                   onTouchStart: () => onMove('y', 1)
@@ -93,7 +93,7 @@ export const PlayerDetails = ({ onMove, onBomb, name, color, index, health, hasC
               </SPlayerDetailsButton>
             </SPlayerDetailsMiddle>
             <SPlayerDetailsButton
-              color={color}
+              color={player.color}
               type="right"
               {...isMobile() ? {
                 onTouchStart: () => onMove('x', 1)
@@ -107,9 +107,9 @@ export const PlayerDetails = ({ onMove, onBomb, name, color, index, health, hasC
               <ChevronRight />
             </SPlayerDetailsButton>
           </SPlayerDetailsMove>
-          { index === 1 ? (
+          { player.index === 1 ? (
             <SPlayerDetailsButton
-              color={color}
+              color={player.color}
               type="bomb"
               {...isMobile() ? {
                 onTouchStart: () => onBomb()
@@ -125,12 +125,12 @@ export const PlayerDetails = ({ onMove, onBomb, name, color, index, health, hasC
           ) : null }
         </Box>
       )}
-      { index === 1 && (
+      { player.index === 1 && (
         <Spacer size="xxs">
-          <SPlayerDetailsHealth index={index}>
-            <SPlayerDetailsHealthProgress index={index} health={health} />
+          <SPlayerDetailsHealth index={player.index}>
+            <SPlayerDetailsHealthProgress index={player.index} health={player.health} />
           </SPlayerDetailsHealth>
-          <Text>{ name }</Text>
+          <Text>{ player.name }</Text>
         </Spacer>
       )}
     </SPlayerDetails>

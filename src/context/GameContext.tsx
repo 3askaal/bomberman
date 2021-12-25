@@ -47,6 +47,8 @@ interface GameContextType {
   socket?: Socket;
 }
 
+
+
 export const GameContext = createContext<GameContextType>({})
 
 interface MoveActionPayload {
@@ -97,8 +99,8 @@ export const GameProvider = ({ children }: any) => {
   }
 
   const startGame = (args: any) => {
-    initialize(args)
     setGameActive(true)
+    initialize(args)
     history.push('/play')
 
     ReactGA4.event({
@@ -112,11 +114,21 @@ export const GameProvider = ({ children }: any) => {
     if (settings.type === 'online') {
       socket.emit('start', {})
     }
+
+    if (settings.type === 'local') {
+      const newGrid = generateGrid(blocks);
+      const newPlayers = generatePlayers(players, blocks);
+      startGame({ grid: newGrid, players: newPlayers })
+    }
   }
 
-  const initialize = ({ grid: newGrid, players: newPlayers }: any) => {
+  const initialize = (data: any) => {
+    const { grid: newGrid, players: newPlayers } = data || {}
+    console.log('newGrid: ', newGrid, !!newGrid)
+    console.log('newPlayers: ', newPlayers, !!newPlayers)
+
     setGrid(newGrid || generateGrid(blocks))
-    setPlayers(newPlayers || generatePlayers(players, blocks))
+    setPlayers((currentPlayers) => newPlayers || generatePlayers(currentPlayers, blocks))
     setTimer()
   }
 
@@ -212,7 +224,6 @@ export const GameProvider = ({ children }: any) => {
         createRoom,
         leaveRoom,
         launchGame,
-        startGame,
         gameActive,
         players,
         setPlayers,

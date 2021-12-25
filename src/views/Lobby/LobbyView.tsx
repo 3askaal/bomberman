@@ -10,7 +10,7 @@ import { useSocket } from 'use-socketio'
 const LobbyView = () => {
   const params: any = useParams()
   const { socket } = useSocket()
-  const { joinRoom, leaveRoom, startGame, gameActive, players, settings, setSettings, getCurrentPlayer, getOpponents }: any = useContext(GameContext)
+  const { joinRoom, leaveRoom, launchGame, gameActive, players, settings, setSettings, getCurrentPlayer, getOpponents }: any = useContext(GameContext)
 
   const [currentPlayerName, setCurrentPlayerName] = useState<string>('')
   const [error, setError] = useState<string | null>('')
@@ -22,11 +22,6 @@ const LobbyView = () => {
       joinRoom(params.roomId)
     }
 
-    return () => {
-      if (!gameActive) {
-        leaveRoom()
-      }
-    }
   }, [])
 
   const onPickUsername = () => {
@@ -105,7 +100,7 @@ const LobbyView = () => {
           <Button
             isDisabled={!rightAmountOfPlayers() && !allPlayersHaveUsernames()}
             isBlock
-            onClick={() => startGame()}
+            onClick={() => launchGame()}
           >
             Start Game
           </Button>

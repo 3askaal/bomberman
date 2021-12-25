@@ -65,14 +65,14 @@ const App = () => {
                 <Route exact path="/setup">
                   <SetupView />
                 </Route>
-                <Route exact path="/play">
-                  <PlayView />
-                </Route>
                 <Route exact path="/rooms">
                   <RoomsView />
                 </Route>
                 <Route exact path="/rooms/:roomId">
                   <LobbyView />
+                </Route>
+                <Route exact path="/play/:roomId?">
+                  <PlayView />
                 </Route>
               </Switch>
             </GameProvider>

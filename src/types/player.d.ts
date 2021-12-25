@@ -1,9 +1,9 @@
 export interface IPlayer {
+  name: string;
+  socketId?: string;
+  index?: number;
+  color?: string;
   x: number;
   y: number;
-  name: string;
-  socketId: string;
-  index: number;
-  color: string;
-  health: number;
+  health?: number;
 }

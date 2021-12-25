@@ -7,7 +7,7 @@ import { CONFIG } from '../../config/config'
 
 const SetupView = () => {
   const query = useLocation().search;
-  const { startGame, settings, players, setSettings } = useContext(GameContext)
+  const { launchGame, settings, players, setSettings } = useContext(GameContext)
   const [activePanel, setActivePanel] = useState('players')
 
   useEffect(() => {
@@ -43,7 +43,7 @@ const SetupView = () => {
           </Spacer>
         </Spacer>
 
-        <Button isBlock isDisabled={players && players?.length < CONFIG.AMOUNT_PLAYERS[settings?.type || 'local']?.min} onClick={startGame}>
+        <Button isBlock isDisabled={players && players?.length < CONFIG.AMOUNT_PLAYERS[settings?.type || 'local']?.min} onClick={launchGame}>
           Start
         </Button>
 

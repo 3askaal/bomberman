@@ -7,11 +7,9 @@ import ReactGA4 from 'react-ga4'
 import faker from 'faker'
 import { Timer } from '../../components/Timer/Timer'
 import { useKeyboardBindings } from '../../helpers/keyboard'
-import { useHistory } from 'react-router-dom'
 
 const PlayView = () => {
-  const history = useHistory()
-  const { socket, players, remainingTime, initialize, blocks, move, bomb, settings } = useContext(GameContext)
+  const { socket, players, remainingTime, initialize, blocks, move, bomb, settings, setPlayers, setSettings } = useContext(GameContext)
 
   useKeyboardBindings()
 
@@ -19,8 +17,10 @@ const PlayView = () => {
     ReactGA.send({ hitType: "pageview", page: "/play" });
 
     if (!players?.length) {
-      history.push('/')
-      // initialize([{ name: faker.name.firstName() }, { name: faker.name.firstName() }])
+      console.log('initialize test match')
+      setSettings && setSettings({ type: 'local' })
+      setPlayers && setPlayers([{ name: faker.name.firstName(), x: 0, y: 0 }, { name: faker.name.firstName(), x: 0, y: 0 }])
+      initialize()
     }
   }, [])
 
@@ -70,11 +70,8 @@ const PlayView = () => {
             >
               <PlayerDetails
                 onMove={(direction: string, movement: number) => move({ playerIndex, direction, movement }, true)}
-                health={player.health}
+                player={player}
                 onBomb={() => bomb({ playerIndex }, true)}
-                color={player.color}
-                name={player.name}
-                index={playerIndex}
                 hasControls={settings?.type === 'local' || socket?.id === player.socketId}
               />
             </Box>

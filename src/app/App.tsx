@@ -5,7 +5,7 @@ import { createBrowserHistory } from 'history'
 import { ThemeProvider } from 'styled-components'
 import ReactGA from 'react-ga4'
 import { GlobalStyle, theme } from '3oilerplate'
-import { GameProvider } from '../context'
+import { GameProvider, SocketProvider } from '../context'
 import { HomeView, PlayView, SetupView, RoomsView, LobbyView } from '../views'
 import { LocalGlobalStyle, fonts, colors } from '../style'
 import { SApp } from './App.styled'
@@ -57,25 +57,27 @@ const App = () => {
         <LocalGlobalStyle />
         <Router history={history}>
           <SocketIOProvider url={SOCKET_URL}>
-            <GameProvider>
-              <Switch>
-                <Route exact path="/">
-                  <HomeView />
-                </Route>
-                <Route exact path="/setup">
-                  <SetupView />
-                </Route>
-                <Route exact path="/rooms">
-                  <RoomsView />
-                </Route>
-                <Route exact path="/rooms/:roomId">
-                  <LobbyView />
-                </Route>
-                <Route exact path="/play/:roomId?">
-                  <PlayView />
-                </Route>
-              </Switch>
-            </GameProvider>
+            <Switch>
+              <Route exact path="/">
+                <HomeView />
+              </Route>
+              <GameProvider>
+                <SocketProvider>
+                  <Route exact path="/setup">
+                    <SetupView />
+                  </Route>
+                  <Route exact path="/rooms">
+                    <RoomsView />
+                  </Route>
+                  <Route exact path="/rooms/:roomId">
+                    <LobbyView />
+                  </Route>
+                  <Route exact path="/play/:roomId?">
+                    <PlayView />
+                  </Route>
+                </SocketProvider>
+              </GameProvider>
+            </Switch>
           </SocketIOProvider>
         </Router>
       </SApp>

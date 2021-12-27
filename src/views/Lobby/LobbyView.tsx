@@ -3,14 +3,15 @@ import { useParams } from 'react-router-dom'
 import { some } from 'lodash'
 import { Box, Container, Wrapper, Spacer, Button, List, ListItem, Text, Title, Input, ElementGroup } from '3oilerplate'
 import { ArrowRight as ArrowRightIcon, Check as CheckIcon } from 'react-feather'
-import { GameContext } from '../../context'
+import { GameContext, SocketContext } from '../../context'
 import { CONFIG } from '../../config/config'
 import { useSocket } from 'use-socketio'
 
 const LobbyView = () => {
   const params: any = useParams()
   const { socket } = useSocket()
-  const { joinRoom, leaveRoom, launchGame, gameActive, players, settings, setSettings, getCurrentPlayer, getOpponents }: any = useContext(GameContext)
+  const { players, settings, setSettings, currentPlayer, getOpponents } = useContext(GameContext)
+  const { joinRoom, startGame } = useContext(SocketContext)
 
   const [currentPlayerName, setCurrentPlayerName] = useState<string>('')
   const [error, setError] = useState<string | null>('')
@@ -73,13 +74,13 @@ const LobbyView = () => {
               onChange={(value: any) => setCurrentPlayerName(value)}
               s={{ flexGrow: 1 }}
               isNegative={error}
-              isPositive={getCurrentPlayer()?.name}
+              isPositive={currentPlayer?.name}
             />
             <Button
               onClick={onPickUsername}
-              isPositive={getCurrentPlayer()?.name}
+              isPositive={currentPlayer?.name}
             >
-              { !getCurrentPlayer()?.name ? <ArrowRightIcon /> : <CheckIcon /> }
+              { !currentPlayer?.name ? <ArrowRightIcon /> : <CheckIcon /> }
             </Button>
           </ElementGroup>
           { error && (
@@ -100,7 +101,7 @@ const LobbyView = () => {
           <Button
             isDisabled={!rightAmountOfPlayers() && !allPlayersHaveUsernames()}
             isBlock
-            onClick={() => launchGame()}
+            onClick={() => startGame()}
           >
             Start Game
           </Button>

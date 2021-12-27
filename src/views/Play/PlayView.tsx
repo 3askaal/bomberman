@@ -7,21 +7,43 @@ import ReactGA4 from 'react-ga4'
 import faker from 'faker'
 import { Timer } from '../../components/Timer/Timer'
 import { useKeyboardBindings } from '../../helpers/keyboard'
+import { useHistory, useLocation, useParams } from 'react-router-dom'
 
 const PlayView = () => {
-  const { socket, players, remainingTime, initialize, blocks, move, bomb, settings, setPlayers, setSettings } = useContext(GameContext)
+  const search = useLocation().search;
+  const { roomId }: any = useParams();
+  const history = useHistory();
+  const {
+    socket,
+    players,
+    remainingTime,
+    onStartGame,
+    blocks,
+    onGameMove,
+    onGameBomb,
+    settings,
+    setPlayers,
+    setSettings,
+    gameOver,
+    getWinner,
+    getCurrentPlayer,
+  } = useContext(GameContext)
 
   useKeyboardBindings()
 
   useEffect(() => {
     ReactGA.send({ hitType: "pageview", page: "/play" });
 
-    if (!players?.length) {
-      console.log('initialize test match')
-      setSettings && setSettings({ type: 'local' })
-      setPlayers && setPlayers([{ name: faker.name.firstName(), x: 0, y: 0 }, { name: faker.name.firstName(), x: 0, y: 0 }])
-      initialize()
+    const debug = new URLSearchParams(search).get('debug');
+
+    if (debug) {
+      setSettings({ type: 'local' })
+      setPlayers([{ name: faker.name.firstName(), x: 0, y: 0 }, { name: faker.name.firstName(), x: 0, y: 0 }])
+      onStartGame()
     }
+    // else if (settings.type !== 'local' && !roomId) {
+    //   history.push('/')
+    // }
   }, [])
 
   useEffect(() => {
@@ -33,16 +55,6 @@ const PlayView = () => {
       });
     }
   }, [players])
-
-  const getActivePlayers = (): any[] => {
-    return [...(players || [])].sort((a: any, b: any) => b.health - a.health).filter(({ health }: any) => health > 0)
-  }
-
-  const gameOver = () => getActivePlayers().length === 1 || !remainingTime
-
-  const getWinner = (): any => {
-    return gameOver() ? getActivePlayers()[0] : false
-  }
 
   return (
     <Wrapper s={{ padding: ['xs', 'xs', 's'] }}>
@@ -69,9 +81,9 @@ const PlayView = () => {
               }}
             >
               <PlayerDetails
-                onMove={(direction: string, movement: number) => move({ playerIndex, direction, movement }, true)}
+                onMove={(direction: string, movement: number) => onGameMove({ playerIndex, direction, movement })}
                 player={player}
-                onBomb={() => bomb({ playerIndex }, true)}
+                onBomb={() => onGameBomb({ playerIndex })}
                 hasControls={settings?.type === 'local' || socket?.id === player.socketId}
               />
             </Box>
@@ -87,7 +99,7 @@ const PlayView = () => {
       { gameOver() && (
         <Popup
           actions={[
-            <Button onClick={() => initialize()}>Restart</Button>
+            <Button onClick={() => onStartGame({}, false)}>Restart</Button>
           ]}
         >
           <Text s={{ textAlign: 'center' }}>{

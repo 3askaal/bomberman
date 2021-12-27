@@ -20,7 +20,7 @@ export const PlayersPanel = () => {
 
     if (players.length >= playerAmount.max) {
       setCurrentPlayerName('')
-      setError(`Can't add more then ${CONFIG.AMOUNT_PLAYERS[settings.type].max} players in ${settings.type} mode.`)
+      setError(`Can't add more then ${playerAmount.max} players in ${settings.type} mode.`)
       return
     }
 

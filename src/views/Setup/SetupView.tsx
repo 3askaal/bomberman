@@ -1,20 +1,20 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { useLocation, useHistory } from 'react-router-dom'
 import { Container, Wrapper, Spacer, Button } from '3oilerplate'
 import { PlayersPanel } from './PlayersPanel'
 import { GameContext } from '../../context'
 import { CONFIG } from '../../config/config'
 
 const SetupView = () => {
-  const query = useLocation().search;
-  const { launchGame, settings, players, setSettings } = useContext(GameContext)
-  const [activePanel, setActivePanel] = useState('players')
+  const { players, onStartGame, settings, setSettings } = useContext(GameContext)
+  const [activePanel] = useState('players')
 
   useEffect(() => {
-    if (setSettings) {
-      setSettings({ type: 'local' })
-    }
-  }, [setSettings])
+    setSettings({ type: 'local' })
+  }, [])
+
+  const onLaunch = () => {
+    onStartGame()
+  }
 
   return (
     <Wrapper s={{ padding: 'l' }}>
@@ -43,7 +43,7 @@ const SetupView = () => {
           </Spacer>
         </Spacer>
 
-        <Button isBlock isDisabled={players && players?.length < CONFIG.AMOUNT_PLAYERS[settings?.type || 'local']?.min} onClick={launchGame}>
+        <Button isBlock isDisabled={players && players?.length < CONFIG.AMOUNT_PLAYERS[settings?.type || 'local']?.min} onClick={onLaunch}>
           Start
         </Button>
 

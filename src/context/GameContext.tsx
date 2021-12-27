@@ -1,4 +1,4 @@
-import React, { createContext, useState } from 'react'
+import React, { createContext, useEffect, useState } from 'react'
 import { useSocket } from "use-socketio";
 import { useHistory } from 'react-router-dom'
 import ReactGA4 from 'react-ga4'
@@ -9,47 +9,30 @@ import { IBomb, IExplosion, IGrid, IPlayer, ISettings } from '../types';
 import { generateGrid, generatePlayers } from '../helpers/generate';
 
 interface GameContextType {
+  socket?: Socket;
+
   blocks?: number;
-
   grid?: IGrid;
-  setGrid?: React.Dispatch<React.SetStateAction<IGrid>>;
-
   bombs?: IBomb;
-  setBombs?: React.Dispatch<React.SetStateAction<IBomb>>;
-
   explosions?: IExplosion;
-  setExplosions?: React.Dispatch<React.SetStateAction<IExplosion>>;
-
-  players?: IPlayer[];
-  setPlayers?: React.Dispatch<React.SetStateAction<IPlayer[]>>;
-
-  settings?: ISettings;
-  setSettings?: React.Dispatch<React.SetStateAction<ISettings>>;
-
-  remainingTime?: any;
-
-  move?: any;
-  bomb?: any;
-
-  rooms?: any;
-  createRoom?: any;
-  joinRoom?: any;
-  leaveRoom?: any;
-
-  launchGame?: any;
-  startGame?: any;
-  gameActive?: boolean;
-  initialize?: any;
+  players: IPlayer[];
+  settings: ISettings;
+  remainingTime?: number;
 
   getOpponents?: any;
   getCurrentPlayer?: any;
 
-  socket?: Socket;
+  [key: string]: any;
 }
 
 
 
-export const GameContext = createContext<GameContextType>({})
+export const GameContext = createContext<GameContextType>({
+  settings: {
+    type: 'local'
+  },
+  players: []
+})
 
 interface MoveActionPayload {
   playerIndex: number;
@@ -65,8 +48,8 @@ export const GameProvider = ({ children }: any) => {
   const history = useHistory()
   const { socket } = useSocket()
   const [players, setPlayers] = useState<IPlayer[]>([])
+  const [currentPlayer, setCurrentPlayer] = useState<IPlayer>()
   const [rooms, setRooms] = useState<any>([])
-  const [gameActive, setGameActive] = useState(false)
   const [settings, setSettings] = useState<any>({})
   const [remainingTime, setRemainingTime] = useState<number>(1000)
   const [blocks] = useState(16)
@@ -74,34 +57,17 @@ export const GameProvider = ({ children }: any) => {
   const [bombs, setBombs] = useState<any>(null)
   const [explosions, setExplosions] = useState<any>(null)
 
-  useSocket('rooms:update', (newRooms: any) => {
-    setRooms(Object.values(newRooms))
-  })
+  const onStartGame = (args: any, restart?: boolean) => {
+    // initialize data
+    const { grid: newGrid, players: newPlayers, time: remainingTime } = args || {}
+    setGrid(newGrid || generateGrid(blocks))
+    setPlayers((currentPlayers) => newPlayers || generatePlayers(currentPlayers, blocks))
+    setRemainingTime(remainingTime || 3 * 60 * 1000)
 
-  useSocket('room:update', ({ players: newPlayers }: any) => {
-    setPlayers(newPlayers)
-  })
-
-  useSocket('game:start', (args) => startGame(args))
-  useSocket('game:bomb', (args) => bomb(args))
-  useSocket('game:move', (args) => move(args))
-
-  function joinRoom(roomId: string) {
-    socket.emit('room:join', { roomId })
-  }
-
-  function leaveRoom(roomId: string) {
-    socket.emit('room:leave', { roomId })
-  }
-
-  const createRoom = (name: string) => {
-    socket.emit('room:create', { name })
-  }
-
-  const startGame = (args: any) => {
-    setGameActive(true)
-    initialize(args)
-    history.push('/play')
+    if (!restart) {
+      // navigate to play view
+      history.push('/play')
+    }
 
     ReactGA4.event({
       category: "actions",
@@ -110,46 +76,11 @@ export const GameProvider = ({ children }: any) => {
     });
   }
 
-  const launchGame = () => {
-    if (settings.type === 'online') {
-      socket.emit('start', {})
-    }
+  const onGameOver = (args: any) => {
 
-    if (settings.type === 'local') {
-      const newGrid = generateGrid(blocks);
-      const newPlayers = generatePlayers(players, blocks);
-      startGame({ grid: newGrid, players: newPlayers })
-    }
   }
 
-  const initialize = (data: any) => {
-    const { grid: newGrid, players: newPlayers } = data || {}
-    console.log('newGrid: ', newGrid, !!newGrid)
-    console.log('newPlayers: ', newPlayers, !!newPlayers)
-
-    setGrid(newGrid || generateGrid(blocks))
-    setPlayers((currentPlayers) => newPlayers || generatePlayers(currentPlayers, blocks))
-    setTimer()
-  }
-
-  const setTimer = () => {
-    const minutes = 3
-    const remainingTime = minutes * 60 * 1000
-    setRemainingTime(remainingTime)
-  }
-
-  useInterval(() => {
-    setRemainingTime(remainingTime - 1000)
-  }, remainingTime ? 1000 : null)
-
-  const getOpponents = (): any[] => players.filter(({ socketId }: any) => socketId !== socket.id)
-  const getCurrentPlayer = (): any => players.find(({ socketId }: any) => socketId === socket.id)
-
-  const move = ({ playerIndex, direction, movement }: MoveActionPayload, sendEvent?: boolean) => {
-    if (sendEvent) {
-      socket.emit("move", { playerIndex, direction, movement })
-    }
-
+  function onGameMove ({ playerIndex, direction, movement }: MoveActionPayload) {
     const newPlayer = { ...players[playerIndex] }
 
     newPlayer[direction] += movement
@@ -178,24 +109,13 @@ export const GameProvider = ({ children }: any) => {
     })))
   }
 
-  const addBomb = (bomb: any, resetBomb: any) => {
+  function onGameBomb ({ playerIndex }: BombActionPayload) {
+    const { damagePositions, newGrid, explosion, resetExplosion, bomb, resetBomb } = generateDamage(grid, players, playerIndex)
+
     setBombs((currentBombs: any) => ({ ...currentBombs, ...bomb }))
 
     setTimeout(() => {
       setBombs((currentBombs: any) => ({ ...currentBombs, ...resetBomb }))
-    }, 3000)
-  }
-
-  const bomb = ({ playerIndex }: BombActionPayload, sendEvent?: boolean) => {
-    if (sendEvent) {
-      socket.emit("bomb", { playerIndex })
-    }
-
-    const { damagePositions, newGrid, explosion, resetExplosion, bomb, resetBomb } = generateDamage(grid, players, playerIndex)
-
-    addBomb(bomb, resetBomb)
-
-    setTimeout(() => {
       setGrid((currentGrid: any) => ({ ...currentGrid, ...newGrid }))
 
       setPlayers((currentPlayers: any) => {
@@ -215,24 +135,44 @@ export const GameProvider = ({ children }: any) => {
     }, 3500)
   }
 
+  useInterval(() => {
+    setRemainingTime(remainingTime - 1000)
+  }, remainingTime ? 1000 : null)
+
+
+  const getOpponents = (): any[] => players.filter(({ socketId }: any) => socketId !== socket.id)
+
+  useEffect(() => {
+    setCurrentPlayer(players.find(({ socketId }: any) => socketId === socket.id) as IPlayer)
+  }, [players])
+
+  const getActivePlayers = (): any[] => {
+    return [...(players || [])].sort((a: any, b: any) => b.health - a.health).filter(({ health }: any) => health > 0)
+  }
+
+  const gameOver = () => getActivePlayers().length === 1 || !remainingTime
+
+  const getWinner = (): any => {
+    return gameOver() ? getActivePlayers()[0] : false
+  }
+
   return (
     <GameContext.Provider
       value={{
-        socket,
         rooms,
-        joinRoom,
-        createRoom,
-        leaveRoom,
-        launchGame,
-        gameActive,
+        setRooms,
+        onStartGame,
+        onGameOver,
+        onGameMove,
+        onGameBomb,
         players,
         setPlayers,
         settings,
         setSettings,
-        initialize,
         remainingTime,
         getOpponents,
-        getCurrentPlayer,
+        currentPlayer,
+        setCurrentPlayer,
         blocks,
         grid,
         setGrid,
@@ -240,8 +180,9 @@ export const GameProvider = ({ children }: any) => {
         setBombs,
         explosions,
         setExplosions,
-        move,
-        bomb
+        getActivePlayers,
+        gameOver,
+        getWinner,
       }}
     >
       {children}

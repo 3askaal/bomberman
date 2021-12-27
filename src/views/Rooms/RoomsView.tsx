@@ -2,12 +2,13 @@ import React, { useContext, useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import { Container, Wrapper, Spacer, Button, List, ListItem, Popup, Input, Text, Title } from '3oilerplate'
 import { useSocket } from 'use-socketio'
-import { GameContext } from '../../context'
+import { GameContext, SocketContext } from '../../context'
 
 const RoomsView = () => {
   const history = useHistory()
   const { socket } = useSocket()
-  const { createRoom, rooms }: any = useContext(GameContext)
+  const { createRoom } = useContext(SocketContext)
+  const { rooms } = useContext(GameContext)
   const [newRoomName, setNewRoomName] = useState('')
   const [showCreateRoomModal, setShowCreateRoomModal] = useState(false)
 

@@ -35,6 +35,7 @@ export const PlayerDetails = ({ onMove, onBomb, player, hasControls }: any) => {
             <SPlayerDetailsButton
               color={player.color}
               type="bomb"
+              index={player.index}
               {...isMobile() ? {
                 onTouchStart: () => onBomb()
               } : {
@@ -51,6 +52,7 @@ export const PlayerDetails = ({ onMove, onBomb, player, hasControls }: any) => {
             <SPlayerDetailsButton
               color={player.color}
               type="left"
+              index={player.index}
               {...isMobile() ? {
                 onTouchStart: () => onMove('x',  -1)
               } : {
@@ -66,6 +68,7 @@ export const PlayerDetails = ({ onMove, onBomb, player, hasControls }: any) => {
               <SPlayerDetailsButton
                 color={player.color}
                 type="up"
+                index={player.index}
                 {...isMobile() ? {
                   onTouchStart: () => onMove('y',  -1)
                 } : {
@@ -80,6 +83,7 @@ export const PlayerDetails = ({ onMove, onBomb, player, hasControls }: any) => {
               <SPlayerDetailsButton
                 color={player.color}
                 type="down"
+                index={player.index}
                 {...isMobile() ? {
                   onTouchStart: () => onMove('y', 1)
                 } : {
@@ -95,6 +99,7 @@ export const PlayerDetails = ({ onMove, onBomb, player, hasControls }: any) => {
             <SPlayerDetailsButton
               color={player.color}
               type="right"
+              index={player.index}
               {...isMobile() ? {
                 onTouchStart: () => onMove('x', 1)
               } : {
@@ -111,6 +116,7 @@ export const PlayerDetails = ({ onMove, onBomb, player, hasControls }: any) => {
             <SPlayerDetailsButton
               color={player.color}
               type="bomb"
+              index={player.index}
               {...isMobile() ? {
                 onTouchStart: () => onBomb()
               } : {

@@ -1,4 +1,5 @@
-import { times, sampleSize } from 'lodash'
+import { darken } from '3oilerplate'
+import { times, sampleSize, shuffle } from 'lodash'
 import randomColor from 'randomcolor'
 
 export const generatePlayers = (players: any, blocks: number) => {
@@ -8,8 +9,8 @@ export const generatePlayers = (players: any, blocks: number) => {
   const bottomRightPosition = { x: blocks, y: blocks }
   const positions = [topLeftPosition, topRightPosition, bottomLeftPosition, bottomRightPosition]
 
-  const colors = ['red', 'green', 'blue', 'purple', 'pink']
-  const randomColors = sampleSize(colors, players.length)
+  const colors = ['blue', 'purple', 'pink']
+  const randomColors = shuffle(sampleSize(colors, players.length))
 
   return players.map((player: any, index: number) => ({
     ...player,
@@ -19,7 +20,7 @@ export const generatePlayers = (players: any, blocks: number) => {
       ...index === 0 && topLeftPosition,
       ...index === 1 && bottomRightPosition,
     },
-    color: randomColor({ luminosity: 'dark', hue: randomColors[index]}),
+    color: darken(randomColor({ luminosity: 'light', hue: randomColors[index] }), 1.2),
     health: 100,
   }))
 }

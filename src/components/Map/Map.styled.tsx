@@ -1,4 +1,4 @@
-import { s } from '3oilerplate'
+import { s, darken } from '3oilerplate'
 import chroma from 'chroma-js'
 
 export const SMap = s.div(({ theme, blocks }: any) => ({
@@ -34,7 +34,7 @@ export const SMapStone = s.div(({ theme }: any) => ({
 
 export const SMapCharacter = s.div(({ theme, color }: any) => ({
   position: 'absolute',
-  backgroundColor: color,
+  backgroundColor: darken(color, 1),
   width: '.8rem',
   height: '.8rem',
   margin: '.1rem',

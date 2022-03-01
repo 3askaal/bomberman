@@ -66,7 +66,7 @@ export const GameProvider = ({ children }: any) => {
 
     if (!restart) {
       // navigate to play view
-      history.push('/play')
+      // history.push('/play')
     }
 
     if (settings.type === 'online') {

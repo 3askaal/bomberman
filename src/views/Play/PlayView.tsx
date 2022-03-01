@@ -87,10 +87,10 @@ const PlayView = () => {
           )) }
         </Box>
         <Box s={{ flexGrow: 1, height: '100%', flexDirection: 'row', display: 'flex', alignItems: 'center' }}>
-          <Spacer size="xs">
-            <Timer />
+          <Box s={{ position: 'relative' }}>
+            <Timer s={{ pb: 's', transform: 'translateY(-100%)', position: 'absolute' }} />
             <Map blocks={blocks} />
-          </Spacer>
+          </Box>
         </Box>
       </Container>
       { gameOver() && (

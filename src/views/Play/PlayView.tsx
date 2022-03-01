@@ -11,8 +11,6 @@ import { useHistory, useLocation, useParams } from 'react-router-dom'
 
 const PlayView = () => {
   const search = useLocation().search;
-  const { roomId }: any = useParams();
-  const history = useHistory();
   const {
     socket,
     players,
@@ -26,7 +24,6 @@ const PlayView = () => {
     setSettings,
     gameOver,
     getWinner,
-    getCurrentPlayer,
   } = useContext(GameContext)
 
   useKeyboardBindings()

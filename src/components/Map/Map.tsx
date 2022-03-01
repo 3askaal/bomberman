@@ -69,7 +69,11 @@ export const Map = ({ style, blocks } : any) => {
         />
       )) }
       { getExplosions().map((explosion: any, index: number) => (
-        <Explosion explosion={explosion} index={index} />
+        <Explosion
+          key={index}
+          explosion={explosion}
+          index={index}
+        />
       ))}
     </SMap>
   )

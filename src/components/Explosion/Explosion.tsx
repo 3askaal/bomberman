@@ -7,11 +7,16 @@ export const Explosion = ({ explosion: { x, y, distance }, index } : any) => {
     <SExplosion key={`explosion${index}`} x={x} y ={y}>
       <SExplosionSmoke size={1.6} />
       { ['top', 'bottom', 'left', 'right'].map((direction, index) => (
-        <SExplosionCenter direction={direction} distance={distance} index={index} />
+        <SExplosionCenter
+          key={`explosionCenter-${index}`}
+          direction={direction}
+          distance={distance}
+          index={index}
+        />
       )) }
       { Object.keys(distance).map((key: string, index: number) => distance[key] ? (
         <SExplosionDirection
-          key={`explosionDirection${index}`}
+          key={`explosionDirection-${index}`}
           x={x}
           y={y}
           direction={key}

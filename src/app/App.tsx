@@ -56,7 +56,7 @@ const App = () => {
         <GlobalStyle />
         <LocalGlobalStyle />
         <Router history={history}>
-          <SocketIOProvider url={SOCKET_URL}>
+          <SocketIOProvider url={SOCKET_URL} opts={{ autoConnect: false }}>
             <Switch>
               <Route exact path="/">
                 <HomeView />

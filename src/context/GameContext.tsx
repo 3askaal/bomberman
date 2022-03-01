@@ -69,6 +69,10 @@ export const GameProvider = ({ children }: any) => {
       history.push('/play')
     }
 
+    if (settings.type === 'online') {
+      socket.connect()
+    }
+
     ReactGA4.event({
       category: "actions",
       action: "game:start",

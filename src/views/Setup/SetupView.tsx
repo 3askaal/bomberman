@@ -23,9 +23,6 @@ const SetupView = () => {
 
     let newRoomId = roomId || uuid().slice(0, 8)
 
-    console.log(roomId)
-    console.log(newRoomId)
-
     if (!roomId) {
       history.push(`setup/${newRoomId}`)
     }

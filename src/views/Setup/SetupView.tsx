@@ -8,9 +8,8 @@ import { CONFIG } from '../../config/config'
 
 const SetupView = () => {
   const history = useHistory()
-  const location = useLocation()
   const { roomId } = useParams<any>()
-  const { room, setRoom, players, onStartGame, settings, setSettings } = useContext(GameContext)
+  const { setRoom, players, onStartGame, settings, setSettings } = useContext(GameContext)
   const { socket, createRoom, joinRoom, startGame }: any = useContext(SocketContext)
   const [activePanel] = useState('players')
 

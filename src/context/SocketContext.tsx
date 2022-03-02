@@ -13,26 +13,16 @@ export const SocketContext = createContext<GameContextType>({})
 export const SocketProvider = ({ children }: any) => {
   const { socket } = useSocket()
   const {
-    setRooms,
     setPlayers,
     onStartGame,
     onGameBomb,
     onGameMove,
-    onGameOver,
   } = useContext(GameContext)
 
-  useSocket('rooms:update', (newRooms: any) => {
-    setRooms(Object.values(newRooms))
-  })
-
-  useSocket('room:update', ({ players: newPlayers }: any) => {
-    setPlayers(newPlayers)
-  })
-
+  useSocket('room:update', ({ players }) => setPlayers(players))
   useSocket('game:start', (args) => onStartGame(args))
   useSocket('game:bomb', (args) => onGameBomb(args))
   useSocket('game:move', (args) => onGameMove(args))
-  useSocket('game:over', (args) => onGameOver(args))
 
   const joinRoom = (roomId: string) => {
     socket.emit('room:join', { roomId })
@@ -42,8 +32,8 @@ export const SocketProvider = ({ children }: any) => {
     socket.emit('room:leave', { roomId })
   }
 
-  const createRoom = (name: string) => {
-    socket.emit('room:create', { name })
+  const createRoom = (roomId: string) => {
+    socket.emit('room:create', { roomId })
   }
 
   const startGame = () => {

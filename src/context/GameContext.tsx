@@ -48,40 +48,28 @@ export const GameProvider = ({ children }: any) => {
   const history = useHistory()
   const { socket } = useSocket()
   const [players, setPlayers] = useState<IPlayer[]>([])
-  const [currentPlayer, setCurrentPlayer] = useState<IPlayer>()
-  const [rooms, setRooms] = useState<any>([])
-  const [settings, setSettings] = useState<any>({})
+  const [room, setRoom] = useState<string | null>(null)
+  const [settings, setSettings] = useState<any>({ type: 'local' })
   const [remainingTime, setRemainingTime] = useState<number>(1000)
   const [blocks] = useState(16)
   const [grid, setGrid] = useState<any>({})
   const [bombs, setBombs] = useState<any>(null)
   const [explosions, setExplosions] = useState<any>(null)
 
-  const onStartGame = (args: any, restart?: boolean) => {
-    // initialize data
+  const onStartGame = (args?: any) => {
+    console.log('onStartGame')
     const { grid: newGrid, players: newPlayers, time: remainingTime } = args || {}
     setGrid(newGrid || generateGrid(blocks))
     setPlayers((currentPlayers) => newPlayers || generatePlayers(currentPlayers, blocks))
     setRemainingTime(remainingTime || 3 * 60 * 1000)
 
-    if (!restart) {
-      // navigate to play view
-      // history.push('/play')
-    }
-
-    if (settings.type === 'online') {
-      socket.connect()
-    }
+    history.push(`/play${room ? `/${room}` : ''}`)
 
     ReactGA4.event({
       category: "actions",
       action: "game:start",
       label: players.map(({ name }: any) => name).join(' vs. '),
     });
-  }
-
-  const onGameOver = (args: any) => {
-
   }
 
   function onGameMove ({ playerIndex, direction, movement }: MoveActionPayload) {
@@ -146,10 +134,6 @@ export const GameProvider = ({ children }: any) => {
 
   const getOpponents = (): any[] => players.filter(({ socketId }: any) => socketId !== socket.id)
 
-  useEffect(() => {
-    setCurrentPlayer(players.find(({ socketId }: any) => socketId === socket.id) as IPlayer)
-  }, [players])
-
   const getActivePlayers = (): any[] => {
     return [...(players || [])].sort((a: any, b: any) => b.health - a.health).filter(({ health }: any) => health > 0)
   }
@@ -160,13 +144,16 @@ export const GameProvider = ({ children }: any) => {
     return gameOver() ? getActivePlayers()[0] : false
   }
 
+  const getMe = (): any => {
+    return players.filter(({ socketId, name }) => socketId === socket.id && name)[0]
+  }
+
   return (
     <GameContext.Provider
       value={{
-        rooms,
-        setRooms,
+        room,
+        setRoom,
         onStartGame,
-        onGameOver,
         onGameMove,
         onGameBomb,
         players,
@@ -175,8 +162,6 @@ export const GameProvider = ({ children }: any) => {
         setSettings,
         remainingTime,
         getOpponents,
-        currentPlayer,
-        setCurrentPlayer,
         blocks,
         grid,
         setGrid,
@@ -185,6 +170,7 @@ export const GameProvider = ({ children }: any) => {
         explosions,
         setExplosions,
         getActivePlayers,
+        getMe,
         gameOver,
         getWinner,
       }}

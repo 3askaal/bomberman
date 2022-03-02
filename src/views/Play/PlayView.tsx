@@ -7,7 +7,7 @@ import ReactGA4 from 'react-ga4'
 import faker from 'faker'
 import { Timer } from '../../components/Timer/Timer'
 import { useKeyboardBindings } from '../../helpers/keyboard'
-import { useHistory, useLocation, useParams } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 
 const PlayView = () => {
   const search = useLocation().search;
@@ -21,7 +21,6 @@ const PlayView = () => {
     onGameBomb,
     settings,
     setPlayers,
-    setSettings,
     gameOver,
     getWinner,
   } = useContext(GameContext)
@@ -34,13 +33,9 @@ const PlayView = () => {
     const debug = new URLSearchParams(search).get('debug');
 
     if (debug) {
-      setSettings({ type: 'local' })
       setPlayers([{ name: faker.name.firstName(), x: 0, y: 0 }, { name: faker.name.firstName(), x: 0, y: 0 }])
       onStartGame()
     }
-    // else if (settings.type !== 'local' && !roomId) {
-    //   history.push('/')
-    // }
   }, [])
 
   useEffect(() => {

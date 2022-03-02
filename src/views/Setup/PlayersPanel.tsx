@@ -3,10 +3,11 @@ import { Spacer, Button, Input, Text, ElementGroup, ListItem } from '3oilerplate
 import { pullAt, some } from 'lodash'
 import { X as XIcon, Plus as PlusIcon } from 'react-feather'
 import { CONFIG } from '../../config/config'
-import { GameContext } from '../../context'
+import { GameContext, SocketContext } from '../../context'
 
 export const PlayersPanel = () => {
-  const { players, setPlayers, settings }: any = useContext(GameContext)
+  const { players, setPlayers, settings, getMe }: any = useContext(GameContext)
+  const { socket }: any = useContext(SocketContext)
   const [currentPlayerName, setCurrentPlayerName] = useState<string>('')
   const [error, setError] = useState<string | null>('')
 
@@ -30,8 +31,12 @@ export const PlayersPanel = () => {
       return
     }
 
-    setCurrentPlayerName('')
-    setPlayers([ ...players, { name: currentPlayerName } ])
+    if (settings.type === 'online') {
+      socket.emit('update:player', { name: currentPlayerName })
+    } else {
+      setCurrentPlayerName('')
+      setPlayers([ ...players, { name: currentPlayerName } ])
+    }
   }
 
   const onRemoveLocalPlayer = (index: number) => {
@@ -78,13 +83,12 @@ export const PlayersPanel = () => {
           </ElementGroup>
         </Spacer>
       ))}
-      { players.length < CONFIG.AMOUNT_PLAYERS[settings.type || 'local'].max && (
+      { ((settings.type === 'local' && players.length < CONFIG.AMOUNT_PLAYERS.local.max) || (settings.type === 'online' && !getMe())) && (
         <Spacer size="xs">
           <Spacer>
             <ElementGroup>
               <Input
-                // placeholder="Username"
-                placeholder={`Player ${players.length + 1}`}
+                placeholder={settings.type === 'local' ? `Player ${players.length + 1}` : 'Pick a username'}
                 s={{ flexGrow: 1 }}
                 value={currentPlayerName}
                 isNegative={error}

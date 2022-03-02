@@ -6,7 +6,7 @@ import { ThemeProvider } from 'styled-components'
 import ReactGA from 'react-ga4'
 import { GlobalStyle, theme } from '3oilerplate'
 import { GameProvider, SocketProvider } from '../context'
-import { HomeView, PlayView, SetupView, RoomsView, LobbyView } from '../views'
+import { HomeView, PlayView, SetupView } from '../views'
 import { LocalGlobalStyle, fonts, colors } from '../style'
 import { SApp } from './App.styled'
 import './fonts.css'
@@ -63,14 +63,8 @@ const App = () => {
               </Route>
               <GameProvider>
                 <SocketProvider>
-                  <Route exact path="/setup">
+                  <Route exact path="/setup/:roomId?">
                     <SetupView />
-                  </Route>
-                  <Route exact path="/rooms">
-                    <RoomsView />
-                  </Route>
-                  <Route exact path="/rooms/:roomId">
-                    <LobbyView />
                   </Route>
                   <Route exact path="/play/:roomId?">
                     <PlayView />

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { Box, Container, Wrapper, Spacer, Button, Select } from '3oilerplate'
+import { Box, Container, Wrapper, Label, Button, Select, Spacer } from '3oilerplate'
 import { useHistory, useLocation, useParams } from 'react-router-dom'
 import { v4 as uuid } from 'uuid';
 import { PlayersPanel } from './PlayersPanel'
@@ -58,16 +58,25 @@ const SetupView = () => {
       <Container s={{ alignItems: 'center' }}>
         <Box s={{ display: 'flex', flexDirection: 'column', width: '100%', flexGrow: 1 }}>
 
-          <Select
-            value={settings.type}
-            options={[
-              { label: 'Local play', value: 'local' },
-              { label: 'Online play', value: 'online' },
-            ]
-            // TODO: fix nasty way of setting selected value
-            .map((mode) => mode.value === settings.type ? { ...mode, selected: true } : mode)}
-            onChange={(type: string) => setSettings({ type })}
-          />
+          <Spacer>
+            <Select
+              value={settings.type}
+              options={[
+                { label: 'Local play', value: 'local' },
+                { label: 'Online play', value: 'online' },
+              ]
+              // TODO: fix nasty way of setting selected value
+              .map((mode) => mode.value === settings.type ? { ...mode, selected: true } : mode)}
+              onChange={(type: string) => setSettings({ type })}
+            />
+
+            { settings.type === 'online' && (
+              <Label s={{ p: 's', bg: 'backgroundDark', border: 0 }}>
+                { window.location.href }
+              </Label>
+            )}
+
+          </Spacer>
           <Box s={{ display: 'flex', flexGrow: 1, alignItems: 'center' }}>
             { activePanel === 'players' ? <PlayersPanel /> : null }
           </Box>

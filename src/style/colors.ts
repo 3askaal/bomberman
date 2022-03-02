@@ -13,6 +13,7 @@ export const colors: any = {
   secondary: '#04f2d5',
   secondaryDark: darken('#04f2d5', 0.25),
   background: '#1A1A2E',
+  backgroundDark: darken('#1A1A2E', .5),
   positive,
   negative,
 }

@@ -46,7 +46,7 @@ const SetupView = () => {
   }
 
   useEffect(() => {
-    if (roomId) {
+    if (roomId || settings.type === 'online') {
       onOnlineMode()
     } else {
       onLocalMode()

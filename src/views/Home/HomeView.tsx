@@ -11,8 +11,7 @@ const HomeView = () => {
         <Spacer size="l" style={{ alignItems: 'center' }}>
           <Title level={1}>Bomberman</Title>
           <Spacer size="m" style={{ alignItems: 'center' }}>
-            <Button onClick={() => history.push('/setup')}>Local play</Button>
-            <Button disable={true} onClick={() => history.push('/rooms')}>Online play</Button>
+            <Button onClick={() => history.push('/setup')}>Start Game</Button>
           </Spacer>
         </Spacer>
       </Container>

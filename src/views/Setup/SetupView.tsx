@@ -29,10 +29,6 @@ const SetupView = () => {
     setRoom(roomId)
     createRoom(newRoomId)
     joinRoom(newRoomId)
-
-    if (settings.type !== 'online') {
-      setSettings({ type: 'online' })
-    }
   }
 
   const onLocalMode = () => {
@@ -42,12 +38,18 @@ const SetupView = () => {
   }
 
   useEffect(() => {
-    if (roomId || settings.type === 'online') {
-      onOnlineMode()
-    } else {
+    if (settings.type === 'local') {
       onLocalMode()
+    } else {
+      onOnlineMode()
     }
-  }, [settings.type, roomId])
+  }, [settings.type])
+
+  useEffect(() => {
+    if (roomId) {
+      setSettings({ type: 'online' })
+    }
+  }, [roomId])
 
   return (
     <Wrapper s={{ padding: 'l' }}>
@@ -56,13 +58,11 @@ const SetupView = () => {
 
           <Spacer>
             <Select
-              value={settings.type}
+              defaultValue={settings.type}
               options={[
                 { label: 'Local play', value: 'local' },
                 { label: 'Online play', value: 'online' },
-              ]
-              // TODO: fix nasty way of setting selected value
-              .map((mode) => mode.value === settings.type ? { ...mode, selected: true } : mode)}
+              ]}
               onChange={(type: string) => setSettings({ type })}
             />
 

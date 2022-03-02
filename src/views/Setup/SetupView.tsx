@@ -46,10 +46,10 @@ const SetupView = () => {
   }
 
   useEffect(() => {
-    if (settings.type === 'local') {
-      onLocalMode()
-    } else if (settings.type === 'online' || roomId) {
+    if (roomId) {
       onOnlineMode()
+    } else {
+      onLocalMode()
     }
   }, [settings.type, roomId])
 

@@ -1,15 +1,17 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { Box, Container, Wrapper, Label, Button, Select, Spacer } from '3oilerplate'
-import { useHistory, useLocation, useParams } from 'react-router-dom'
+import { Box, Container, Wrapper, Label, Button, Select, Spacer, ElementGroup, Text } from '3oilerplate'
+import { useHistory, useParams } from 'react-router-dom'
 import { v4 as uuid } from 'uuid';
 import { PlayersPanel } from './PlayersPanel'
 import { GameContext, SocketContext } from '../../context'
 import { CONFIG } from '../../config/config'
+import { Copy } from 'react-feather';
+import copy from 'copy-to-clipboard';
 
 const SetupView = () => {
   const history = useHistory()
   const { roomId } = useParams<any>()
-  const { setRoom, players, onStartGame, settings, setSettings } = useContext(GameContext)
+  const { room, setRoom, players, onStartGame, settings, setSettings } = useContext(GameContext)
   const { socket, createRoom, joinRoom, startGame }: any = useContext(SocketContext)
   const [activePanel] = useState('players')
 
@@ -20,13 +22,14 @@ const SetupView = () => {
   const onOnlineMode = () => {
     socket.connect()
 
+    console.log('onOnlineMode')
+
     let newRoomId = roomId || uuid().slice(0, 8)
 
     if (!roomId) {
       history.push(`setup/${newRoomId}`)
     }
 
-    setRoom(roomId)
     createRoom(newRoomId)
     joinRoom(newRoomId)
   }
@@ -38,9 +41,11 @@ const SetupView = () => {
   }
 
   useEffect(() => {
-    if (settings.type === 'local') {
+    if (!roomId && settings.type === 'local') {
       onLocalMode()
-    } else {
+    }
+
+    if (settings.type === 'online') {
       onOnlineMode()
     }
   }, [settings.type])
@@ -55,10 +60,9 @@ const SetupView = () => {
     <Wrapper s={{ padding: 'l' }}>
       <Container s={{ alignItems: 'center' }}>
         <Box s={{ display: 'flex', flexDirection: 'column', width: '100%', flexGrow: 1 }}>
-
           <Spacer>
             <Select
-              defaultValue={settings.type}
+              value={settings.type}
               options={[
                 { label: 'Local play', value: 'local' },
                 { label: 'Online play', value: 'online' },
@@ -67,9 +71,14 @@ const SetupView = () => {
             />
 
             { settings.type === 'online' && (
-              <Label s={{ p: 's', bg: 'backgroundDark', border: 0 }}>
-                { window.location.href }
-              </Label>
+              <ElementGroup s={{ display: 'flex', width: '100%', '> *': { borderRadius: 's' } }}>
+                <Label s={{ p: 's', bg: 'backgroundDark', border: 0, justifyContent: 'space-between', flexGrow: 1 }}>
+                  <span>{ window.location.href }</span>
+                </Label>
+                <Button onClick={() => copy(window.location.href)}>
+                  <Copy />
+                </Button>
+              </ElementGroup>
             )}
 
           </Spacer>

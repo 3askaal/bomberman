@@ -19,8 +19,15 @@ export const SocketProvider = ({ children }: any) => {
     onGameMove,
   } = useContext(GameContext)
 
-  useSocket('room:update', ({ players }) => setPlayers(players))
-  useSocket('game:start', (args) => onStartGame(args))
+  useSocket('room:update', ({ players }) => {
+    console.log('room:update', players)
+    setPlayers(players)
+  })
+
+  useSocket('game:start', (args) => {
+    console.log('game:start')
+    onStartGame(args)
+  })
   useSocket('game:bomb', (args) => onGameBomb(args))
   useSocket('game:move', (args) => onGameMove(args))
 

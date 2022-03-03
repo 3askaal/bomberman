@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { Spacer, Button, Input, Text, ElementGroup, ListItem } from '3oilerplate'
+import { Spacer, Button, Input, Text, ElementGroup } from '3oilerplate'
 import { pullAt, some } from 'lodash'
-import { X as XIcon, Plus as PlusIcon } from 'react-feather'
+import { X as XIcon, Plus as PlusIcon, Check as CheckIcon } from 'react-feather'
 import { CONFIG } from '../../config/config'
 import { GameContext, SocketContext } from '../../context'
 
@@ -33,6 +33,7 @@ export const PlayersPanel = () => {
 
     if (settings.type === 'online') {
       socket.emit('update:player', { name: currentPlayerName })
+      // setPlayers([ ...players, { name: currentPlayerName } ])
     } else {
       setCurrentPlayerName('')
       setPlayers([ ...players, { name: currentPlayerName } ])
@@ -64,46 +65,41 @@ export const PlayersPanel = () => {
   }, [error, currentPlayerName])
 
   return (
-    <Spacer size="s">
-      {players.map((player: any, index: number) => (
-        <Spacer
-          key={index.toString()}
-          gutter="s"
-          s={{ justifyContent: 'center', flexWrap: 'nowrap' }}
-        >
+    <Spacer size="xs">
+      { ((settings.type === 'local' && players.length < CONFIG.AMOUNT_PLAYERS.local.max) || (settings.type === 'online' && !getMe())) && (
+        <Spacer size="s">
           <ElementGroup>
             <Input
+              placeholder={settings.type === 'local' ? `Player ${players.length + 1}` : 'Pick a username'}
               s={{ flexGrow: 1 }}
-              value={player.name}
-              onChange={(value: string) => onUpdateLocalPlayer(value, index)}
+              value={currentPlayerName}
+              isNegative={error}
+              onChange={(value: any) => setCurrentPlayerName(value)}
             />
-            <Button onClick={() => onRemoveLocalPlayer(index)}>
-              <XIcon />
+            <Button type="submit" onClick={onAddLocalPlayer}>
+              { settings.type === 'local' ? <PlusIcon /> : <CheckIcon /> }
             </Button>
           </ElementGroup>
-        </Spacer>
-      ))}
-      { ((settings.type === 'local' && players.length < CONFIG.AMOUNT_PLAYERS.local.max) || (settings.type === 'online' && !getMe())) && (
-        <Spacer size="xs">
-          <Spacer>
-            <ElementGroup>
-              <Input
-                placeholder={settings.type === 'local' ? `Player ${players.length + 1}` : 'Pick a username'}
-                s={{ flexGrow: 1 }}
-                value={currentPlayerName}
-                isNegative={error}
-                onChange={(value: any) => setCurrentPlayerName(value)}
-              />
-              <Button type="submit" onClick={onAddLocalPlayer}>
-                <PlusIcon />
-              </Button>
-            </ElementGroup>
-          </Spacer>
           <Text size="s" s={{ color: 'negative' }}>
             {error}
           </Text>
         </Spacer>
       )}
+      {players.map((player: any, index: number) => (
+        <ElementGroup key={index}>
+          <Input
+            s={{ flexGrow: 1 }}
+            value={player.name}
+            onChange={(value: string) => onUpdateLocalPlayer(value, index)}
+            disabled={ player.socketId !== socket.id }
+          />
+          { player.socketId === socket.id && (
+            <Button onClick={() => onRemoveLocalPlayer(index)}>
+              <XIcon />
+            </Button>
+          )}
+        </ElementGroup>
+      ))}
     </Spacer>
   )
 }

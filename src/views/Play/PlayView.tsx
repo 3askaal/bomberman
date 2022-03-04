@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from 'react'
 import { Container, Wrapper, Box, Popup, Button, Text, Spacer } from '3oilerplate'
 import ReactGA from 'react-ga4'
 import { PlayerDetails, Map } from '../../components'
-import { GameContext } from '../../context'
+import { GameContext, SocketContext } from '../../context'
 import ReactGA4 from 'react-ga4'
 import faker from 'faker'
 import { Timer } from '../../components/Timer/Timer'
@@ -23,6 +23,7 @@ const PlayView = () => {
     setPlayers,
     gameOver,
     getWinner,
+    getMe,
   } = useContext(GameContext)
 
   useKeyboardBindings()
@@ -56,14 +57,13 @@ const PlayView = () => {
             width: '100%',
             height: '100%',
             position: 'absolute',
-            justifyContent: 'space-between',
-            alignContent: 'space-between',
+            alignContent: (settings.type === 'online' && 'flex-end') || 'space-between',
             flexDirection: 'row',
             display: 'flex',
             flexWrap: 'wrap'
           }}
         >
-          { players?.map((player: any, playerIndex: number) => (
+          { settings.type === 'local' && players?.map((player: any, playerIndex: number) => (
             <Box
               key={`player${playerIndex}`}
               s={{
@@ -76,10 +76,24 @@ const PlayView = () => {
                 onMove={(direction: string, movement: number) => onGameMove({ playerIndex, direction, movement })}
                 player={player}
                 onBomb={() => onGameBomb({ playerIndex })}
-                hasControls={settings?.type === 'local' || socket?.id === player.socketId}
               />
             </Box>
           )) }
+          { settings.type === 'online' && (
+            <Box
+              s={{
+                display: 'inline-flex',
+                width: '100%',
+                justifyContent: 'center',
+              }}
+            >
+              <PlayerDetails
+                onMove={(direction: string, movement: number) => onGameMove({ playerIndex: getMe().index, direction, movement })}
+                player={getMe()}
+                onBomb={() => onGameBomb({ playerIndex: getMe().index })}
+              />
+            </Box>
+          ) }
         </Box>
         <Box s={{ flexGrow: 1, height: '100%', flexDirection: 'row', display: 'flex', alignItems: 'center' }}>
           <Box s={{ position: 'relative' }}>

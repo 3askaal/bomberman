@@ -5,7 +5,7 @@ import { v4 as uuid } from 'uuid';
 import { PlayersPanel } from './PlayersPanel'
 import { GameContext, SocketContext } from '../../context'
 import { CONFIG } from '../../config/config'
-import { Copy } from 'react-feather';
+import { Copy, Clipboard } from 'react-feather';
 import copy from 'copy-to-clipboard';
 
 const SetupView = () => {
@@ -14,6 +14,7 @@ const SetupView = () => {
   const { room, setRoom, players, onStartGame, settings, setSettings } = useContext(GameContext)
   const { socket, createRoom, joinRoom, startGame }: any = useContext(SocketContext)
   const [activePanel] = useState('players')
+  const [isCopied, setIsCopied] = useState(false)
 
   const onLaunch = () => {
     settings.type === 'local' ? onStartGame() : startGame()
@@ -21,8 +22,6 @@ const SetupView = () => {
 
   const onOnlineMode = () => {
     socket.connect()
-
-    console.log('onOnlineMode')
 
     let newRoomId = roomId || uuid().slice(0, 8)
 
@@ -76,7 +75,7 @@ const SetupView = () => {
                   <span>{ window.location.href }</span>
                 </Label>
                 <Button onClick={() => copy(window.location.href)}>
-                  <Copy />
+                  { isCopied ? <Clipboard /> : <Copy/> }
                 </Button>
               </ElementGroup>
             )}

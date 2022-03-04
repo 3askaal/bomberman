@@ -64,8 +64,8 @@ const SetupView = () => {
             <Select
               value={settings.type}
               options={[
-                { label: 'Local play', value: 'local' },
-                { label: 'Online play', value: 'online' },
+                { label: 'Local play', value: 'local', selected: settings.type === 'local'},
+                { label: 'Online play', value: 'online', selected: settings.type === 'online'},
               ]}
               onChange={(type: string) => setSettings({ type })}
             />
@@ -86,7 +86,6 @@ const SetupView = () => {
             { activePanel === 'players' ? <PlayersPanel /> : null }
           </Box>
         </Box>
-
 
         <Button isBlock isDisabled={players && players?.length < CONFIG.AMOUNT_PLAYERS[settings?.type || 'local']?.min} onClick={onLaunch}>
           Start

@@ -6,7 +6,7 @@ import { CONFIG } from '../../config/config'
 import { GameContext, SocketContext } from '../../context'
 
 export const PlayersPanel = () => {
-  const { players, setPlayers, settings, getMe }: any = useContext(GameContext)
+  const { players, setPlayers, settings, getMe, getOpponents }: any = useContext(GameContext)
   const { socket }: any = useContext(SocketContext)
   const [currentPlayerName, setCurrentPlayerName] = useState<string>('')
   const [error, setError] = useState<string | null>('')
@@ -33,7 +33,6 @@ export const PlayersPanel = () => {
 
     if (settings.type === 'online') {
       socket.emit('update:player', { name: currentPlayerName })
-      // setPlayers([ ...players, { name: currentPlayerName } ])
     } else {
       setCurrentPlayerName('')
       setPlayers([ ...players, { name: currentPlayerName } ])
@@ -66,7 +65,7 @@ export const PlayersPanel = () => {
 
   return (
     <Spacer size="xs">
-      { ((settings.type === 'local' && players.length < CONFIG.AMOUNT_PLAYERS.local.max) || (settings.type === 'online' && !getMe())) && (
+      { ((settings.type === 'local' && players.length < CONFIG.AMOUNT_PLAYERS.local.max) || (settings.type === 'online')) && (
         <Spacer size="s">
           <ElementGroup>
             <Input
@@ -74,9 +73,10 @@ export const PlayersPanel = () => {
               s={{ flexGrow: 1 }}
               value={currentPlayerName}
               isNegative={error}
+              isPositive={getMe()}
               onChange={(value: any) => setCurrentPlayerName(value)}
             />
-            <Button type="submit" onClick={onAddLocalPlayer}>
+            <Button type="submit" onClick={onAddLocalPlayer} isReady={getMe()}>
               { settings.type === 'local' ? <PlusIcon /> : <CheckIcon /> }
             </Button>
           </ElementGroup>
@@ -85,15 +85,16 @@ export const PlayersPanel = () => {
           </Text>
         </Spacer>
       )}
-      {players.map((player: any, index: number) => (
+      {(settings.type === 'local' ? players : getOpponents()).map((player: any, index: number) => (
         <ElementGroup key={index}>
           <Input
             s={{ flexGrow: 1 }}
             value={player.name}
             onChange={(value: string) => onUpdateLocalPlayer(value, index)}
             disabled={ player.socketId !== socket.id }
+            isPositive={player.me}
           />
-          { player.socketId === socket.id && (
+          { player.socketId === socket.id && !player.me && (
             <Button onClick={() => onRemoveLocalPlayer(index)}>
               <XIcon />
             </Button>

@@ -11,7 +11,7 @@ import copy from 'copy-to-clipboard';
 const SetupView = () => {
   const history = useHistory()
   const { roomId } = useParams<any>()
-  const { room, setRoom, players, onStartGame, settings, setSettings } = useContext(GameContext)
+  const { players, onStartGame, settings, setSettings } = useContext(GameContext)
   const { socket, createRoom, joinRoom, startGame }: any = useContext(SocketContext)
   const [activePanel] = useState('players')
   const [isCopied, setIsCopied] = useState(false)
@@ -35,25 +35,42 @@ const SetupView = () => {
 
   const onLocalMode = () => {
     socket.disconnect()
-    setRoom(null)
-    history.replace('/setup')
+    history.push('/setup')
   }
-
-  useEffect(() => {
-    if (!roomId && settings.type === 'local') {
-      onLocalMode()
-    }
-
-    if (settings.type === 'online') {
-      onOnlineMode()
-    }
-  }, [settings.type])
 
   useEffect(() => {
     if (roomId) {
       setSettings({ type: 'online' })
+      onOnlineMode()
+    } else {
+      onLocalMode()
     }
-  }, [roomId])
+  }, [])
+
+  const onCopy = () => {
+    setIsCopied(true)
+    copy(window.location.href)
+  }
+
+  const onTypeChange = (type: string) => {
+    setSettings({ type })
+
+    if (type === 'local') {
+      onLocalMode()
+    }
+
+    if (type === 'online') {
+      onOnlineMode()
+    }
+  }
+
+  useEffect(() => {
+    if (isCopied) {
+      setTimeout(() => {
+        setIsCopied(false)
+      }, 1000)
+    }
+  }, [isCopied])
 
   return (
     <Wrapper s={{ padding: 'l' }}>
@@ -63,10 +80,10 @@ const SetupView = () => {
             <Select
               value={settings.type}
               options={[
-                { label: 'Local play', value: 'local', selected: settings.type === 'local'},
-                { label: 'Online play', value: 'online', selected: settings.type === 'online'},
+                { label: 'Local play', value: 'local' },
+                { label: 'Online play', value: 'online' },
               ]}
-              onChange={(type: string) => setSettings({ type })}
+              onChange={onTypeChange}
             />
 
             { settings.type === 'online' && (
@@ -74,7 +91,7 @@ const SetupView = () => {
                 <Label s={{ p: 's', bg: 'backgroundDark', border: 0, justifyContent: 'space-between', flexGrow: 1 }}>
                   <span>{ window.location.href }</span>
                 </Label>
-                <Button onClick={() => copy(window.location.href)}>
+                <Button onClick={onCopy}>
                   { isCopied ? <Clipboard /> : <Copy/> }
                 </Button>
               </ElementGroup>

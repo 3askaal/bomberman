@@ -47,7 +47,21 @@ const App = () => {
             default: {
               paddingX: 's',
               paddingY: 'xs',
+              borderWidth: '2px',
             },
+            variants: {
+              isReady: {
+                backgroundColor: 'transparent',
+                color: 'positive',
+                borderColor: 'positive',
+
+                ':hover': {
+                  backgroundColor: 'positive',
+                  color: 'background',
+                  borderColor: 'positive',
+                }
+              }
+            }
           },
         },
       }}

@@ -12,11 +12,33 @@ export function useKeyboardBindings() {
     bomb: isLocalGame ? onGameBomb : bomb,
   }
 
-  useMousetrap('up', () => actions.move({ playerIndex: getMe()?.index, direction: 'y', movement: -1 }))
-  useMousetrap('down', () => actions.move({ playerIndex: getMe()?.index, direction: 'y', movement: 1 }))
-  useMousetrap('left', () => actions.move({ playerIndex: getMe()?.index, direction: 'x', movement: -1 }))
-  useMousetrap('right', () => actions.move({ playerIndex: getMe()?.index, direction: 'x', movement: 1 }))
-  useMousetrap('space', () => actions.bomb({ playerIndex: getMe()?.index }))
+  useMousetrap('up', () => actions.move({
+    playerIndex: settings.type === 'online' ? getMe()?.index : 1,
+    direction: 'y',
+    movement: -1
+  }))
+
+  useMousetrap('down', () => actions.move({
+    playerIndex: settings.type === 'online' ? getMe()?.index : 1,
+    direction: 'y',
+    movement: 1
+  }))
+
+  useMousetrap('left', () => actions.move({
+    playerIndex: settings.type === 'online' ? getMe()?.index : 1,
+    direction: 'x',
+    movement: -1
+  }))
+
+  useMousetrap('right', () => actions.move({
+    playerIndex: settings.type === 'online' ? getMe()?.index : 1,
+    direction: 'x',
+    movement: 1
+  }))
+
+  useMousetrap('space', () => actions.bomb({
+    playerIndex: settings.type === 'online' ? getMe()?.index : 1,
+  }))
 
   useMousetrap('w', () => actions.move({ playerIndex: 0, direction: 'y', movement: -1 }))
   useMousetrap('s', () => actions.move({ playerIndex: 0, direction: 'y', movement: 1 }))

@@ -48,7 +48,6 @@ export const GameProvider = ({ children }: any) => {
   const history = useHistory()
   const { socket } = useSocket()
   const [players, setPlayers] = useState<IPlayer[]>([])
-  const [room, setRoom] = useState<string | null>(null)
   const [settings, setSettings] = useState<any>({ type: 'local' })
   const [remainingTime, setRemainingTime] = useState<number>(1000)
   const [blocks] = useState(16)
@@ -63,7 +62,7 @@ export const GameProvider = ({ children }: any) => {
     setPlayers((currentPlayers) => newPlayers || generatePlayers(currentPlayers, blocks))
     setRemainingTime(remainingTime || 3 * 60 * 1000)
 
-    history.push(`/play${room ? `/${room}` : ''}`)
+    history.push(`/play`)
 
     ReactGA4.event({
       category: "actions",
@@ -145,14 +144,12 @@ export const GameProvider = ({ children }: any) => {
   }
 
   const getMe = (): any => {
-    return players.filter(({ socketId, name }) => socketId === socket.id && name)[0]
+    return players.filter(({ socketId, name }) => socketId === socket.id && name)[0] || null
   }
 
   return (
     <GameContext.Provider
       value={{
-        room,
-        setRoom,
         onStartGame,
         onGameMove,
         onGameBomb,

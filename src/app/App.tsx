@@ -2,15 +2,15 @@ import React from 'react'
 import { SocketIOProvider } from "use-socketio";
 import { Router, Switch, Route } from 'react-router-dom'
 import { createBrowserHistory } from 'history'
-import { ThemeProvider } from 'styled-components'
 import ReactGA from 'react-ga4'
-import { GlobalStyle, theme } from '3oilerplate'
+import { ThemeProvider, GlobalStyle, theme } from '3oilerplate'
 import { GameProvider, SocketProvider } from '../context'
 import { HomeView, PlayView, SetupView } from '../views'
-import { LocalGlobalStyle, fonts, colors } from '../style'
+import { LocalGlobalStyle, localTheme } from '../style'
 import { SApp } from './App.styled'
 import './fonts.css'
 import { SOCKET_URL } from '../constants';
+import deepmerge from 'deepmerge'
 
 export const history = createBrowserHistory()
 
@@ -18,54 +18,7 @@ ReactGA.initialize('G-40XGVJPSNY')
 
 const App = () => {
   return (
-    <ThemeProvider
-      theme={{
-        ...theme,
-        rootFontSizes: ['12px', '16px', '20px'],
-        fonts: {
-          ...theme.fonts,
-          ...fonts,
-          base: "'Play', sans-serif",
-          title: "'Play', sans-serif"
-        },
-        colors: {
-          ...theme.colors,
-          ...colors,
-        },
-        components: {
-          Input: {
-            default: {
-              padding: 'xs',
-            },
-            variants: {
-              isBlock: {
-                width: '100% !important'
-              }
-            }
-          },
-          Button: {
-            default: {
-              paddingX: 's',
-              paddingY: 'xs',
-              borderWidth: '2px',
-            },
-            variants: {
-              isReady: {
-                backgroundColor: 'transparent',
-                color: 'positive',
-                borderColor: 'positive',
-
-                ':hover': {
-                  backgroundColor: 'positive',
-                  color: 'background',
-                  borderColor: 'positive',
-                }
-              }
-            }
-          },
-        },
-      }}
-    >
+    <ThemeProvider theme={deepmerge(theme, localTheme, { arrayMerge: (srcArray, overrideArray) => overrideArray })}>
       <SApp>
         <GlobalStyle />
         <LocalGlobalStyle />

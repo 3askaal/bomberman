@@ -8,7 +8,6 @@ import { GameProvider, SocketProvider } from '../context'
 import { HomeView, PlayView, SetupView } from '../views'
 import { LocalGlobalStyle, localTheme } from '../style'
 import { SApp } from './App.styled'
-import './fonts.css'
 import { SOCKET_URL } from '../constants';
 import deepmerge from 'deepmerge'
 

@@ -5,7 +5,7 @@ import { createBrowserHistory } from 'history'
 import ReactGA from 'react-ga4'
 import { ThemeProvider, GlobalStyle, theme } from '3oilerplate'
 import { GameProvider, SocketProvider } from '../context'
-import { HomeView, PlayView, SetupView } from '../views'
+import { PlayView, SetupView } from '../views'
 import { LocalGlobalStyle, localTheme } from '../style'
 import { SApp } from './App.styled'
 import { SOCKET_URL } from '../constants';

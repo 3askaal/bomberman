@@ -88,7 +88,7 @@ const SetupView = () => {
 
             { settings.type === 'online' && (
               <ElementGroup s={{ display: 'flex', width: '100%', '> *': { borderRadius: 's' } }}>
-                <Label s={{ p: 's', bg: 'backgroundDark', border: 0, justifyContent: 'space-between', flexGrow: 1 }}>
+                <Label s={{ p: 's', bg: 'backgroundDark', border: 0, justifyContent: 'space-between', flexGrow: 1, overflow: 'scroll' }}>
                   <span>{ window.location.href }</span>
                 </Label>
                 <Button onClick={onCopy}>

@@ -104,7 +104,7 @@ const SetupView = () => {
         </Box>
 
         <Button isBlock isDisabled={players && players?.length < CONFIG.AMOUNT_PLAYERS[settings?.type || 'local']?.min} onClick={onLaunch}>
-          Start
+          Start Game
         </Button>
 
       </Container>

@@ -24,12 +24,9 @@ const App = () => {
         <Router history={history}>
           <SocketIOProvider url={SOCKET_URL} opts={{ autoConnect: false }}>
             <Switch>
-              <Route exact path="/">
-                <HomeView />
-              </Route>
               <GameProvider>
                 <SocketProvider>
-                  <Route exact path="/setup/:roomId?">
+                  <Route exact path="/:roomId?">
                     <SetupView />
                   </Route>
                   <Route exact path="/play/:roomId?">

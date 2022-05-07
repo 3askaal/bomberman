@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { Box, Container, Wrapper, Label, Button, Select, Spacer, ElementGroup, Text } from '3oilerplate'
+import { Box, Container, Wrapper, Label, Button, Select, Spacer, ElementGroup } from '3oilerplate'
 import { useHistory, useParams } from 'react-router-dom'
 import { v4 as uuid } from 'uuid';
 import { PlayersPanel } from './PlayersPanel'
@@ -16,6 +16,8 @@ const SetupView = () => {
   const [activePanel] = useState('players')
   const [isCopied, setIsCopied] = useState(false)
 
+  const multiPlayerUrl = `${window.location.host}/${socket.id}`
+
   const onLaunch = () => {
     settings.type === 'local' ? onStartGame() : startGame()
   }
@@ -26,7 +28,7 @@ const SetupView = () => {
     let newRoomId = roomId || uuid().slice(0, 8)
 
     if (!roomId) {
-      history.push(`setup/${newRoomId}`)
+      history.push(`${newRoomId}`)
     }
 
     createRoom(newRoomId)
@@ -35,7 +37,7 @@ const SetupView = () => {
 
   const onLocalMode = () => {
     socket.disconnect()
-    history.push('/setup')
+    history.push('/')
   }
 
   useEffect(() => {
@@ -49,7 +51,7 @@ const SetupView = () => {
 
   const onCopy = () => {
     setIsCopied(true)
-    copy(window.location.href)
+    copy(multiPlayerUrl)
   }
 
   const onTypeChange = (type: string) => {
@@ -89,7 +91,7 @@ const SetupView = () => {
             { settings.type === 'online' && (
               <ElementGroup s={{ display: 'flex', width: '100%', '> *': { borderRadius: 's' } }}>
                 <Label s={{ p: 's', bg: 'backgroundDark', border: 0, justifyContent: 'space-between', flexGrow: 1, overflow: 'scroll' }}>
-                  <span>{ window.location.href }</span>
+                  <span>{ multiPlayerUrl }</span>
                 </Label>
                 <Button onClick={onCopy}>
                   { isCopied ? <Clipboard /> : <Copy/> }

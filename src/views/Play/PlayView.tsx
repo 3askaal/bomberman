@@ -40,7 +40,7 @@ const PlayView = () => {
     }
 
     if (!players.length) {
-      history.push('/setup')
+      history.push('/')
     }
   }, [])
 

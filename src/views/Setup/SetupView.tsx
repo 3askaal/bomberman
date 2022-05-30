@@ -16,7 +16,7 @@ const SetupView = () => {
   const [activePanel] = useState('players')
   const [isCopied, setIsCopied] = useState(false)
 
-  const multiPlayerUrl = `${window.location.host}/${socket.id}`
+  const multiPlayerUrl = `${window.location.host}/${roomId || socket.id}`
 
   const onLaunch = () => {
     settings.type === 'local' ? onStartGame() : startGame()
@@ -27,7 +27,10 @@ const SetupView = () => {
 
     let newRoomId = roomId || uuid().slice(0, 8)
 
+    console.log(roomId)
+
     if (!roomId) {
+      console.log('should not run')
       history.push(`${newRoomId}`)
     }
 

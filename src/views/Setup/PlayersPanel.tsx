@@ -65,6 +65,22 @@ export const PlayersPanel = () => {
 
   return (
     <Spacer size="xs">
+      { settings.type === 'local' && players.map((player: any, index: number) => (
+        <ElementGroup key={index}>
+          <Input
+            s={{ flexGrow: 1 }}
+            value={player.name}
+            onChange={(value: string) => onUpdateLocalPlayer(value, index)}
+            disabled={ player.socketId !== socket.id }
+            isPositive={player.me}
+          />
+          { player.socketId === socket.id && !player.me && (
+            <Button onClick={() => onRemoveLocalPlayer(index)}>
+              <XIcon />
+            </Button>
+          )}
+        </ElementGroup>
+      )) }
       { ((settings.type === 'local' && players.length < CONFIG.AMOUNT_PLAYERS.local.max) || (settings.type === 'online')) && (
         <Spacer size="s">
           <ElementGroup>
@@ -84,8 +100,8 @@ export const PlayersPanel = () => {
             {error}
           </Text>
         </Spacer>
-      )}
-      {(settings.type === 'local' ? players : getOpponents()).map((player: any, index: number) => (
+      ) }
+      { settings.type === 'online' && getOpponents().map((player: any, index: number) => (
         <ElementGroup key={index}>
           <Input
             s={{ flexGrow: 1 }}
@@ -100,7 +116,7 @@ export const PlayersPanel = () => {
             </Button>
           )}
         </ElementGroup>
-      ))}
+      )) }
     </Spacer>
   )
 }

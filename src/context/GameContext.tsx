@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useState } from 'react'
+import React, { createContext, useState } from 'react'
 import { useSocket } from "use-socketio";
 import { useHistory } from 'react-router-dom'
 import ReactGA4 from 'react-ga4'
@@ -57,12 +57,12 @@ export const GameProvider = ({ children }: any) => {
 
   const onStartGame = (args?: any) => {
     console.log('onStartGame')
-    const { grid: newGrid, players: newPlayers, time: remainingTime } = args || {}
+    const { grid: newGrid, players: newPlayers, time: remainingTime, roomId } = args || {}
     setGrid(newGrid || generateGrid(blocks))
     setPlayers((currentPlayers) => newPlayers || generatePlayers(currentPlayers, blocks))
     setRemainingTime(remainingTime || 3 * 60 * 1000)
 
-    history.push(`/play`)
+    history.push(`/play/${roomId || 'local'}`);
 
     ReactGA4.event({
       category: "actions",
@@ -144,7 +144,7 @@ export const GameProvider = ({ children }: any) => {
   }
 
   const getMe = (): any => {
-    return players.filter(({ socketId, name }) => socketId === socket.id && name)[0] || null
+    return players.filter(({ socketId, name }) => socketId && socketId === socket.id && name)[0] || null
   }
 
   return (
